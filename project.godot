@@ -1,0 +1,5 @@
+[gd_project]
+config_version=5
+application/name="Sims"
+application/description="A simulation game."
+run/main_scene="res://scenes/main_hub.tscn"
