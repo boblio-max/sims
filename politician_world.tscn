@@ -1,0 +1,171 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
+sky_top_color = Color(0.3, 0.45, 0.75, 1)
+sky_horizon_color = Color(0.6, 0.7, 0.85, 1)
+
+[sub_resource type="Sky" id="SubResource_sky"]
+sky_material = SubResource("SubResource_sky_mat")
+
+[sub_resource type="Environment" id="SubResource_env"]
+background_mode = 2
+sky = SubResource("SubResource_sky")
+ambient_light_source = 2
+ambient_light_color = Color(0.6, 0.6, 0.65, 1)
+ambient_light_energy = 0.3
+
+[sub_resource type="StandardMaterial3D" id="SubResource_ground_mat"]
+albedo_color = Color(0.35, 0.35, 0.4, 1)
+
+[sub_resource type="PlaneMesh" id="SubResource_floor"]
+size = Vector2(40, 40)
+material = SubResource("SubResource_ground_mat")
+
+[sub_resource type="BoxShape3D" id="SubResource_floor_col"]
+size = Vector3(40, 0.1, 40)
+
+[sub_resource type="StandardMaterial3D" id="SubResource_wall_mat"]
+albedo_color = Color(0.4, 0.35, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="SubResource_wall_mesh"]
+size = Vector3(40, 8, 0.5)
+material = SubResource("SubResource_wall_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_roof_mesh"]
+size = Vector3(40, 0.5, 40)
+material = SubResource("SubResource_wall_mat")
+
+[sub_resource type="StandardMaterial3D" id="SubResource_stage_mat"]
+albedo_color = Color(0.5, 0.35, 0.25, 1)
+
+[sub_resource type="StandardMaterial3D" id="SubResource_podium_mat"]
+albedo_color = Color(0.4, 0.28, 0.18, 1)
+
+[sub_resource type="StandardMaterial3D" id="SubResource_building_mat"]
+albedo_color = Color(0.75, 0.73, 0.7, 1)
+
+[sub_resource type="StandardMaterial3D" id="SubResource_seat_mat"]
+albedo_color = Color(0.35, 0.3, 0.28, 1)
+
+[sub_resource type="BoxMesh" id="SubResource_stage"]
+size = Vector3(12, 1.5, 6)
+material = SubResource("SubResource_stage_mat")
+
+[sub_resource type="BoxShape3D" id="SubResource_stage_col"]
+size = Vector3(12, 1.5, 6)
+
+[sub_resource type="BoxMesh" id="SubResource_podium"]
+size = Vector3(0.8, 1.2, 0.6)
+material = SubResource("SubResource_podium_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_building"]
+size = Vector3(14, 8, 0.5)
+material = SubResource("SubResource_building_mat")
+
+[sub_resource type="CylinderMesh" id="SubResource_column"]
+top_radius = 0.35
+bottom_radius = 0.4
+height = 8.0
+material = SubResource("SubResource_building_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_bench"]
+size = Vector3(8, 0.5, 0.5)
+material = SubResource("SubResource_seat_mat")
+
+[node name="PoliticianWorld" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("SubResource_env")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -6)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 2.0
+shadow_enabled = true
+omni_range = 40.0
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="FloorMesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("SubResource_floor")
+
+[node name="FloorCol" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("SubResource_floor_col")
+
+[node name="WallBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -20)
+mesh = SubResource("SubResource_wall_mesh")
+
+[node name="WallLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 4, 0)
+mesh = SubResource("SubResource_wall_mesh")
+
+[node name="WallRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 4, 0)
+mesh = SubResource("SubResource_wall_mesh")
+
+[node name="WallFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 20)
+mesh = SubResource("SubResource_wall_mesh")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+mesh = SubResource("SubResource_roof_mesh")
+
+[node name="Stage" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -12)
+
+[node name="StageMesh" type="MeshInstance3D" parent="Stage"]
+mesh = SubResource("SubResource_stage")
+
+[node name="StageCol" type="CollisionShape3D" parent="Stage"]
+shape = SubResource("SubResource_stage_col")
+
+[node name="Podium" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, -12)
+mesh = SubResource("SubResource_podium")
+
+[node name="BuildingBackdrop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -15)
+mesh = SubResource("SubResource_building")
+
+[node name="ColumnLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 4, -14.5)
+mesh = SubResource("SubResource_column")
+
+[node name="ColumnRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 4, -14.5)
+mesh = SubResource("SubResource_column")
+
+[node name="BenchRow1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -4)
+mesh = SubResource("SubResource_bench")
+
+[node name="BenchRow2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -2)
+mesh = SubResource("SubResource_bench")
+
+[node name="BenchRow3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+mesh = SubResource("SubResource_bench")
+
+[node name="BenchRow4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 2)
+mesh = SubResource("SubResource_bench")
+
+[node name="Player" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8)
+
+[node name="ReturnPortal" parent="." instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+target_scene = "res://scenes/main_hub.tscn"
+
+[node name="ReturnLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 15)
+text = "Return to Hub"
+font_size = 36
+modulate = Color(1, 1, 0.5, 1)

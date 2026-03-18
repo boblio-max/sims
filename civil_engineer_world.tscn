@@ -1,0 +1,177 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
+sky_top_color = Color(0.45, 0.6, 0.8, 1)
+sky_horizon_color = Color(0.7, 0.75, 0.8, 1)
+
+[sub_resource type="Sky" id="SubResource_sky"]
+sky_material = SubResource("SubResource_sky_mat")
+
+[sub_resource type="Environment" id="SubResource_env"]
+background_mode = 2
+sky = SubResource("SubResource_sky")
+ambient_light_source = 2
+ambient_light_color = Color(0.65, 0.6, 0.55, 1)
+ambient_light_energy = 0.3
+
+[sub_resource type="StandardMaterial3D" id="SubResource_dirt_mat"]
+albedo_color = Color(0.55, 0.42, 0.3, 1)
+
+[sub_resource type="PlaneMesh" id="SubResource_floor"]
+size = Vector2(50, 50)
+material = SubResource("SubResource_dirt_mat")
+
+[sub_resource type="BoxShape3D" id="SubResource_floor_col"]
+size = Vector3(50, 0.1, 50)
+
+[sub_resource type="StandardMaterial3D" id="SubResource_concrete_mat"]
+albedo_color = Color(0.65, 0.63, 0.6, 1)
+
+[sub_resource type="BoxMesh" id="SubResource_wall_mesh"]
+size = Vector3(50, 12, 0.5)
+material = SubResource("SubResource_concrete_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_roof_mesh"]
+size = Vector3(50, 0.5, 50)
+material = SubResource("SubResource_concrete_mat")
+
+[sub_resource type="StandardMaterial3D" id="SubResource_steel_mat"]
+albedo_color = Color(0.5, 0.52, 0.55, 1)
+
+[sub_resource type="StandardMaterial3D" id="SubResource_scaffold_mat"]
+albedo_color = Color(0.6, 0.55, 0.3, 1)
+
+[sub_resource type="CylinderMesh" id="SubResource_pillar"]
+top_radius = 0.6
+bottom_radius = 0.7
+height = 8.0
+material = SubResource("SubResource_concrete_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_bridge_deck"]
+size = Vector3(16, 0.5, 4)
+material = SubResource("SubResource_concrete_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_scaffold_h"]
+size = Vector3(0.15, 6.0, 0.15)
+material = SubResource("SubResource_scaffold_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_scaffold_bar"]
+size = Vector3(3.0, 0.1, 0.1)
+material = SubResource("SubResource_scaffold_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_crane_base"]
+size = Vector3(1.5, 3.0, 1.5)
+material = SubResource("SubResource_steel_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_crane_arm"]
+size = Vector3(8.0, 0.3, 0.3)
+material = SubResource("SubResource_steel_mat")
+
+[node name="CivilEngineerWorld" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("SubResource_env")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -5)
+light_color = Color(1, 0.9, 0.8, 1)
+light_energy = 2.5
+shadow_enabled = true
+omni_range = 45.0
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="FloorMesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("SubResource_floor")
+
+[node name="FloorCol" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("SubResource_floor_col")
+
+[node name="WallBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -25)
+mesh = SubResource("SubResource_wall_mesh")
+
+[node name="WallLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25, 6, 0)
+mesh = SubResource("SubResource_wall_mesh")
+
+[node name="WallRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 25, 6, 0)
+mesh = SubResource("SubResource_wall_mesh")
+
+[node name="WallFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 25)
+mesh = SubResource("SubResource_wall_mesh")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
+mesh = SubResource("SubResource_roof_mesh")
+
+[node name="BridgePillar1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 4, -15)
+mesh = SubResource("SubResource_pillar")
+
+[node name="BridgePillar2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 4, -15)
+mesh = SubResource("SubResource_pillar")
+
+[node name="BridgePillar3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 4, -10)
+mesh = SubResource("SubResource_pillar")
+
+[node name="BridgePillar4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 4, -10)
+mesh = SubResource("SubResource_pillar")
+
+[node name="BridgeDeck" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, -12.5)
+mesh = SubResource("SubResource_bridge_deck")
+
+[node name="ScaffoldV1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 3, -8)
+mesh = SubResource("SubResource_scaffold_h")
+
+[node name="ScaffoldV2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 3, -8)
+mesh = SubResource("SubResource_scaffold_h")
+
+[node name="ScaffoldBar1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 2, -8)
+mesh = SubResource("SubResource_scaffold_bar")
+
+[node name="ScaffoldBar2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 4, -8)
+mesh = SubResource("SubResource_scaffold_bar")
+
+[node name="ScaffoldBar3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 6, -8)
+mesh = SubResource("SubResource_scaffold_bar")
+
+[node name="CraneBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 1.5, -5)
+mesh = SubResource("SubResource_crane_base")
+
+[node name="CraneTower" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 6, -5)
+mesh = SubResource("SubResource_scaffold_h")
+
+[node name="CraneArm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 9.2, -5)
+mesh = SubResource("SubResource_crane_arm")
+
+[node name="Player" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8)
+
+[node name="ReturnPortal" parent="." instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+target_scene = "res://scenes/main_hub.tscn"
+
+[node name="ReturnLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 15)
+text = "Return to Hub"
+font_size = 36
+modulate = Color(1, 1, 0.5, 1)

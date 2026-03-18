@@ -1,0 +1,304 @@
+[gd_scene format=3 uid="uid://c58gdncfeqwe6"]
+
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
+sky_top_color = Color(0.35, 0.55, 0.85, 1)
+sky_horizon_color = Color(0.65, 0.75, 0.9, 1)
+
+[sub_resource type="Sky" id="SubResource_sky"]
+sky_material = SubResource("SubResource_sky_mat")
+
+[sub_resource type="Environment" id="SubResource_env"]
+background_mode = 2
+sky = SubResource("SubResource_sky")
+ambient_light_source = 2
+ambient_light_color = Color(0.5, 0.5, 0.55, 1)
+ambient_light_energy = 0.5
+
+[sub_resource type="StandardMaterial3D" id="SubResource_ground"]
+albedo_color = Color(0.3, 0.45, 0.3, 1)
+
+[sub_resource type="PlaneMesh" id="SubResource_ground_mesh"]
+material = SubResource("SubResource_ground")
+size = Vector2(100, 100)
+
+[sub_resource type="BoxShape3D" id="SubResource_ground_col"]
+size = Vector3(100, 0.1, 100)
+
+[sub_resource type="StandardMaterial3D" id="SubResource_dark_marble"]
+albedo_color = Color(0.65, 0.65, 0.6, 1)
+
+[sub_resource type="BoxMesh" id="SubResource_step1"]
+material = SubResource("SubResource_dark_marble")
+size = Vector3(36, 0.5, 26)
+
+[sub_resource type="BoxMesh" id="SubResource_step2"]
+material = SubResource("SubResource_dark_marble")
+size = Vector3(34, 0.5, 24)
+
+[sub_resource type="StandardMaterial3D" id="SubResource_marble_mat"]
+albedo_color = Color(0.85, 0.86, 0.82, 1)
+
+[sub_resource type="BoxMesh" id="SubResource_floor"]
+material = SubResource("SubResource_marble_mat")
+size = Vector3(32, 0.5, 22)
+
+[sub_resource type="BoxShape3D" id="SubResource_floor_col"]
+size = Vector3(36, 1.5, 26)
+
+[sub_resource type="CylinderMesh" id="SubResource_column"]
+material = SubResource("SubResource_marble_mat")
+top_radius = 0.4
+height = 6.0
+
+[sub_resource type="BoxShape3D" id="SubResource_col_col"]
+size = Vector3(1, 6, 1)
+
+[sub_resource type="BoxMesh" id="SubResource_roof"]
+material = SubResource("SubResource_marble_mat")
+size = Vector3(33, 1, 23)
+
+[sub_resource type="PrismMesh" id="SubResource_pediment"]
+material = SubResource("SubResource_marble_mat")
+size = Vector3(33, 3, 23)
+
+[node name="MainHub" type="Node3D" unique_id=142754362]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2089747486]
+environment = SubResource("SubResource_env")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1094842952]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866, 0, -0.866, 0.5, 0, 15, 0)
+shadow_enabled = true
+
+[node name="InteriorLight1" type="OmniLight3D" parent="." unique_id=341876528]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6, 0)
+light_color = Color(1, 0.95, 0.9, 1)
+light_energy = 1.2
+light_indirect_energy = 2.0
+omni_range = 30.0
+
+[node name="InteriorLight2" type="OmniLight3D" parent="." unique_id=192713923]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6, 0)
+light_color = Color(1, 0.95, 0.9, 1)
+light_energy = 1.2
+light_indirect_energy = 2.0
+omni_range = 30.0
+
+[node name="Grass" type="StaticBody3D" parent="." unique_id=828292389]
+
+[node name="GrassMesh" type="MeshInstance3D" parent="Grass" unique_id=2118801536]
+mesh = SubResource("SubResource_ground_mesh")
+
+[node name="GrassCol" type="CollisionShape3D" parent="Grass" unique_id=543964062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("SubResource_ground_col")
+
+[node name="PavilionBase" type="StaticBody3D" parent="." unique_id=746961929]
+
+[node name="Step1" type="MeshInstance3D" parent="PavilionBase" unique_id=1882714245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+mesh = SubResource("SubResource_step1")
+
+[node name="Step2" type="MeshInstance3D" parent="PavilionBase" unique_id=469647430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("SubResource_step2")
+
+[node name="Floor" type="MeshInstance3D" parent="PavilionBase" unique_id=1331417840]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("SubResource_floor")
+
+[node name="BaseCol" type="CollisionShape3D" parent="PavilionBase" unique_id=189637462]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("SubResource_floor_col")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="PavilionBase" unique_id=1802061371]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55731297, -0.0025398731)
+use_collision = true
+radius = 6.3310547
+sides = 20
+
+[node name="CSGBox3D" type="CSGBox3D" parent="PavilionBase" unique_id=1636186497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.019891, 1.0483263, 0)
+size = Vector3(9.964172, 0.95129395, 3.4638672)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="PavilionBase/CSGBox3D" unique_id=1592898937]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.032578, 0.011554003, 0)
+size = Vector3(9.964172, 0.95129395, 3.4638672)
+
+[node name="Columns" type="Node3D" parent="." unique_id=1271801149]
+
+[node name="ColF1" type="StaticBody3D" parent="Columns" unique_id=1456707108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 4.5, 9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColF1" unique_id=1740892957]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColF1" unique_id=989731261]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColF2" type="StaticBody3D" parent="Columns" unique_id=1129612712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 4.5, 9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColF2" unique_id=1396496525]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColF2" unique_id=974600639]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColF3" type="StaticBody3D" parent="Columns" unique_id=347338004]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4.5, 9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColF3" unique_id=958485109]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColF3" unique_id=942145699]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColF4" type="StaticBody3D" parent="Columns" unique_id=1533066925]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 4.5, 9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColF4" unique_id=395476196]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColF4" unique_id=635195663]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColB1" type="StaticBody3D" parent="Columns" unique_id=125352824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 4.5, -9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColB1" unique_id=1053389724]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColB1" unique_id=2038880181]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColB2" type="StaticBody3D" parent="Columns" unique_id=305081010]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 4.5, -9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColB2" unique_id=1016888017]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColB2" unique_id=144084712]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColB3" type="StaticBody3D" parent="Columns" unique_id=1845721868]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4.5, -9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColB3" unique_id=363813723]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColB3" unique_id=920910805]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColB4" type="StaticBody3D" parent="Columns" unique_id=922092664]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 4.5, -9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColB4" unique_id=993352609]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColB4" unique_id=1407289314]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColL1" type="StaticBody3D" parent="Columns" unique_id=497984266]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 4.5, 3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColL1" unique_id=1259294540]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColL1" unique_id=1020046986]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColL2" type="StaticBody3D" parent="Columns" unique_id=1420670130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 4.5, -3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColL2" unique_id=738580663]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColL2" unique_id=357541907]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColR1" type="StaticBody3D" parent="Columns" unique_id=1302972666]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 4.5, 3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColR1" unique_id=1144994862]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColR1" unique_id=959729992]
+shape = SubResource("SubResource_col_col")
+
+[node name="ColR2" type="StaticBody3D" parent="Columns" unique_id=435935773]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 4.5, -3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Columns/ColR2" unique_id=1004985912]
+mesh = SubResource("SubResource_column")
+
+[node name="Col" type="CollisionShape3D" parent="Columns/ColR2" unique_id=1029266341]
+shape = SubResource("SubResource_col_col")
+
+[node name="RoofStructure" type="StaticBody3D" parent="." unique_id=509636935]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+
+[node name="RoofBase" type="MeshInstance3D" parent="RoofStructure" unique_id=352280495]
+mesh = SubResource("SubResource_roof")
+
+[node name="RoofCol" type="CollisionShape3D" parent="RoofStructure" unique_id=701428395]
+
+[node name="Pediment" type="MeshInstance3D" parent="RoofStructure" unique_id=1868631921]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("SubResource_pediment")
+
+[node name="Player" parent="." unique_id=2074206401 instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 6)
+
+[node name="DoctorPortal" parent="." unique_id=396279472 instance=ExtResource("2")]
+transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, -10, 1.5, -5)
+target_scene = "res://scenes/doctor_world.tscn"
+
+[node name="DoctorLabel" type="Label3D" parent="." unique_id=1118906009]
+transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, -10, 5.3, -5)
+modulate = Color(1, 0.3, 0.3, 1)
+text = "Doctor"
+font_size = 48
+
+[node name="PoliticianPortal" parent="." unique_id=1063304876 instance=ExtResource("2")]
+transform = Transform3D(0.9659258, 0, 0.25881904, 0, 1, 0, -0.25881904, 0, 0.9659258, -5, 1.5, -7)
+target_scene = "res://scenes/politician_world.tscn"
+
+[node name="PoliticianLabel" type="Label3D" parent="." unique_id=295049892]
+transform = Transform3D(0.9659258, 0, 0.25881904, 0, 1, 0, -0.25881904, 0, 0.9659258, -5, 5.3, -7)
+modulate = Color(0.3, 0.3, 1, 1)
+text = "Politician"
+font_size = 48
+
+[node name="CivilEngineerPortal" parent="." unique_id=851896983 instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -7.5)
+target_scene = "res://scenes/civil_engineer_world.tscn"
+
+[node name="CivilEngineerLabel" type="Label3D" parent="." unique_id=2019619845]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.3, -7.5)
+modulate = Color(1, 0.7, 0.2, 1)
+text = "Civil Engineer"
+font_size = 48
+
+[node name="SoftwareEngineerPortal" parent="." unique_id=926366981 instance=ExtResource("2")]
+transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, 5, 1.5, -7)
+target_scene = "res://scenes/software_engineer_world.tscn"
+
+[node name="SoftwareEngineerLabel" type="Label3D" parent="." unique_id=718435240]
+transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, 5, 5.3, -7)
+modulate = Color(0.2, 1, 0.3, 1)
+text = "Software Engineer"
+font_size = 48
+
+[node name="LawyerPortal" parent="." unique_id=1249574185 instance=ExtResource("2")]
+transform = Transform3D(0.90630776, 0, -0.42261827, 0, 1, 0, 0.42261827, 0, 0.90630776, 10, 1.5, -5)
+target_scene = "res://scenes/lawyer_world.tscn"
+
+[node name="LawyerLabel" type="Label3D" parent="." unique_id=1370647652]
+transform = Transform3D(0.9063077, 0, -0.42261824, 0, 1, 0, 0.42261824, 0, 0.9063077, 10, 5.3, -5)
+modulate = Color(0.7, 0.3, 1, 1)
+text = "Lawyer"
+font_size = 48
