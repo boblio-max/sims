@@ -94,6 +94,12 @@ func _physics_process(delta: float) -> void:
 		if distance_traveled >= FOOTSTEP_DISTANCE:
 			distance_traveled = 0.0
 			_play_footstep()
+	
+	# Update interaction hint in UI
+	var ui = get_tree().get_first_node_in_group("dialogue_ui")
+	if ui:
+		var object = get_interactable_object()
+		ui.set_interact_hint_visible(object != null and object.has_method("interact"))
 
 func _play_footstep() -> void:
 	# Play footstep sound if audio system is available
