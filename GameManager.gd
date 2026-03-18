@@ -93,6 +93,6 @@ func set_audio_volumes(master: float, music: float, sfx: float) -> void:
 	
 	# Apply to audio busses if they exist
 	if AudioServer.get_bus_index("Music") > -1:
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear2db(music_volume))
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(music_volume))
 	if AudioServer.get_bus_index("SFX") > -1:
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear2db(sfx_volume))
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear_to_db(sfx_volume))

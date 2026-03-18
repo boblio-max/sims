@@ -29,7 +29,7 @@ func _process(delta: float) -> void:
 
 	for i in range(blocks.size()):
 		var block = blocks[i]
-		if player.global_transform.origin.distance_to(block.global_transform.origin) < 3.0:
+		if player.global_position.distance_to(block.global_position) < 3.0:
 			if Input.is_action_just_pressed("ui_accept"):
 				_rotate_block(i)
 
@@ -39,7 +39,7 @@ func _process(delta: float) -> void:
 func _rotate_block(index: int) -> void:
 	var block = blocks[index]
 	var basis = block.global_transform.basis.rotated(Vector3.UP, PI/2)
-	block.global_transform = Transform3D(basis, block.global_transform.origin)
+	block.global_transform = Transform3D(basis, block.global_position)
 	
 	if AudioManager:
 		AudioManager.play_sfx("success")

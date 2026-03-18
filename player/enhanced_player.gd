@@ -45,9 +45,7 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	# Handle sprinting
-	is_sprinting = Input.is_action_pressed("ui_shift") if Input.is_action_just_pressed("ui_shift") else is_sprinting
-	if Input.is_action_just_released("ui_shift"):
-		is_sprinting = false
+	is_sprinting = Input.is_action_pressed("ui_shift")
 	
 	# Calculate movement direction
 	var direction = Vector3.ZERO
@@ -85,8 +83,8 @@ func _physics_process(delta: float) -> void:
 	velocity = move_and_slide()
 	
 	# Track distance for footsteps
-	if is_on_floor() and direction.length() > 0:
-		distance_traveled += (direction * current_max_speed * delta).length()
+	if is_on_floor() and get_real_velocity().length() > 0.1:
+		distance_traveled += get_real_velocity().length() * delta
 		if distance_traveled >= FOOTSTEP_DISTANCE:
 			distance_traveled = 0.0
 			_play_footstep()

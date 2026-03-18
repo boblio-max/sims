@@ -94,5 +94,5 @@ func _finish_shootout() -> void:
 		ui.show_critical("Final score: " + str(shots_goal) + " / " + str(max_shots))
 
 	portal.monitoring = true
-    portal.get_node("Collision").disabled = false
-    portal.visible = true
+	portal.get_node("Collision").disabled = false
+	portal.visible = true
