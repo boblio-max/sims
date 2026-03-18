@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
+[ext_resource type="Script" path="res://scenes/software_world.gd" id="3"]
+[ext_resource type="Script" path="res://scenes/world_ui.gd" id="4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
 sky_top_color = Color(0.12, 0.12, 0.18, 1)
@@ -15,6 +17,8 @@ sky = SubResource("SubResource_sky")
 ambient_light_source = 2
 ambient_light_color = Color(0.5, 0.55, 0.65, 1)
 ambient_light_energy = 0.3
+bloom_enabled = true
+bloom_intensity = 0.2
 
 [sub_resource type="StandardMaterial3D" id="SubResource_floor_mat"]
 albedo_color = Color(0.25, 0.27, 0.32, 1)
@@ -72,10 +76,44 @@ size = Vector3(3, 2, 0.08)
 material = SubResource("SubResource_screen_mat")
 size = Vector3(4, 2.5, 0.08)
 
+[sub_resource type="SphereMesh" id="SubResource_bug_mesh"]
+radius = 0.5
+rings = 16
+radial_segments = 16
+
 [node name="SoftwareEngineerWorld" type="Node3D" unique_id=1485790777]
+script = ExtResource("3")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1813840474]
 environment = SubResource("SubResource_env")
+
+[node name="WorldUI" type="CanvasLayer" parent="."]
+script = ExtResource("4")
+
+[node name="ObjectiveLabel" type="Label" parent="WorldUI"]
+text = ""
+rect_position = Vector2(16, 16)
+
+[node name="StatusLabel" type="Label" parent="WorldUI"]
+text = ""
+rect_position = Vector2(16, 48)
+
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.86, 0, 0.5, 0, 1, 0, -0.5, 0, 0.86, 0, 12, 0)
+light_color = Color(1, 0.98, 1, 1)
+light_energy = 1.2
+shadow_enabled = true
+shadow_bias = 0.05
+
+[node name="ReflectionProbe" type="ReflectionProbe3D" parent="."]
+extents = Vector3(30, 18, 30)
+intensity = 1.2
+
+[node name="WorldTitle" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
+text = "Software Engineering"
+font_size = 48
+modulate = Color(0.5, 0.7, 1, 1)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=556336707]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
@@ -434,6 +472,39 @@ mesh = SubResource("SubResource_whiteboard")
 [node name="BigScreen" type="MeshInstance3D" parent="." unique_id=1153754147]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.8, 2.2, -5)
 mesh = SubResource("SubResource_bigscreen")
+
+[node name="Bug1" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.5, -4)
+monitoring = true
+
+[node name="Bug1Col" type="CollisionShape3D" parent="Bug1"]
+shape = SphereShape3D(radius = 0.7)
+
+[node name="Bug1Mesh" type="MeshInstance3D" parent="Bug1"]
+mesh = SubResource("SubResource_bug_mesh")
+material_override = SubResource("SubResource_screen_mat")
+
+[node name="Bug2" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, -5)
+monitoring = true
+
+[node name="Bug2Col" type="CollisionShape3D" parent="Bug2"]
+shape = SphereShape3D(radius = 0.7)
+
+[node name="Bug2Mesh" type="MeshInstance3D" parent="Bug2"]
+mesh = SubResource("SubResource_bug_mesh")
+material_override = SubResource("SubResource_screen_mat")
+
+[node name="Bug3" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, -4)
+monitoring = true
+
+[node name="Bug3Col" type="CollisionShape3D" parent="Bug3"]
+shape = SphereShape3D(radius = 0.7)
+
+[node name="Bug3Mesh" type="MeshInstance3D" parent="Bug3"]
+mesh = SubResource("SubResource_bug_mesh")
+material_override = SubResource("SubResource_screen_mat")
 
 [node name="Player" parent="." unique_id=1639654393 instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8)

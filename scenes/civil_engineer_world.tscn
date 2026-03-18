@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
+[ext_resource type="Script" path="res://scenes/civil_world.gd" id="3"]
+[ext_resource type="Script" path="res://scenes/world_ui.gd" id="4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
 sky_top_color = Color(0.45, 0.6, 0.8, 1)
@@ -16,6 +18,8 @@ sky = SubResource("SubResource_sky")
 ambient_light_source = 2
 ambient_light_color = Color(0.65, 0.6, 0.55, 1)
 ambient_light_energy = 0.3
+bloom_enabled = true
+bloom_intensity = 0.25
 
 [sub_resource type="StandardMaterial3D" id="SubResource_dirt_mat"]
 albedo_color = Color(0.55, 0.42, 0.3, 1)
@@ -71,9 +75,38 @@ size = Vector3(8.0, 0.3, 0.3)
 material = SubResource("SubResource_steel_mat")
 
 [node name="CivilEngineerWorld" type="Node3D"]
+script = ExtResource("3")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("SubResource_env")
+
+[node name="WorldUI" type="CanvasLayer" parent="."]
+script = ExtResource("4")
+
+[node name="ObjectiveLabel" type="Label" parent="WorldUI"]
+text = ""
+rect_position = Vector2(16, 16)
+
+[node name="StatusLabel" type="Label" parent="WorldUI"]
+text = ""
+rect_position = Vector2(16, 48)
+
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, 0, 12, 0)
+light_color = Color(1, 0.95, 0.9, 1)
+light_energy = 1.2
+shadow_enabled = true
+shadow_bias = 0.05
+
+[node name="ReflectionProbe" type="ReflectionProbe3D" parent="."]
+extents = Vector3(30, 20, 30)
+intensity = 1.2
+
+[node name="WorldTitle" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.5, 0)
+text = "Civil Engineering"
+font_size = 48
+modulate = Color(0.9, 0.9, 1, 1)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -5)
@@ -162,6 +195,24 @@ mesh = SubResource("SubResource_scaffold_h")
 [node name="CraneArm" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 9.2, -5)
 mesh = SubResource("SubResource_crane_arm")
+
+[node name="BlockA" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, -5)
+
+[node name="BlockAMesh" type="MeshInstance3D" parent="BlockA"]
+mesh = SubResource("SubResource_block")
+
+[node name="BlockB" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -5)
+
+[node name="BlockBMesh" type="MeshInstance3D" parent="BlockB"]
+mesh = SubResource("SubResource_block")
+
+[node name="BlockC" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, -5)
+
+[node name="BlockCMesh" type="MeshInstance3D" parent="BlockC"]
+mesh = SubResource("SubResource_block")
 
 [node name="Player" parent="." instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8)

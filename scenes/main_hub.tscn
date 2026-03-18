@@ -16,6 +16,8 @@ sky = SubResource("SubResource_sky")
 ambient_light_source = 2
 ambient_light_color = Color(0.5, 0.5, 0.55, 1)
 ambient_light_energy = 0.5
+bloom_enabled = true
+bloom_intensity = 0.2
 
 [sub_resource type="StandardMaterial3D" id="SubResource_ground"]
 albedo_color = Color(0.3, 0.45, 0.3, 1)
@@ -68,6 +70,16 @@ size = Vector3(33, 3, 23)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2089747486]
 environment = SubResource("SubResource_env")
+
+[node name="ReflectionProbe" type="ReflectionProbe3D" parent="."]
+extents = Vector3(35, 15, 35)
+intensity = 1.1
+
+[node name="WorldTitle" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.5, 0)
+text = "Career Hub"
+font_size = 64
+modulate = Color(0.9, 0.95, 1, 1)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1094842952]
 transform = Transform3D(1, 0, 0, 0, 0.5, 0.866, 0, -0.866, 0.5, 0, 15, 0)
