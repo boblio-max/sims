@@ -39,6 +39,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Pause menu toggle
 	if Input.is_action_just_pressed("ui_cancel"):
 		GameManager.toggle_pause()
+	
+	# Handle interaction
+	if Input.is_action_just_pressed("ui_accept"):
+		var object = get_interactable_object()
+		if object and object.has_method("interact"):
+			object.interact()
 
 func _physics_process(delta: float) -> void:
 	if GameManager.is_paused:

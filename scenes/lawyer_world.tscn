@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://scenes/lawyer_world.gd" id="3"]
 [ext_resource type="Script" path="res://scenes/enhanced_world_ui.gd" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://npc/npc.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://ui/dialogue_ui.tscn" id="7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
 sky_top_color = Color(0.15, 0.12, 0.1, 1)
@@ -955,3 +957,9 @@ material = SubResource("StandardMaterial3D_e7124")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32241982, -0.049560547)
 operation = 2
 size = Vector3(0.8310547, 0.5527344, 0.9008789)
+[node name="DialogueUI" parent="." instance=ExtResource("7")]
+
+[node name="SeniorPartner" parent="." instance=ExtResource("6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6)
+character_name = "Senior Partner"
+dialogue_lines = ["The client's future is in your hands.", "Gather all the evidence at the scene before presenting our case to the judge."]

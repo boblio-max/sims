@@ -5,6 +5,8 @@
 [ext_resource type="Script" path="res://scenes/doctor_world.gd" id="3"]
 [ext_resource type="Script" path="res://scenes/enhanced_world_ui.gd" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://npc/npc.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://ui/dialogue_ui.tscn" id="7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
 sky_top_color = Color(0.15, 0.15, 0.2, 1)
@@ -225,3 +227,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 9)
 text = "Return to Hub"
 font_size = 36
 modulate = Color(1, 1, 0.5, 1)
+[node name="DialogueUI" parent="." instance=ExtResource("7")]
+
+[node name="HeadNurse" parent="." instance=ExtResource("6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6)
+character_name = "Head Nurse"
+dialogue_lines = ["It's a busy day at the clinic.", "We need you to examine the patients and provide accurate diagnoses based on their symptoms."]
