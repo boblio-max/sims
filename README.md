@@ -2,7 +2,7 @@
 
 A 3D career exploration game built with Godot 4. Players navigate through different profession worlds and complete skill-based challenges.
 
-## 🎮 Game Overview
+## Game Overview
 
 **Main Hub**: A central meeting point with 5 career portals. Navigate the pavilion and choose which career path to explore.
 
@@ -59,7 +59,7 @@ A 3D career exploration game built with Godot 4. Players navigate through differ
 
 ---
 
-## 🎯 Difficulty Progression
+## Difficulty Progression
 
 | World | Difficulty | Why |
 |-------|-----------|-----|
@@ -71,7 +71,7 @@ A 3D career exploration game built with Godot 4. Players navigate through differ
 
 ---
 
-## 🕹️ Controls
+## Controls
 
 ### General
 - **WASD**: Move forward/backward/left/right
@@ -85,7 +85,7 @@ A 3D career exploration game built with Godot 4. Players navigate through differ
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 /workspaces/sims/
@@ -113,7 +113,7 @@ A 3D career exploration game built with Godot 4. Players navigate through differ
 
 ---
 
-## 🔧 Technical Details
+## Technical Details
 
 ### Player System
 - **CharacterBody3D** with gravity simulation
@@ -145,7 +145,7 @@ A 3D career exploration game built with Godot 4. Players navigate through differ
 
 ---
 
-## 🎨 World Themes & Colors
+## World Themes & Colors
 
 | World | Sky Color | Ground | Accent Color | Vibe |
 |-------|-----------|--------|--------------|------|
@@ -158,7 +158,7 @@ A 3D career exploration game built with Godot 4. Players navigate through differ
 
 ---
 
-## 📊 Difficulty Breakdown
+## Difficulty Breakdown
 
 ### Easy (Software, Lawyer early)
 - Large interactive areas
@@ -180,7 +180,7 @@ A 3D career exploration game built with Godot 4. Players navigate through differ
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 1. **Open Godot 4.x**
 2. **Import Project**: Point to `/workspaces/sims/`
@@ -193,7 +193,7 @@ A 3D career exploration game built with Godot 4. Players navigate through differ
 
 ---
 
-## 📝 Notes
+## Notes
 
 - Each world is **independent** and can be played in any order
 - Objectives and status messages guide the player
@@ -203,18 +203,18 @@ A 3D career exploration game built with Godot 4. Players navigate through differ
 
 ---
 
-## 🎓 Educational Value
+## Educational Value
 
 This game demonstrates:
-- ✅ First-person character controller
-- ✅ 3D scene management and portals
-- ✅ Physics-based interactions (ball throwing)
-- ✅ UI overlay systems
-- ✅ Event-driven gameplay
-- ✅ Asset-light design (procedural geometry)
-- ✅ Proper Godot 4 best practices
-- ✅ Career diversity education
+- First-person character controller
+- 3D scene management and portals
+- Physics-based interactions (ball throwing)
+- UI overlay systems
+- Event-driven gameplay
+- Asset-light design (procedural geometry)
+- Proper Godot 4 best practices
+- Career diversity education
 
 ---
 
-**Made with ❤️ in Godot 4**
+**Made with Godot 4**
