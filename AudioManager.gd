@@ -104,16 +104,16 @@ func stop_music(fade_out: bool = true) -> void:
 
 func set_master_volume(volume: float) -> void:
 	if AudioServer.get_bus_index("Master") > -1:
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(clamp(volume, 0.0, 1.0)))
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(clamp(volume, 0.0, 1.0)))
 
 func set_sfx_volume(volume: float) -> void:
 	if AudioServer.get_bus_index("SFX") > -1:
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear_to_db(clamp(volume, 0.0, 1.0)))
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear2db(clamp(volume, 0.0, 1.0)))
 	for player in sfx_players:
 		player.bus = "SFX"
 
 func set_music_volume(volume: float) -> void:
 	if AudioServer.get_bus_index("Music") > -1:
-		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(clamp(volume, 0.0, 1.0)))
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear2db(clamp(volume, 0.0, 1.0)))
 	if current_music:
 		current_music.bus = "Music"

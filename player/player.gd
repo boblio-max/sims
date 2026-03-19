@@ -4,7 +4,7 @@ extends CharacterBody3D
 @export var mouse_sensitivity: float = 0.003
 @export var jump_velocity: float = 4.5
 
-var GRAVITY := ProjectSettings.get_setting("physics/3d/default_gravity")
+var GRAVITY: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var yaw := 0.0
 var pitch := 0.0

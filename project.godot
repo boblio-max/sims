@@ -1,8 +1,8 @@
 [gd_project]
 config_version=5
-application/name="Sims"
+application/name="Step Into My Shoes"
 application/description="A simulation game."
-run/main_scene="res://scenes/main_menu.tscn"
+run/main_scene="res://scenes/main_scene.tscn"
 
 [autoload]
 GameManager="res://GameManager.gd"
