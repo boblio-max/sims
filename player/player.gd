@@ -44,4 +44,4 @@ func _physics_process(delta: float) -> void:
     elif Input.is_action_just_pressed("ui_accept"):
         velocity.y = jump_velocity
 
-move_and_slide()
+    move_and_slide()

@@ -42,14 +42,7 @@ func _ready() -> void:
 		add_child(player)
 		sfx_players.append(player)
 
-func _ready() -> void:
-	add_to_group("audio_manager")
-	
-	# Create SFX players
-	for i in range(MAX_SFX_PLAYERS):
-		var player = AudioStreamPlayer.new()
-		add_child(player)
-		sfx_players.append(player)
+
 
 func play_sfx(sound_name: String, volume_db: float = 0.0) -> void:
 	if not sfx_library.has(sound_name):

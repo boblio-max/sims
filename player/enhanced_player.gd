@@ -7,7 +7,7 @@ extends CharacterBody3D
 @export var acceleration: float = 20.0
 @export var deceleration: float = 15.0
 
-var GRAVITY := ProjectSettings.get_setting("physics/3d/default_gravity")
+var GRAVITY: Variant = ProjectSettings.get_setting("physics/3d/default_gravity")
 const FOOTSTEP_DISTANCE := 0.5  # Distance traveled between footsteps
 
 var yaw := 0.0
