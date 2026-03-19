@@ -1,9 +1,9 @@
 [gd_project]
 config_version=5
-application/name="Career Quest"
-application/description="A career exploration game where you experience different professions."
+application/name="Sims"
+application/description="A simulation game."
 run/main_scene="res://scenes/main_menu.tscn"
 
 [autoload]
-GameManager="*res://GameManager.gd"
-AudioManager="*res://AudioManager.gd"
+GameManager="res://GameManager.gd"
+AudioManager="res://AudioManager.gd"

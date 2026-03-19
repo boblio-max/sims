@@ -4,7 +4,7 @@ extends CharacterBody3D
 @export var mouse_sensitivity: float = 0.003
 @export var jump_velocity: float = 4.5
 
-const GRAVITY := ProjectSettings.get_setting("physics/3d/default_gravity")
+var GRAVITY := ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var yaw := 0.0
 var pitch := 0.0
@@ -44,4 +44,4 @@ func _physics_process(delta: float) -> void:
     elif Input.is_action_just_pressed("ui_accept"):
         velocity.y = jump_velocity
 
-    velocity = move_and_slide()
+move_and_slide()

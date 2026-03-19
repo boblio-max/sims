@@ -7,7 +7,7 @@ extends CharacterBody3D
 @export var acceleration: float = 20.0
 @export var deceleration: float = 15.0
 
-const GRAVITY := ProjectSettings.get_setting("physics/3d/default_gravity")
+var GRAVITY := ProjectSettings.get_setting("physics/3d/default_gravity")
 const FOOTSTEP_DISTANCE := 0.5  # Distance traveled between footsteps
 
 var yaw := 0.0
@@ -86,7 +86,7 @@ func _physics_process(delta: float) -> void:
 	elif Input.is_action_just_pressed("ui_accept"):
 		velocity.y = jump_velocity
 
-	velocity = move_and_slide()
+	move_and_slide()
 	
 	# Track distance for footsteps
 	if is_on_floor() and get_real_velocity().length() > 0.1:

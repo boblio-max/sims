@@ -6,22 +6,41 @@ var current_music: AudioStreamPlayer = null
 var sfx_players: Array[AudioStreamPlayer] = []
 const MAX_SFX_PLAYERS = 8
 
-# Sound effect dictionary - Add your sounds here
-var sfx_library: Dictionary = {
-	"success": preload("res://assets/sounds/success.wav") if ResourceLoader.exists("res://assets/sounds/success.wav") else null,
-	"fail": preload("res://assets/sounds/fail.wav") if ResourceLoader.exists("res://assets/sounds/fail.wav") else null,
-	"pickup": preload("res://assets/sounds/pickup.wav") if ResourceLoader.exists("res://assets/sounds/pickup.wav") else null,
-	"ui_click": preload("res://assets/sounds/ui_click.wav") if ResourceLoader.exists("res://assets/sounds/ui_click.wav") else null,
-	"footstep": preload("res://assets/sounds/footstep.wav") if ResourceLoader.exists("res://assets/sounds/footstep.wav") else null,
-	"portal": preload("res://assets/sounds/portal.wav") if ResourceLoader.exists("res://assets/sounds/portal.wav") else null,
-}
+# Sound effect dictionary - Add your sounds here (loaded at runtime so missing files don't break the project)
+var sfx_library: Dictionary = {}
 
 # Music dictionary
-var music_library: Dictionary = {
-	"menu": preload("res://assets/music/menu.ogg") if ResourceLoader.exists("res://assets/music/menu.ogg") else null,
-	"hub": preload("res://assets/music/hub.ogg") if ResourceLoader.exists("res://assets/music/hub.ogg") else null,
-	"gameplay": preload("res://assets/music/gameplay.ogg") if ResourceLoader.exists("res://assets/music/gameplay.ogg") else null,
-}
+var music_library: Dictionary = {}
+
+func _safe_load_audio(path: String) -> AudioStream:
+	if ResourceLoader.exists(path):
+		return load(path) as AudioStream
+	return null
+
+func _ready() -> void:
+	add_to_group("audio_manager")
+
+	# Initialize audio libraries
+	sfx_library = {
+		"success": _safe_load_audio("res://assets/sounds/success.wav"),
+		"fail": _safe_load_audio("res://assets/sounds/fail.wav"),
+		"pickup": _safe_load_audio("res://assets/sounds/pickup.wav"),
+		"ui_click": _safe_load_audio("res://assets/sounds/ui_click.wav"),
+		"footstep": _safe_load_audio("res://assets/sounds/footstep.wav"),
+		"portal": _safe_load_audio("res://assets/sounds/portal.wav"),
+	}
+
+	music_library = {
+		"menu": _safe_load_audio("res://assets/music/menu.ogg"),
+		"hub": _safe_load_audio("res://assets/music/hub.ogg"),
+		"gameplay": _safe_load_audio("res://assets/music/gameplay.ogg"),
+	}
+
+	# Create SFX players
+	for i in range(MAX_SFX_PLAYERS):
+		var player = AudioStreamPlayer.new()
+		add_child(player)
+		sfx_players.append(player)
 
 func _ready() -> void:
 	add_to_group("audio_manager")

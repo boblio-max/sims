@@ -41,8 +41,12 @@ func _process(delta: float) -> void:
 			if Input.is_action_just_pressed("ui_accept"):
 				_start_treating(patient)
 
+var _prev_key_1: bool = false
+var _prev_key_2: bool = false
+var _prev_key_3: bool = false
+
 func _start_treating(patient: Area3D) -> void:
-	if patients.empty():
+	if patients.size() == 0:
 		return
 	treating = true
 	current_patient = patients.pop_front()
@@ -51,12 +55,20 @@ func _start_treating(patient: Area3D) -> void:
 
 func _check_diagnosis_input() -> void:
 	var choice := -1
-	if Input.is_key_just_pressed(KEY_1):
+	var key_1 = Input.is_key_pressed(Key.KEY_1)
+	var key_2 = Input.is_key_pressed(Key.KEY_2)
+	var key_3 = Input.is_key_pressed(Key.KEY_3)
+
+	if key_1 and not _prev_key_1:
 		choice = 0
-	elif Input.is_key_just_pressed(KEY_2):
+	elif key_2 and not _prev_key_2:
 		choice = 1
-	elif Input.is_key_just_pressed(KEY_3):
+	elif key_3 and not _prev_key_3:
 		choice = 2
+
+	_prev_key_1 = key_1
+	_prev_key_2 = key_2
+	_prev_key_3 = key_3
 
 	if choice == -1:
 		return
@@ -74,7 +86,7 @@ func _check_diagnosis_input() -> void:
 
 	ui.show_progress(correct_diagnoses, total_patients)
 
-	if patients.empty():
+	if patients.size() == 0:
 		_finish_clinic()
 	else:
 		ui.set_objective("Treat " + str(patients.size()) + " more patient(s).")
