@@ -25,7 +25,9 @@ bloom_enabled = true
 bloom_intensity = 0.25
 
 [sub_resource type="StandardMaterial3D" id="SubResource_dirt_mat"]
-albedo_color = Color(0.55, 0.42, 0.3, 1)
+albedo_color = Color(0.4, 0.3, 0.2, 1)
+roughness = 0.9
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="PlaneMesh" id="SubResource_floor"]
 size = Vector2(50, 50)
@@ -35,7 +37,9 @@ material = SubResource("SubResource_dirt_mat")
 size = Vector3(50, 0.1, 50)
 
 [sub_resource type="StandardMaterial3D" id="SubResource_concrete_mat"]
-albedo_color = Color(0.65, 0.63, 0.6, 1)
+albedo_color = Color(0.5, 0.5, 0.5, 1)
+roughness = 0.7
+uv1_scale = Vector3(5, 5, 5)
 
 [sub_resource type="BoxMesh" id="SubResource_wall_mesh"]
 size = Vector3(50, 12, 0.5)
@@ -46,7 +50,9 @@ size = Vector3(50, 0.5, 50)
 material = SubResource("SubResource_concrete_mat")
 
 [sub_resource type="StandardMaterial3D" id="SubResource_steel_mat"]
-albedo_color = Color(0.5, 0.52, 0.55, 1)
+albedo_color = Color(0.9, 0.7, 0.1, 1) # Construction Yellow
+metallic = 0.6
+roughness = 0.3
 
 [sub_resource type="StandardMaterial3D" id="SubResource_scaffold_mat"]
 albedo_color = Color(0.6, 0.55, 0.3, 1)

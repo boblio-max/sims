@@ -7,7 +7,12 @@ extends CharacterBody3D
 @export var acceleration: float = 20.0
 @export var deceleration: float = 15.0
 
+var bob_freq = 2.4
+var bob_amp = 0.08
+var t_bob = 0.0
+
 var GRAVITY: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+@onready var audio: Node = get_node_or_null("/root/AudioManager")
 const FOOTSTEP_DISTANCE := 0.5  # Distance traveled between footsteps
 
 var yaw := 0.0
@@ -15,6 +20,7 @@ var pitch := 0.0
 var velocity_smoothed := Vector3.ZERO
 var distance_traveled := 0.0
 var is_sprinting := false
+var footstep_dist := 0.0 # New variable for footstep tracking
 
 @onready var cam: Camera3D = $Camera3D
 @onready var raycast: RayCast3D = $InteractionRaycast
@@ -45,6 +51,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		var object = get_interactable_object()
 		if object and object.has_method("interact"):
 			object.interact()
+
+func _headbob(time) -> Vector3:
+	var pos = Vector3.ZERO
+	pos.y = sin(time * bob_freq) * bob_amp
+	pos.x = cos(time * bob_freq * 0.5) * bob_amp
+	return pos
 
 func _physics_process(delta: float) -> void:
 	if GameManager.is_paused:
@@ -88,12 +100,16 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	
-	# Track distance for footsteps
-	if is_on_floor() and get_real_velocity().length() > 0.1:
-		distance_traveled += get_real_velocity().length() * delta
-		if distance_traveled >= FOOTSTEP_DISTANCE:
-			distance_traveled = 0.0
+	# Camera bobbing
+	t_bob += delta * velocity.length() * float(is_on_floor())
+	cam.transform.origin = _headbob(t_bob)
+	
+	# Footsteps
+	if is_on_floor() and velocity.length() > 1.0:
+		footstep_dist += velocity.length() * delta
+		if footstep_dist > 3.0: # Distance-based footsteps
 			_play_footstep()
+			footstep_dist = 0.0
 	
 	# Update interaction hint in UI
 	var ui = get_tree().get_first_node_in_group("dialogue_ui")

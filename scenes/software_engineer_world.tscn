@@ -54,15 +54,20 @@ size = Vector3(2, 0.75, 1)
 [sub_resource type="StandardMaterial3D" id="SubResource_screen_mat"]
 albedo_color = Color(0.1, 0.12, 0.15, 1)
 emission_enabled = true
-emission = Color(0.15, 0.35, 0.55, 1)
-emission_energy_multiplier = 1.5
+emission = Color(0.2, 0.5, 1.0, 1.0)
+emission_energy_multiplier = 3.0
 
 [sub_resource type="BoxMesh" id="SubResource_monitor"]
 material = SubResource("SubResource_screen_mat")
 size = Vector3(0.8, 0.5, 0.05)
 
 [sub_resource type="StandardMaterial3D" id="SubResource_server_mat"]
-albedo_color = Color(0.15, 0.15, 0.18, 1)
+albedo_color = Color(0.1, 0.1, 0.12, 1)
+metallic = 0.8
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.1, 1.0, 0.2, 1.0)
+emission_energy_multiplier = 0.4
 
 [sub_resource type="BoxMesh" id="SubResource_server"]
 material = SubResource("SubResource_server_mat")

@@ -6,14 +6,32 @@ extends Node3D
 @onready var score_label: Label = $ProgressUI/ScoreLabel if has_node("ProgressUI/ScoreLabel") else Label.new()
 
 func _ready() -> void:
-	GameManager.load_progress()
-	
-	# Update progress display
-	_update_progress_display()
-	
-	# Play hub music
-	if AudioManager:
-		AudioManager.play_music("hub")
+    # Set player to initial position
+    if player:
+        player.global_position = Vector3(0, 2, 6)
+    
+    # Initialize UI
+    _update_progress_display()
+    
+    # Play hub music
+    var audio = get_node_or_null("/root/AudioManager")
+    if audio:
+        audio.play_music("hub")
+    
+    # Smooth fade-in
+    _fade_in_from_black()
+
+func _fade_in_from_black() -> void:
+    var canvas = CanvasLayer.new()
+    var color_rect = ColorRect.new()
+    color_rect.color = Color(0, 0, 0, 1)
+    color_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    canvas.add_child(color_rect)
+    get_tree().root.add_child(canvas)
+    
+    var tween = create_tween()
+    tween.tween_property(color_rect, "color:a", 0.0, 0.6)
+    tween.tween_callback(func(): canvas.queue_free())
 
 func _process(delta: float) -> void:
 	# Check if player returned - update display

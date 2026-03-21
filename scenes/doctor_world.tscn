@@ -54,8 +54,8 @@ material = SubResource("SubResource_metal_mat")
 [sub_resource type="StandardMaterial3D" id="SubResource_light_mat"]
 albedo_color = Color(0.95, 0.95, 0.9, 1)
 emission_enabled = true
-emission = Color(1, 1, 0.9, 1)
-emission_energy_multiplier = 2.0
+emission = Color(0.9, 1.0, 1.0, 1)
+emission_energy_multiplier = 4.0
 
 [sub_resource type="BoxMesh" id="SubResource_light_mesh"]
 size = Vector3(0.6, 0.1, 0.6)
@@ -216,7 +216,7 @@ mesh = SubResource("SubResource_patient_mesh")
 material_override = SubResource("SubResource_light_mat")
 
 [node name="Player" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 6.5)
 
 [node name="ReturnPortal" parent="." instance=ExtResource("2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9)

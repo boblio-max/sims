@@ -280,14 +280,14 @@ modulate = Color(1, 0.3, 0.3, 1)
 text = "Doctor"
 font_size = 48
 
-[node name="PoliticianPortal" parent="." unique_id=1063304876 instance=ExtResource("2")]
+[node name="SoccerPortal" parent="." unique_id=1063304876 instance=ExtResource("2")]
 transform = Transform3D(0.9659258, 0, 0.25881904, 0, 1, 0, -0.25881904, 0, 0.9659258, -5, 1.5, -7)
-target_scene = "res://scenes/politician_world.tscn"
+target_scene = "res://scenes/soccer_world.tscn"
 
-[node name="PoliticianLabel" type="Label3D" parent="." unique_id=295049892]
+[node name="SoccerLabel" type="Label3D" parent="." unique_id=295049892]
 transform = Transform3D(0.9659258, 0, 0.25881904, 0, 1, 0, -0.25881904, 0, 0.9659258, -5, 5.3, -7)
 modulate = Color(0.3, 0.3, 1, 1)
-text = "Politician"
+text = "Soccer Player"
 font_size = 48
 
 [node name="CivilEngineerPortal" parent="." unique_id=851896983 instance=ExtResource("2")]

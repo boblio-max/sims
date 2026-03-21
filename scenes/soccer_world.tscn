@@ -1,0 +1,155 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
+[ext_resource type="Script" path="res://scenes/soccer_world.gd" id="3"]
+[ext_resource type="Script" path="res://scenes/enhanced_world_ui.gd" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://npc/npc.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://ui/dialogue_ui.tscn" id="7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
+sky_top_color = Color(0.25, 0.45, 0.8, 1)
+sky_horizon_color = Color(0.6, 0.7, 0.8, 1)
+
+[sub_resource type="Sky" id="SubResource_sky"]
+sky_material = SubResource("SubResource_sky_mat")
+
+[sub_resource type="Environment" id="SubResource_env"]
+background_mode = 2
+sky = SubResource("SubResource_sky")
+ambient_light_source = 2
+ambient_light_color = Color(0.7, 0.7, 0.75, 1)
+ambient_light_energy = 0.5
+bloom_enabled = true
+bloom_intensity = 0.2
+
+[sub_resource type="StandardMaterial3D" id="SubResource_grass_mat"]
+albedo_color = Color(0.15, 0.4, 0.15, 1)
+roughness = 0.8
+uv1_scale = Vector3(20, 20, 20)
+
+[sub_resource type="PlaneMesh" id="SubResource_floor"]
+size = Vector2(60, 60)
+material = SubResource("SubResource_grass_mat")
+
+[sub_resource type="BoxShape3D" id="SubResource_floor_col"]
+size = Vector3(60, 0.1, 60)
+
+[sub_resource type="StandardMaterial3D" id="SubResource_goal_mat"]
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="BoxMesh" id="SubResource_goal_post"]
+size = Vector3(0.2, 2.5, 0.2)
+material = SubResource("SubResource_goal_mat")
+
+[sub_resource type="BoxMesh" id="SubResource_goal_crossbar"]
+size = Vector3(7.5, 0.2, 0.2)
+material = SubResource("SubResource_goal_mat")
+
+[sub_resource type="SphereMesh" id="SubResource_ball_mesh"]
+radius = 0.3
+rings = 16
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="SubResource_ball_mat"]
+albedo_color = Color(1, 1, 1, 1)
+
+[node name="SoccerWorld" type="Node3D" unique_id=1485790777]
+script = ExtResource("3")
+
+[node name="PauseMenu" parent="." instance=ExtResource("5")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("SubResource_env")
+
+[node name="WorldUI" type="CanvasLayer" parent="."]
+script = ExtResource("4")
+
+[node name="ObjectiveLabel" type="Label" parent="WorldUI"]
+layout_mode = 3
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 600.0
+offset_bottom = 50.0
+text = ""
+[node name="FloodLight" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 15, 0)
+light_energy = 5.0
+spot_range = 40.0
+spot_angle = 60.0
+shadow_enabled = true
+
+[node name="StatusLabel" type="Label" parent="WorldUI"]
+layout_mode = 3
+offset_left = 20.0
+offset_top = 60.0
+offset_right = 600.0
+offset_bottom = 90.0
+text = ""
+
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.86, -0.43, 0.25, 0, 0.5, 0.866, -0.5, -0.74, 0.43, 0, 15, 0)
+light_color = Color(1, 1, 0.95, 1)
+shadow_enabled = true
+
+[node name="WorldTitle" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -12)
+text = "Soccer Stadium"
+font_size = 64
+modulate = Color(1, 1, 0.8, 1)
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="FloorMesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("SubResource_floor")
+
+[node name="FloorCol" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("SubResource_floor_col")
+
+[node name="Goal" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
+
+[node name="PostL" type="MeshInstance3D" parent="Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 1.25, 0)
+mesh = SubResource("SubResource_goal_post")
+
+[node name="PostR" type="MeshInstance3D" parent="Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 1.25, 0)
+mesh = SubResource("SubResource_goal_post")
+
+[node name="Crossbar" type="MeshInstance3D" parent="Goal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+mesh = SubResource("SubResource_goal_crossbar")
+
+[node name="GoalArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -15.5)
+
+[node name="GoalCol" type="CollisionShape3D" parent="GoalArea"]
+shape = BoxShape3D(size = Vector3(7, 2.5, 1))
+
+[node name="PenaltyBall" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -6)
+mass = 0.45
+
+[node name="BallMesh" type="MeshInstance3D" parent="PenaltyBall"]
+mesh = SubResource("SubResource_ball_mesh")
+material_override = SubResource("SubResource_ball_mat")
+
+[node name="BallCol" type="CollisionShape3D" parent="PenaltyBall"]
+shape = SphereShape3D(radius = 0.3)
+
+[node name="Player" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2)
+
+[node name="ReturnPortal" parent="." instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+target_scene = "res://scenes/main_hub.tscn"
+
+[node name="CoachNPC" parent="." instance=ExtResource("6")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3, 0, -4)
+character_name = "Coach"
+dialogue_lines = ["Ready for the penalty shootout?", "You need to score 3 out of 5 goals to win.", "Move near the ball and press Space to shoot!"]
+
+[node name="DialogueUI" parent="." instance=ExtResource("7")]

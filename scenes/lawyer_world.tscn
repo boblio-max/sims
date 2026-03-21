@@ -24,7 +24,9 @@ bloom_enabled = true
 bloom_intensity = 0.22
 
 [sub_resource type="StandardMaterial3D" id="SubResource_wood_mat"]
-albedo_color = Color(0.45, 0.3, 0.18, 1)
+albedo_color = Color(0.4, 0.25, 0.15, 1)
+roughness = 0.4
+metallic = 0.05
 
 [sub_resource type="PlaneMesh" id="SubResource_floor"]
 material = SubResource("SubResource_wood_mat")
@@ -48,7 +50,9 @@ material = SubResource("SubResource_wall_mat")
 size = Vector3(22, 0.2, 22)
 
 [sub_resource type="StandardMaterial3D" id="SubResource_dark_wood"]
-albedo_color = Color(0.35, 0.22, 0.12, 1)
+albedo_color = Color(0.25, 0.15, 0.08, 1)
+roughness = 0.3
+metallic = 0.1
 
 [sub_resource type="BoxMesh" id="SubResource_judge_platform"]
 material = SubResource("SubResource_dark_wood")
@@ -138,9 +142,9 @@ modulate = Color(1, 0.9, 0.8, 1)
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=914004060]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -4)
 light_color = Color(1, 0.95, 0.85, 1)
-light_energy = 2.0
+light_energy = 3.5
 shadow_enabled = true
-omni_range = 30.0
+omni_range = 40.0
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=2013850872]
 
