@@ -1,258 +1,988 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=76 format=3]
+
+[ext_resource type="Script" path="res://scripts/worlds/politician_world.gd" id="1_script"]
 
 [ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
-[ext_resource type="Script" path="res://scenes/soccer_world.gd" id="3"]
-[ext_resource type="Script" path="res://scenes/enhanced_world_ui.gd" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://npc/npc.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://ui/dialogue_ui.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/voter.tscn" id="3"]
 
-[sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
-sky_top_color = Color(0.35, 0.5, 0.8, 1)
-sky_horizon_color = Color(0.65, 0.75, 0.9, 1)
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+sky_top_color = Color(0.25, 0.38, 0.7, 1)
+sky_horizon_color = Color(0.55, 0.65, 0.82, 1)
 
-[sub_resource type="Sky" id="SubResource_sky"]
-sky_material = SubResource("SubResource_sky_mat")
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
 
-[sub_resource type="Environment" id="SubResource_env"]
+[sub_resource type="Environment" id="env"]
 background_mode = 2
-sky = SubResource("SubResource_sky")
+sky = SubResource("sky")
 ambient_light_source = 2
-ambient_light_color = Color(0.6, 0.6, 0.65, 1)
-ambient_light_energy = 0.3
-bloom_enabled = true
-bloom_intensity = 0.2
+ambient_light_color = Color(0.5, 0.48, 0.42, 1)
+ambient_light_energy = 0.15
+tonemap_mode = 3
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
+glow_intensity = 0.4
+glow_strength = 1.0
+glow_bloom = 0.2
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.9, 0.85, 0.7, 1)
+ssao_radius = 2.5
+ssao_intensity = 2.5
+ssil_enabled = true
+glow_enabled = true
+glow_intensity = 0.35
+glow_strength = 0.9
+glow_bloom = 0.2
+glow_blend_mode = 1
+fog_enabled = true
+fog_light_color = Color(0.65, 0.6, 0.5, 1)
+fog_density = 0.002
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.008
+volumetric_fog_albedo = Color(0.8, 0.75, 0.65, 1)
 
-[sub_resource type="StandardMaterial3D" id="SubResource_ground_mat"]
-albedo_color = Color(0.35, 0.35, 0.4, 1)
+; === PBR MATERIALS ===
+[sub_resource type="StandardMaterial3D" id="m_marble"]
+albedo_color = Color(0.9, 0.88, 0.84, 1)
+roughness = 0.2
+metallic = 0.03
+metallic_specular = 0.7
 
-[sub_resource type="PlaneMesh" id="SubResource_floor"]
+[sub_resource type="StandardMaterial3D" id="m_marble_dk"]
+albedo_color = Color(0.5, 0.48, 0.45, 1)
+roughness = 0.25
+metallic = 0.05
+
+[sub_resource type="StandardMaterial3D" id="m_wall"]
+albedo_color = Color(0.85, 0.82, 0.78, 1)
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="m_dark_wood"]
+albedo_color = Color(0.3, 0.18, 0.1, 1)
+roughness = 0.4
+metallic = 0.03
+
+[sub_resource type="StandardMaterial3D" id="m_wood"]
+albedo_color = Color(0.48, 0.32, 0.18, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="m_navy"]
+albedo_color = Color(0.06, 0.08, 0.2, 1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="m_leather"]
+albedo_color = Color(0.22, 0.12, 0.08, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="m_gold"]
+albedo_color = Color(0.85, 0.72, 0.28, 1)
+metallic = 0.85
+roughness = 0.2
+metallic_specular = 0.95
+
+[sub_resource type="StandardMaterial3D" id="m_red"]
+albedo_color = Color(0.6, 0.08, 0.05, 1)
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="m_flag_b"]
+albedo_color = Color(0.12, 0.18, 0.5, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="m_flag_r"]
+albedo_color = Color(0.65, 0.1, 0.08, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="m_chandelier"]
+albedo_color = Color(0.92, 0.88, 0.72, 1)
+emission_enabled = true
+emission = Color(1, 0.92, 0.65, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="StandardMaterial3D" id="m_metal"]
+albedo_color = Color(0.5, 0.5, 0.55, 1)
+metallic = 0.6
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="m_camera"]
+albedo_color = Color(0.1, 0.1, 0.12, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="m_globe"]
+albedo_color = Color(0.12, 0.28, 0.5, 1)
+roughness = 0.3
+metallic = 0.1
+
+[sub_resource type="StandardMaterial3D" id="m_frieze"]
+albedo_color = Color(0.78, 0.75, 0.7, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="m_seal"]
+albedo_color = Color(0.7, 0.6, 0.2, 1)
+emission_enabled = true
+emission = Color(0.4, 0.35, 0.1, 1)
+emission_energy_multiplier = 0.5
+metallic = 0.4
+
+; === MESHES ===
+[sub_resource type="PlaneMesh" id="msh_floor"]
 size = Vector2(40, 40)
-material = SubResource("SubResource_ground_mat")
-
-[sub_resource type="BoxShape3D" id="SubResource_floor_col"]
+material = SubResource("m_marble")
+[sub_resource type="BoxShape3D" id="shp_floor"]
 size = Vector3(40, 0.1, 40)
-
-[sub_resource type="StandardMaterial3D" id="SubResource_wall_mat"]
-albedo_color = Color(0.4, 0.35, 0.3, 1)
-
-[sub_resource type="BoxMesh" id="SubResource_wall_mesh"]
-size = Vector3(40, 8, 0.5)
-material = SubResource("SubResource_wall_mat")
-
-[sub_resource type="BoxMesh" id="SubResource_roof_mesh"]
+[sub_resource type="BoxMesh" id="msh_wall"]
+size = Vector3(40, 10, 0.5)
+material = SubResource("m_wall")
+[sub_resource type="BoxMesh" id="msh_roof"]
 size = Vector3(40, 0.5, 40)
-material = SubResource("SubResource_wall_mat")
+material = SubResource("m_wall")
 
-[sub_resource type="StandardMaterial3D" id="SubResource_stage_mat"]
-albedo_color = Color(0.5, 0.35, 0.25, 1)
+[sub_resource type="CylinderMesh" id="msh_col"]
+top_radius = 0.38
+bottom_radius = 0.5
+height = 9.5
+material = SubResource("m_marble")
+[sub_resource type="BoxMesh" id="msh_cap"]
+size = Vector3(1.25, 0.3, 1.25)
+material = SubResource("m_marble")
+[sub_resource type="BoxMesh" id="msh_base"]
+size = Vector3(1.25, 0.3, 1.25)
+material = SubResource("m_marble_dk")
 
-[sub_resource type="StandardMaterial3D" id="SubResource_podium_mat"]
-albedo_color = Color(0.4, 0.28, 0.18, 1)
+[sub_resource type="BoxMesh" id="msh_stage"]
+size = Vector3(14, 1.2, 6)
+material = SubResource("m_dark_wood")
+[sub_resource type="BoxShape3D" id="shp_stage"]
+size = Vector3(14, 1.2, 6)
+[sub_resource type="BoxMesh" id="msh_podium"]
+size = Vector3(0.9, 1.3, 0.65)
+material = SubResource("m_dark_wood")
+[sub_resource type="BoxMesh" id="msh_gavel"]
+size = Vector3(0.18, 0.06, 0.12)
+material = SubResource("m_wood")
+[sub_resource type="CylinderMesh" id="msh_mic"]
+top_radius = 0.012
+bottom_radius = 0.018
+height = 0.5
+material = SubResource("m_metal")
+[sub_resource type="SphereMesh" id="msh_mic_h"]
+radius = 0.028
+height = 0.056
+material = SubResource("m_camera")
 
-[sub_resource type="StandardMaterial3D" id="SubResource_building_mat"]
-albedo_color = Color(0.75, 0.73, 0.7, 1)
+[sub_resource type="BoxMesh" id="msh_bench"]
+size = Vector3(10, 0.48, 0.55)
+material = SubResource("m_leather")
+[sub_resource type="BoxMesh" id="msh_sback"]
+size = Vector3(10, 0.58, 0.06)
+material = SubResource("m_leather")
+[sub_resource type="BoxMesh" id="msh_sdesk"]
+size = Vector3(10, 0.06, 0.38)
+material = SubResource("m_wood")
 
-[sub_resource type="StandardMaterial3D" id="SubResource_seat_mat"]
-albedo_color = Color(0.35, 0.3, 0.28, 1)
+[sub_resource type="BoxMesh" id="msh_facade"]
+size = Vector3(16, 10, 0.5)
+material = SubResource("m_marble")
+[sub_resource type="PrismMesh" id="msh_pediment"]
+size = Vector3(16, 2.5, 4)
+material = SubResource("m_marble")
+[sub_resource type="BoxMesh" id="msh_frieze"]
+size = Vector3(16, 0.55, 0.55)
+material = SubResource("m_frieze")
+[sub_resource type="BoxMesh" id="msh_cornice"]
+size = Vector3(17, 0.22, 0.85)
+material = SubResource("m_marble_dk")
 
-[sub_resource type="BoxMesh" id="SubResource_stage"]
-size = Vector3(12, 1.5, 6)
-material = SubResource("SubResource_stage_mat")
+[sub_resource type="BoxMesh" id="msh_carpet"]
+size = Vector3(12, 0.015, 18)
+material = SubResource("m_navy")
+[sub_resource type="BoxMesh" id="msh_aisle"]
+size = Vector3(2.5, 0.018, 12)
+material = SubResource("m_red")
 
-[sub_resource type="BoxShape3D" id="SubResource_stage_col"]
-size = Vector3(12, 1.5, 6)
+[sub_resource type="BoxMesh" id="msh_ch_ring"]
+size = Vector3(2.0, 0.12, 2.0)
+material = SubResource("m_gold")
+[sub_resource type="BoxMesh" id="msh_ch_candle"]
+size = Vector3(0.05, 0.28, 0.05)
+material = SubResource("m_chandelier")
+[sub_resource type="CylinderMesh" id="msh_ch_chain"]
+top_radius = 0.018
+bottom_radius = 0.018
+height = 2.0
+material = SubResource("m_gold")
 
-[sub_resource type="BoxMesh" id="SubResource_podium"]
-size = Vector3(0.8, 1.2, 0.6)
-material = SubResource("SubResource_podium_mat")
+[sub_resource type="BoxMesh" id="msh_curtain"]
+size = Vector3(3.0, 7.5, 0.08)
+material = SubResource("m_red")
+[sub_resource type="BoxMesh" id="msh_crod"]
+size = Vector3(3.5, 0.05, 0.05)
+material = SubResource("m_gold")
 
-[sub_resource type="BoxMesh" id="SubResource_building"]
-size = Vector3(14, 8, 0.5)
-material = SubResource("SubResource_building_mat")
+[sub_resource type="CylinderMesh" id="msh_fpole"]
+top_radius = 0.025
+bottom_radius = 0.035
+height = 3.0
+material = SubResource("m_gold")
+[sub_resource type="BoxMesh" id="msh_fcloth_b"]
+size = Vector3(0.8, 0.48, 0.015)
+material = SubResource("m_flag_b")
+[sub_resource type="BoxMesh" id="msh_fcloth_r"]
+size = Vector3(0.8, 0.48, 0.015)
+material = SubResource("m_flag_r")
 
-[sub_resource type="CylinderMesh" id="SubResource_column"]
-top_radius = 0.35
-bottom_radius = 0.4
-height = 8.0
-material = SubResource("SubResource_building_mat")
+[sub_resource type="BoxMesh" id="msh_edesk"]
+size = Vector3(3.0, 0.82, 1.2)
+material = SubResource("m_dark_wood")
+[sub_resource type="BoxMesh" id="msh_echair"]
+size = Vector3(0.68, 1.0, 0.68)
+material = SubResource("m_leather")
+[sub_resource type="BoxMesh" id="msh_bshelf"]
+size = Vector3(2.5, 3.5, 0.45)
+material = SubResource("m_dark_wood")
+[sub_resource type="SphereMesh" id="msh_globe"]
+radius = 0.32
+height = 0.64
+material = SubResource("m_globe")
+[sub_resource type="CylinderMesh" id="msh_gstand"]
+top_radius = 0.14
+bottom_radius = 0.18
+height = 0.75
+material = SubResource("m_wood")
 
-[sub_resource type="BoxMesh" id="SubResource_bench"]
-size = Vector3(8, 0.5, 0.5)
-material = SubResource("SubResource_seat_mat")
+[sub_resource type="BoxMesh" id="msh_press"]
+size = Vector3(8, 0.8, 4)
+material = SubResource("m_marble_dk")
+[sub_resource type="BoxShape3D" id="shp_press"]
+size = Vector3(8, 0.8, 4)
+[sub_resource type="BoxMesh" id="msh_pbench"]
+size = Vector3(6, 0.48, 0.45)
+material = SubResource("m_wood")
+[sub_resource type="CylinderMesh" id="msh_tripod"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 1.5
+material = SubResource("m_metal")
+[sub_resource type="BoxMesh" id="msh_cam"]
+size = Vector3(0.28, 0.18, 0.38)
+material = SubResource("m_camera")
 
-[sub_resource type="SphereMesh" id="SubResource_ball_mesh"]
-radius = 0.3
-rings = 16
-radial_segments = 16
+[sub_resource type="BoxMesh" id="msh_balc"]
+size = Vector3(12, 0.38, 3)
+material = SubResource("m_marble_dk")
+[sub_resource type="BoxMesh" id="msh_brail"]
+size = Vector3(12, 0.75, 0.1)
+material = SubResource("m_gold")
+[sub_resource type="BoxMesh" id="msh_bseat"]
+size = Vector3(8, 0.38, 0.45)
+material = SubResource("m_leather")
 
-[sub_resource type="StandardMaterial3D" id="SubResource_ball_mat"]
-albedo_color = Color(0.85, 0.85, 0.2, 1)
+[sub_resource type="BoxMesh" id="msh_tile_dk"]
+size = Vector3(2, 0.008, 2)
+material = SubResource("m_marble_dk")
 
-[sub_resource type="BoxMesh" id="SubResource_goal_mesh"]
-size = Vector3(7, 2, 1)
-material = SubResource("SubResource_building_mat")
+[sub_resource type="CylinderMesh" id="msh_seal"]
+top_radius = 1.2
+bottom_radius = 1.2
+height = 0.08
+material = SubResource("m_seal")
 
-[node name="PoliticianWorld" type="Node3D" unique_id=1485790777]
-script = ExtResource("3")
+; --- NEW PROP MATERIALS ---
+[sub_resource type="StandardMaterial3D" id="m_frame"]
+albedo_color = Color(0.72, 0.58, 0.22, 1)
+metallic = 0.7
+roughness = 0.25
+metallic_specular = 0.9
 
-[node name="PauseMenu" parent="." instance=ExtResource("5")]
+[sub_resource type="StandardMaterial3D" id="m_portrait"]
+albedo_color = Color(0.35, 0.28, 0.2, 1)
+roughness = 0.8
 
+[sub_resource type="StandardMaterial3D" id="m_vote_scr"]
+albedo_color = Color(0.02, 0.05, 0.02, 1)
+emission_enabled = true
+emission = Color(0.1, 0.7, 0.15, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="StandardMaterial3D" id="m_glass"]
+albedo_color = Color(0.85, 0.9, 0.95, 1)
+roughness = 0.1
+metallic = 0.05
+transparency = 1
+albedo_color.a = 0.4
+
+[sub_resource type="StandardMaterial3D" id="m_rug_orn"]
+albedo_color = Color(0.5, 0.12, 0.08, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="m_coat_hook"]
+albedo_color = Color(0.4, 0.38, 0.35, 1)
+metallic = 0.5
+roughness = 0.4
+
+; === COLLISION SHAPES ===
+[sub_resource type="BoxShape3D" id="shp_wall"]
+size = Vector3(40, 10, 0.5)
+[sub_resource type="BoxShape3D" id="shp_roof"]
+size = Vector3(40, 0.5, 40)
+[sub_resource type="CylinderShape3D" id="shp_col"]
+radius = 0.5
+height = 9.5
+[sub_resource type="BoxShape3D" id="shp_podium"]
+size = Vector3(0.9, 1.3, 0.65)
+[sub_resource type="BoxShape3D" id="shp_bench"]
+size = Vector3(10, 0.48, 0.55)
+[sub_resource type="BoxShape3D" id="shp_sdesk"]
+size = Vector3(10, 0.6, 0.38)
+[sub_resource type="BoxShape3D" id="shp_facade"]
+size = Vector3(16, 10, 0.5)
+[sub_resource type="BoxShape3D" id="shp_edesk"]
+size = Vector3(3.0, 0.82, 1.2)
+[sub_resource type="BoxShape3D" id="shp_echair"]
+size = Vector3(0.68, 1.0, 0.68)
+[sub_resource type="BoxShape3D" id="shp_bshelf"]
+size = Vector3(2.5, 3.5, 0.45)
+[sub_resource type="BoxShape3D" id="shp_balc"]
+size = Vector3(12, 0.38, 3)
+[sub_resource type="BoxShape3D" id="shp_gf_clock"]
+size = Vector3(0.6, 2.2, 0.35)
+
+; --- NEW PROP MESHES ---
+[sub_resource type="BoxMesh" id="msh_portrait_frame"]
+size = Vector3(1.2, 1.6, 0.06)
+material = SubResource("m_frame")
+
+[sub_resource type="BoxMesh" id="msh_portrait_canvas"]
+size = Vector3(1.0, 1.4, 0.02)
+material = SubResource("m_portrait")
+
+[sub_resource type="BoxMesh" id="msh_gf_clock_body"]
+size = Vector3(0.6, 2.2, 0.35)
+material = SubResource("m_dark_wood")
+
+[sub_resource type="CylinderMesh" id="msh_gf_clock_face"]
+top_radius = 0.22
+bottom_radius = 0.22
+height = 0.04
+material = SubResource("m_seal")
+
+[sub_resource type="BoxMesh" id="msh_vote_screen"]
+size = Vector3(4.0, 2.0, 0.08)
+material = SubResource("m_vote_scr")
+
+[sub_resource type="BoxMesh" id="msh_nameplate"]
+size = Vector3(0.4, 0.08, 0.12)
+material = SubResource("m_gold")
+
+[sub_resource type="CylinderMesh" id="msh_pitcher"]
+top_radius = 0.06
+bottom_radius = 0.08
+height = 0.25
+material = SubResource("m_glass")
+
+[sub_resource type="CylinderMesh" id="msh_glass"]
+top_radius = 0.035
+bottom_radius = 0.03
+height = 0.12
+material = SubResource("m_glass")
+
+[sub_resource type="CylinderMesh" id="msh_cr_pole"]
+top_radius = 0.025
+bottom_radius = 0.03
+height = 1.8
+material = SubResource("m_coat_hook")
+
+[sub_resource type="BoxMesh" id="msh_cr_arm"]
+size = Vector3(0.4, 0.03, 0.03)
+material = SubResource("m_coat_hook")
+
+[sub_resource type="CylinderMesh" id="msh_rug"]
+top_radius = 2.5
+bottom_radius = 2.5
+height = 0.015
+material = SubResource("m_rug_orn")
+
+[sub_resource type="CylinderMesh" id="msh_rug_in"]
+top_radius = 1.8
+bottom_radius = 1.8
+height = 0.018
+material = SubResource("m_seal")
+
+
+; === SCENE TREE ===
+[node name="PoliticianWorld" type="Node3D"]
+script = ExtResource("1_script")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("SubResource_env")
+environment = SubResource("env")
 
-[node name="WorldUI" type="CanvasLayer" parent="."]
-script = ExtResource("4")
-
-[node name="ObjectiveLabel" type="Label" parent="WorldUI"]
-layout_mode = 3
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 600.0
-offset_bottom = 50.0
-text = ""
-
-[node name="StatusLabel" type="Label" parent="WorldUI"]
-layout_mode = 3
-offset_left = 20.0
-offset_top = 60.0
-offset_right = 600.0
-offset_bottom = 90.0
-text = ""
-
-[node name="SunLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.86, 0, 0.5, 0, 1, 0, -0.5, 0, 0.86, 0, 12, 0)
-light_color = Color(1, 0.95, 0.9, 1)
-light_energy = 1.2
+; === 7-LIGHT CINEMATIC SETUP ===
+[node name="Ch1L" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.2, -2)
+light_color = Color(1, 0.9, 0.7, 1)
+light_energy = 1.5
 shadow_enabled = true
-shadow_bias = 0.05
-
-[node name="ReflectionProbe" type="ReflectionProbe3D" parent="."]
-extents = Vector3(35, 20, 35)
-intensity = 1.2
-
-[node name="WorldTitle" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.5, 0)
-text = "Soccer - Penalty Shootout"
-font_size = 48
-modulate = Color(0.2, 0.8, 0.2, 1)
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -6)
-light_color = Color(1, 0.95, 0.85, 1)
-light_energy = 2.0
+omni_range = 28.0
+[node name="Ch2L" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.2, 8)
+light_color = Color(1, 0.9, 0.7, 1)
+light_energy = 1.25
+omni_range = 22.0
+[node name="PodSpot" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 9.5, -14)
+light_color = Color(1, 0.96, 0.9, 1)
+light_energy = 2.25
 shadow_enabled = true
-omni_range = 40.0
+spot_range = 10.0
+spot_angle = 28.0
+[node name="GalL" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 5.5, 5)
+light_color = Color(0.9, 0.85, 0.72, 1)
+light_energy = 0.5
+omni_range = 10.0
+[node name="OffL" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 5.5, -9)
+light_color = Color(1, 0.88, 0.65, 1)
+light_energy = 0.75
+omni_range = 10.0
+[node name="BalcL" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 15)
+light_color = Color(0.9, 0.85, 0.75, 1)
+light_energy = 0.4
+omni_range = 10.0
+[node name="FacadeUp" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.5, -18)
+light_color = Color(1, 0.92, 0.75, 1)
+light_energy = 1.0
+spot_range = 12.0
+spot_angle = 40.0
 
+; === STRUCTURE ===
 [node name="Floor" type="StaticBody3D" parent="."]
-
-[node name="FloorMesh" type="MeshInstance3D" parent="Floor"]
-mesh = SubResource("SubResource_floor")
-
-[node name="FloorCol" type="CollisionShape3D" parent="Floor"]
+[node name="FM" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("msh_floor")
+[node name="FC" type="CollisionShape3D" parent="Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-shape = SubResource("SubResource_floor_col")
+shape = SubResource("shp_floor")
 
-[node name="WallBack" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -20)
-mesh = SubResource("SubResource_wall_mesh")
+[node name="WB" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -20)
+[node name="M" type="MeshInstance3D" parent="WB"]
+mesh = SubResource("msh_wall")
+[node name="C" type="CollisionShape3D" parent="WB"]
+shape = SubResource("shp_wall")
 
-[node name="WallLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 4, 0)
-mesh = SubResource("SubResource_wall_mesh")
+[node name="WL" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 5, 0)
+[node name="M" type="MeshInstance3D" parent="WL"]
+mesh = SubResource("msh_wall")
+[node name="C" type="CollisionShape3D" parent="WL"]
+shape = SubResource("shp_wall")
 
-[node name="WallRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 4, 0)
-mesh = SubResource("SubResource_wall_mesh")
+[node name="WR" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 20, 5, 0)
+[node name="M" type="MeshInstance3D" parent="WR"]
+mesh = SubResource("msh_wall")
+[node name="C" type="CollisionShape3D" parent="WR"]
+shape = SubResource("shp_wall")
 
-[node name="WallFront" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 20)
-mesh = SubResource("SubResource_wall_mesh")
+[node name="WF" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 20)
+[node name="M" type="MeshInstance3D" parent="WF"]
+mesh = SubResource("msh_wall")
+[node name="C" type="CollisionShape3D" parent="WF"]
+shape = SubResource("shp_wall")
 
-[node name="Roof" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-mesh = SubResource("SubResource_roof_mesh")
+[node name="Roof" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+[node name="M" type="MeshInstance3D" parent="Roof"]
+mesh = SubResource("msh_roof")
+[node name="C" type="CollisionShape3D" parent="Roof"]
+shape = SubResource("shp_roof")
 
+; Floor tiles + carpet
+[node name="DT1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.01, 5)
+mesh = SubResource("msh_tile_dk")
+[node name="DT2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.01, 5)
+mesh = SubResource("msh_tile_dk")
+[node name="DT3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.01, -5)
+mesh = SubResource("msh_tile_dk")
+[node name="DT4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.01, -5)
+mesh = SubResource("msh_tile_dk")
+[node name="DT5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0.01, 9)
+mesh = SubResource("msh_tile_dk")
+[node name="DT6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.01, 9)
+mesh = SubResource("msh_tile_dk")
+[node name="Carpet" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -5)
+mesh = SubResource("msh_carpet")
+[node name="Aisle" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -8)
+mesh = SubResource("msh_aisle")
+
+; Great Seal on floor
+[node name="Seal" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 8)
+mesh = SubResource("msh_seal")
+
+; === COLUMNS (8 total with caps + bases) ===
+[node name="C1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 4.75, 10)
+[node name="M" type="MeshInstance3D" parent="C1"]
+mesh = SubResource("msh_col")
+[node name="C" type="CollisionShape3D" parent="C1"]
+shape = SubResource("shp_col")
+
+[node name="C2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 4.75, 10)
+[node name="M" type="MeshInstance3D" parent="C2"]
+mesh = SubResource("msh_col")
+[node name="C" type="CollisionShape3D" parent="C2"]
+shape = SubResource("shp_col")
+
+[node name="C3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4.75, 10)
+[node name="M" type="MeshInstance3D" parent="C3"]
+mesh = SubResource("msh_col")
+[node name="C" type="CollisionShape3D" parent="C3"]
+shape = SubResource("shp_col")
+
+[node name="C4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 4.75, 10)
+[node name="M" type="MeshInstance3D" parent="C4"]
+mesh = SubResource("msh_col")
+[node name="C" type="CollisionShape3D" parent="C4"]
+shape = SubResource("shp_col")
+
+[node name="C5" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 4.75, 3)
+[node name="M" type="MeshInstance3D" parent="C5"]
+mesh = SubResource("msh_col")
+[node name="C" type="CollisionShape3D" parent="C5"]
+shape = SubResource("shp_col")
+
+[node name="C6" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4.75, 3)
+[node name="M" type="MeshInstance3D" parent="C6"]
+mesh = SubResource("msh_col")
+[node name="C" type="CollisionShape3D" parent="C6"]
+shape = SubResource("shp_col")
+
+[node name="C7" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 4.75, -19)
+[node name="M" type="MeshInstance3D" parent="C7"]
+mesh = SubResource("msh_col")
+[node name="C" type="CollisionShape3D" parent="C7"]
+shape = SubResource("shp_col")
+
+[node name="C8" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 4.75, -19)
+[node name="M" type="MeshInstance3D" parent="C8"]
+mesh = SubResource("msh_col")
+[node name="C" type="CollisionShape3D" parent="C8"]
+shape = SubResource("shp_col")
+
+; === CHANDELIERS ===
+[node name="ChCh1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.0, -2)
+mesh = SubResource("msh_ch_chain")
+[node name="ChR1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9, -2)
+mesh = SubResource("msh_ch_ring")
+[node name="Cn1a" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 8.1, -2)
+mesh = SubResource("msh_ch_candle")
+[node name="Cn1b" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 8.1, -2)
+mesh = SubResource("msh_ch_candle")
+[node name="Cn1c" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -1.2)
+mesh = SubResource("msh_ch_candle")
+[node name="Cn1d" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.1, -2.8)
+mesh = SubResource("msh_ch_candle")
+[node name="ChCh2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.0, 8)
+mesh = SubResource("msh_ch_chain")
+[node name="ChR2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9, 8)
+mesh = SubResource("msh_ch_ring")
+[node name="Cn2a" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 8.1, 8)
+mesh = SubResource("msh_ch_candle")
+[node name="Cn2b" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 8.1, 8)
+mesh = SubResource("msh_ch_candle")
+
+; === LEGISLATIVE CHAMBER ===
 [node name="Stage" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -15)
+[node name="SM" type="MeshInstance3D" parent="Stage"]
+mesh = SubResource("msh_stage")
+[node name="SC" type="CollisionShape3D" parent="Stage"]
+shape = SubResource("shp_stage")
 
-[node name="StageMesh" type="MeshInstance3D" parent="Stage"]
-mesh = SubResource("SubResource_stage")
+[node name="Pod" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, -15)
+[node name="M" type="MeshInstance3D" parent="Pod"]
+mesh = SubResource("msh_podium")
+[node name="C" type="CollisionShape3D" parent="Pod"]
+shape = SubResource("shp_podium")
 
-[node name="StageCol" type="CollisionShape3D" parent="Stage"]
-shape = SubResource("SubResource_stage_col")
+; Flags
+[node name="FPL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2.7, -17.5)
+mesh = SubResource("msh_fpole")
+[node name="FCL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 3.9, -17.5)
+mesh = SubResource("msh_fcloth_b")
+[node name="FPR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2.7, -17.5)
+mesh = SubResource("msh_fpole")
+[node name="FCR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 3.9, -17.5)
+mesh = SubResource("msh_fcloth_r")
 
-[node name="Podium" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, -12)
-mesh = SubResource("SubResource_podium")
+; Curtains
+[node name="CRdL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 9.5, -19.7)
+mesh = SubResource("msh_crod")
+[node name="CrtL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 5.7, -19.7)
+mesh = SubResource("msh_curtain")
+[node name="CRdR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 9.5, -19.7)
+mesh = SubResource("msh_crod")
+[node name="CrtR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 5.7, -19.7)
+mesh = SubResource("msh_curtain")
 
-[node name="BuildingBackdrop" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -15)
-mesh = SubResource("SubResource_building")
+; Seating (5 rows)
+[node name="R1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24, -8)
+[node name="M" type="MeshInstance3D" parent="R1"]
+mesh = SubResource("msh_bench")
+[node name="C" type="CollisionShape3D" parent="R1"]
+shape = SubResource("shp_bench")
 
-[node name="ColumnLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 4, -14.5)
-mesh = SubResource("SubResource_column")
+[node name="R1d" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, -8.5)
+[node name="M" type="MeshInstance3D" parent="R1d"]
+mesh = SubResource("msh_sdesk")
+[node name="C" type="CollisionShape3D" parent="R1d"]
+shape = SubResource("shp_sdesk")
 
-[node name="ColumnRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 4, -14.5)
-mesh = SubResource("SubResource_column")
+[node name="R2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24, -5.5)
+[node name="M" type="MeshInstance3D" parent="R2"]
+mesh = SubResource("msh_bench")
+[node name="C" type="CollisionShape3D" parent="R2"]
+shape = SubResource("shp_bench")
 
-[node name="BenchRow1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -4)
-mesh = SubResource("SubResource_bench")
+[node name="R2d" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, -6)
+[node name="M" type="MeshInstance3D" parent="R2d"]
+mesh = SubResource("msh_sdesk")
+[node name="C" type="CollisionShape3D" parent="R2d"]
+shape = SubResource("shp_sdesk")
 
-[node name="BenchRow2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -2)
-mesh = SubResource("SubResource_bench")
+[node name="R3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24, -3)
+[node name="M" type="MeshInstance3D" parent="R3"]
+mesh = SubResource("msh_bench")
+[node name="C" type="CollisionShape3D" parent="R3"]
+shape = SubResource("shp_bench")
 
-[node name="BenchRow3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
-mesh = SubResource("SubResource_bench")
+[node name="R3d" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, -3.5)
+[node name="M" type="MeshInstance3D" parent="R3d"]
+mesh = SubResource("msh_sdesk")
+[node name="C" type="CollisionShape3D" parent="R3d"]
+shape = SubResource("shp_sdesk")
 
-[node name="BenchRow4" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 2)
-mesh = SubResource("SubResource_bench")
+[node name="R4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24, -0.5)
+[node name="M" type="MeshInstance3D" parent="R4"]
+mesh = SubResource("msh_bench")
+[node name="C" type="CollisionShape3D" parent="R4"]
+shape = SubResource("shp_bench")
 
-[node name="PenaltyBall" type="RigidBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -6)
-mass = 0.45
-physics_material_override = StandardMaterial3D(bounce = 0.5)
+[node name="R5" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24, 2)
+[node name="M" type="MeshInstance3D" parent="R5"]
+mesh = SubResource("msh_bench")
+[node name="C" type="CollisionShape3D" parent="R5"]
+shape = SubResource("shp_bench")
 
-[node name="BallMesh" type="MeshInstance3D" parent="PenaltyBall"]
-mesh = SubResource("SubResource_ball_mesh")
-material_override = SubResource("SubResource_ball_mat")
+; Facade
+[node name="Fac" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -19.5)
+[node name="M" type="MeshInstance3D" parent="Fac"]
+mesh = SubResource("msh_facade")
+[node name="C" type="CollisionShape3D" parent="Fac"]
+shape = SubResource("shp_facade")
+[node name="Ped" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.5, -18)
+mesh = SubResource("msh_pediment")
+[node name="Frz" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.7, -19.5)
+mesh = SubResource("msh_frieze")
+[node name="Cor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.95, -19.5)
+mesh = SubResource("msh_cornice")
 
-[node name="BallCol" type="CollisionShape3D" parent="PenaltyBall"]
-shape = SphereShape3D(radius = 0.3)
+; === PRESS GALLERY ===
+[node name="PG" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0.4, 5)
+[node name="PGM" type="MeshInstance3D" parent="PG"]
+mesh = SubResource("msh_press")
+[node name="PGC" type="CollisionShape3D" parent="PG"]
+shape = SubResource("shp_press")
+[node name="PBn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1.04, 6)
+mesh = SubResource("msh_pbench")
+[node name="Tr1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 1.55, 4)
+mesh = SubResource("msh_tripod")
+[node name="Cm1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 2.38, 4)
+mesh = SubResource("msh_cam")
+[node name="Tr2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 1.55, 4)
+mesh = SubResource("msh_tripod")
+[node name="Cm2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.38, 4)
+mesh = SubResource("msh_cam")
+[node name="PSgn" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 3.5, 3.1)
+text = "PRESS GALLERY"
+font_size = 20
+modulate = Color(0.3, 0.28, 0.25, 1)
 
-[node name="Goalkeeper" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -12)
-mesh = SubResource("SubResource_building_mat")
+; === EXECUTIVE OFFICE ===
+[node name="ED" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.41, -10)
+[node name="M" type="MeshInstance3D" parent="ED"]
+mesh = SubResource("msh_edesk")
+[node name="C" type="CollisionShape3D" parent="ED"]
+shape = SubResource("shp_edesk")
 
-[node name="GoalArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -12)
-monitoring = true
+[node name="EC" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.5, -11.5)
+[node name="M" type="MeshInstance3D" parent="EC"]
+mesh = SubResource("msh_echair")
+[node name="C" type="CollisionShape3D" parent="EC"]
+shape = SubResource("shp_echair")
 
-[node name="GoalCol" type="CollisionShape3D" parent="GoalArea"]
-shape = BoxShape3D(size = Vector3(7, 2, 2))
+[node name="BS1" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 19.7, 1.75, -12)
+[node name="M" type="MeshInstance3D" parent="BS1"]
+mesh = SubResource("msh_bshelf")
+[node name="C" type="CollisionShape3D" parent="BS1"]
+shape = SubResource("shp_bshelf")
 
+[node name="BS2" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 19.7, 1.75, -8)
+[node name="M" type="MeshInstance3D" parent="BS2"]
+mesh = SubResource("msh_bshelf")
+[node name="C" type="CollisionShape3D" parent="BS2"]
+shape = SubResource("shp_bshelf")
+
+[node name="BS3" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 19.7, 1.75, -4)
+[node name="M" type="MeshInstance3D" parent="BS3"]
+mesh = SubResource("msh_bshelf")
+[node name="C" type="CollisionShape3D" parent="BS3"]
+shape = SubResource("shp_bshelf")
+[node name="GS" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0.375, -7)
+mesh = SubResource("msh_gstand")
+[node name="Gl" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1.07, -7)
+mesh = SubResource("msh_globe")
+[node name="OFL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1.5, -14)
+mesh = SubResource("msh_fpole")
+[node name="OFcL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.4, 2.7, -14)
+mesh = SubResource("msh_fcloth_b")
+[node name="OFR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1.5, -14)
+mesh = SubResource("msh_fpole")
+[node name="OFcR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.6, 2.7, -14)
+mesh = SubResource("msh_fcloth_r")
+[node name="OSgn" type="Label3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 19.7, 5, -10)
+text = "EXECUTIVE OFFICE"
+font_size = 20
+modulate = Color(0.7, 0.58, 0.22, 1)
+
+; === BALCONY ===
+[node name="BaF" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 15)
+[node name="M" type="MeshInstance3D" parent="BaF"]
+mesh = SubResource("msh_balc")
+[node name="C" type="CollisionShape3D" parent="BaF"]
+shape = SubResource("shp_balc")
+[node name="BaR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.25, 13.5)
+mesh = SubResource("msh_brail")
+[node name="BaS" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.88, 15.5)
+mesh = SubResource("msh_bseat")
+
+; === SIGNAGE ===
+[node name="ChSgn" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -19.4)
+text = "THE PEOPLE'S CHAMBER"
+font_size = 34
+modulate = Color(0.82, 0.7, 0.28, 1)
+[node name="SpSgn" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -14.3)
+text = "SPEAKER'S PODIUM"
+font_size = 16
+modulate = Color(0.45, 0.35, 0.18, 1)
+
+; === WALL PORTRAITS ===
+[node name="PF1" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -19.7, 5.5, -5)
+mesh = SubResource("msh_portrait_frame")
+[node name="PC1" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -19.68, 5.5, -5)
+mesh = SubResource("msh_portrait_canvas")
+[node name="PF2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -19.7, 5.5, -12)
+mesh = SubResource("msh_portrait_frame")
+[node name="PC2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -19.68, 5.5, -12)
+mesh = SubResource("msh_portrait_canvas")
+[node name="PF3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 19.7, 5.5, -5)
+mesh = SubResource("msh_portrait_frame")
+[node name="PC3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 19.68, 5.5, -5)
+mesh = SubResource("msh_portrait_canvas")
+
+; === GRANDFATHER CLOCK ===
+[node name="GFClk" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 1.1, 15)
+[node name="M" type="MeshInstance3D" parent="GFClk"]
+mesh = SubResource("msh_gf_clock_body")
+[node name="C" type="CollisionShape3D" parent="GFClk"]
+shape = SubResource("shp_gf_clock")
+[node name="GFClkF" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 1.8, 14.8)
+mesh = SubResource("msh_gf_clock_face")
+
+; === ELECTRONIC VOTING DISPLAY ===
+[node name="VoteScr" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -19.4)
+mesh = SubResource("msh_vote_screen")
+[node name="VoteLbl" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, -19.35)
+text = "VOTING SYSTEM  YEA: ---  NAY: ---"
+font_size = 18
+modulate = Color(0.2, 0.9, 0.3, 1)
+
+; === NAME PLATES (on seating desks) ===
+[node name="NP1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.565, -8.5)
+mesh = SubResource("msh_nameplate")
+[node name="NP2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.565, -8.5)
+mesh = SubResource("msh_nameplate")
+[node name="NP3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.565, -8.5)
+mesh = SubResource("msh_nameplate")
+[node name="NP4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.565, -6)
+mesh = SubResource("msh_nameplate")
+[node name="NP5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.565, -6)
+mesh = SubResource("msh_nameplate")
+[node name="NP6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.565, -6)
+mesh = SubResource("msh_nameplate")
+
+; === WATER PITCHER & GLASSES (on podium) ===
+[node name="Pitcher" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 2.63, -15)
+mesh = SubResource("msh_pitcher")
+[node name="Glass1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 2.56, -14.85)
+mesh = SubResource("msh_glass")
+[node name="Glass2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 2.56, -14.85)
+mesh = SubResource("msh_glass")
+
+; === COAT RACK (near entrance) ===
+[node name="CoatPole" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.9, 18)
+mesh = SubResource("msh_cr_pole")
+[node name="CoatA1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.78, 18)
+mesh = SubResource("msh_cr_arm")
+[node name="CoatA2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 1.78, 18)
+mesh = SubResource("msh_cr_arm")
+
+; === ORNAMENTAL RUG (rotunda) ===
+[node name="Rug" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 8)
+mesh = SubResource("msh_rug")
+[node name="RugIn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 8)
+mesh = SubResource("msh_rug_in")
+
+; === AMBIENT AUDIO ===
+[node name="AmbientEcho" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+; === ANIMATION PLAYER ===
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+; === PLAYER & PORTAL ===
 [node name="Player" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8)
-
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 12)
 [node name="ReturnPortal" parent="." instance=ExtResource("2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 18)
 target_scene = "res://scenes/main_hub.tscn"
 
+[node name="Voter1" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 5)
+voter_name = "Farmer Bob"
+concern = "We need better irrigation for our crops."
+option1 = "Build Water Tank"
+option2 = "Lower Taxes"
+correct_option = 1
+
+[node name="Voter2" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 8)
+voter_name = "Store Owner Sue"
+concern = "Business is slow due to poor road access."
+option1 = "Free Parking"
+option2 = "Repair Main Road"
+correct_option = 2
+
+[node name="Voter3" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -10)
+voter_name = "Young Tim"
+concern = "We need more places to play sports safely."
+option1 = "New Sports Park"
+option2 = "Free Video Games"
+correct_option = 1
 [node name="ReturnLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 18)
 text = "Return to Hub"
 font_size = 36
 modulate = Color(1, 1, 0.5, 1)
-[node name="DialogueUI" parent="." instance=ExtResource("7")]
-
-[node name="CampaignManager" parent="." instance=ExtResource("6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6)
-character_name = "Campaign Manager"
-dialogue_lines = ["The election is next week!", "We need to win over the voters in this district with the right message."]

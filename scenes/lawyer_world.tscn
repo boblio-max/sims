@@ -1,12 +1,10 @@
-[gd_scene format=3 uid="uid://bfc7jupht8rxg"]
+[gd_scene load_steps=6 format=3 uid="uid://bfc7jupht8rxg"]
+
+[ext_resource type="Script" path="res://scripts/worlds/lawyer_world.gd" id="1_script"]
 
 [ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
-[ext_resource type="Script" path="res://scenes/lawyer_world.gd" id="3"]
-[ext_resource type="Script" path="res://scenes/enhanced_world_ui.gd" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://npc/npc.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://ui/dialogue_ui.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/evidence.tscn" id="3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
 sky_top_color = Color(0.15, 0.12, 0.1, 1)
@@ -20,13 +18,21 @@ sky = SubResource("SubResource_sky")
 ambient_light_source = 2
 ambient_light_color = Color(0.6, 0.55, 0.5, 1)
 ambient_light_energy = 0.3
-bloom_enabled = true
-bloom_intensity = 0.22
+tonemap_mode = 3
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
+glow_intensity = 0.4
+glow_strength = 0.9
+glow_bloom = 0.1
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.7, 0.6, 0.4, 1)
 
 [sub_resource type="StandardMaterial3D" id="SubResource_wood_mat"]
-albedo_color = Color(0.4, 0.25, 0.15, 1)
-roughness = 0.4
-metallic = 0.05
+albedo_color = Color(0.45, 0.3, 0.18, 1)
 
 [sub_resource type="PlaneMesh" id="SubResource_floor"]
 material = SubResource("SubResource_wood_mat")
@@ -50,9 +56,7 @@ material = SubResource("SubResource_wall_mat")
 size = Vector3(22, 0.2, 22)
 
 [sub_resource type="StandardMaterial3D" id="SubResource_dark_wood"]
-albedo_color = Color(0.25, 0.15, 0.08, 1)
-roughness = 0.3
-metallic = 0.1
+albedo_color = Color(0.35, 0.22, 0.12, 1)
 
 [sub_resource type="BoxMesh" id="SubResource_judge_platform"]
 material = SubResource("SubResource_dark_wood")
@@ -67,11 +71,6 @@ size = Vector3(4, 1.8, 1.2)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iydb1"]
 albedo_color = Color(0.60498637, 0.15358818, 0, 1)
-
-[sub_resource type="SphereMesh" id="SubResource_evidence_mesh"]
-radius = 0.4
-rings = 16
-radial_segments = 16
 
 [sub_resource type="BoxMesh" id="SubResource_witness_stand"]
 material = SubResource("SubResource_dark_wood")
@@ -96,55 +95,17 @@ size = Vector3(2.5, 3.5, 0.5)
 albedo_color = Color(0.23079634, 0.104545586, 0.0068468037, 1)
 
 [node name="LawyerWorld" type="Node3D" unique_id=1416470179]
-script = ExtResource("3")
-
-[node name="PauseMenu" parent="." instance=ExtResource("5")]
+script = ExtResource("1_script")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=355395774]
 environment = SubResource("SubResource_env")
 
-[node name="WorldUI" type="CanvasLayer" parent="."]
-script = ExtResource("4")
-
-[node name="ObjectiveLabel" type="Label" parent="WorldUI"]
-layout_mode = 3
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 600.0
-offset_bottom = 50.0
-text = ""
-
-[node name="StatusLabel" type="Label" parent="WorldUI"]
-layout_mode = 3
-offset_left = 20.0
-offset_top = 60.0
-offset_right = 600.0
-offset_bottom = 90.0
-text = ""
-
-[node name="SunLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.86, 0, 0.5, 0, 1, 0, -0.5, 0, 0.86, 0, 12, 0)
-light_color = Color(1, 0.95, 0.9, 1)
-light_energy = 1.2
-shadow_enabled = true
-shadow_bias = 0.05
-
-[node name="ReflectionProbe" type="ReflectionProbe3D" parent="."]
-extents = Vector3(25, 18, 25)
-intensity = 1.1
-
-[node name="WorldTitle" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
-text = "Law"
-font_size = 48
-modulate = Color(1, 0.9, 0.8, 1)
-
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=914004060]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -4)
 light_color = Color(1, 0.95, 0.85, 1)
-light_energy = 3.5
+light_energy = 1.0
 shadow_enabled = true
-omni_range = 40.0
+omni_range = 30.0
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=2013850872]
 
@@ -307,52 +268,24 @@ size = Vector3(2.4667969, 3.6119385, 0.72753906)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.75, -10.5)
 mesh = SubResource("SubResource_bookshelf")
 
-[node name="Evidence1" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.8, -2)
-monitoring = true
-
-[node name="Evidence1Col" type="CollisionShape3D" parent="Evidence1"]
-shape = SphereShape3D(radius = 0.6)
-
-[node name="Evidence1Mesh" type="MeshInstance3D" parent="Evidence1"]
-mesh = SubResource("SubResource_evidence_mesh")
-material_override = SubResource("StandardMaterial3D_iydb1")
-
-[node name="Evidence2" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.8, -3)
-monitoring = true
-
-[node name="Evidence2Col" type="CollisionShape3D" parent="Evidence2"]
-shape = SphereShape3D(radius = 0.6)
-
-[node name="Evidence2Mesh" type="MeshInstance3D" parent="Evidence2"]
-mesh = SubResource("SubResource_evidence_mesh")
-material_override = SubResource("StandardMaterial3D_iydb1")
-
-[node name="Evidence3" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.8, -2)
-monitoring = true
-
-[node name="Evidence3Col" type="CollisionShape3D" parent="Evidence3"]
-shape = SphereShape3D(radius = 0.6)
-
-[node name="Evidence3Mesh" type="MeshInstance3D" parent="Evidence3"]
-mesh = SubResource("SubResource_evidence_mesh")
-material_override = SubResource("StandardMaterial3D_iydb1")
-
-[node name="CourtArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -8)
-monitoring = true
-
-[node name="CourtCol" type="CollisionShape3D" parent="CourtArea"]
-shape = BoxShape3D(size = Vector3(4, 2, 4))
-
 [node name="Player" parent="." unique_id=304614533 instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8)
 
 [node name="ReturnPortal" parent="." unique_id=1379375379 instance=ExtResource("2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 target_scene = "res://scenes/main_hub.tscn"
+
+[node name="Evidence1" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, -2)
+evidence_name = "Legal Brief"
+
+[node name="Evidence2" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.2, -6)
+evidence_name = "Critical Document"
+
+[node name="Evidence3" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -4)
+evidence_name = "The Gavel"
 
 [node name="ReturnLabel" type="Label3D" parent="." unique_id=1431251894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 10)
@@ -961,9 +894,3 @@ material = SubResource("StandardMaterial3D_e7124")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32241982, -0.049560547)
 operation = 2
 size = Vector3(0.8310547, 0.5527344, 0.9008789)
-[node name="DialogueUI" parent="." instance=ExtResource("7")]
-
-[node name="SeniorPartner" parent="." instance=ExtResource("6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6)
-character_name = "Senior Partner"
-dialogue_lines = ["The client's future is in your hands.", "Gather all the evidence at the scene before presenting our case to the judge."]

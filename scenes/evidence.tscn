@@ -1,0 +1,71 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/evidence.gd" id="1"]
+[ext_resource type="Shader" path="res://assets/shaders/glow_pulse.gdshader" id="2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_evidence"]
+shader = ExtResource("2")
+shader_parameter/glow_color = Color(1.0, 0.8, 0.2, 1.0)
+shader_parameter/speed = 2.0
+shader_parameter/intensity = 0.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(0.6, 0.4, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.7, 0.5, 0.1, 1)
+metallic = 0.3
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+material = SubResource("ShaderMaterial_evidence")
+size = Vector3(0.5, 0.35, 0.15)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_evidence"]
+emission_shape = 3
+emission_box_extents = Vector3(0.3, 0.2, 0.1)
+direction = Vector3(0, 1, 0)
+spread = 45.0
+gravity = Vector3(0, 0.2, 0)
+initial_velocity_min = 0.1
+initial_velocity_max = 0.3
+scale_min = 0.05
+scale_max = 0.15
+color = Color(1, 0.9, 0.4, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sparkle"]
+shading_mode = 0
+albedo_color = Color(1, 1, 0.5, 1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_sparkle"]
+material = SubResource("StandardMaterial3D_sparkle")
+size = Vector2(0.05, 0.05)
+
+[node name="Evidence" type="Area3D"]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_1")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+billboard = 1
+text = "EVIDENCE"
+font_size = 18
+outline_size = 4
+modulate = Color(1, 0.8, 0.2, 1)
+
+[node name="SparkleParticles" type="GPUParticles3D" parent="."]
+amount = 10
+lifetime = 1.2
+process_material = SubResource("ParticleProcessMaterial_evidence")
+draw_pass_1 = SubResource("QuadMesh_sparkle")

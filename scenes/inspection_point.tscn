@@ -1,0 +1,79 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/inspection_point.gd" id="1"]
+[ext_resource type="Shader" path="res://assets/shaders/glow_pulse.gdshader" id="2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_scanner"]
+shader = ExtResource("2")
+shader_parameter/glow_color = Color(0.1, 0.6, 1.0, 1.0)
+shader_parameter/speed = 1.5
+shader_parameter/intensity = 0.4
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1"]
+radius = 2.0
+height = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+transparency = 1
+albedo_color = Color(0.1, 0.5, 1, 0.4)
+emission_enabled = true
+emission = Color(0, 0.4, 1, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1"]
+material = SubResource("ShaderMaterial_scanner")
+top_radius = 2.0
+bottom_radius = 2.0
+height = 0.1
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_scan"]
+emission_shape = 3
+emission_box_extents = Vector3(1.8, 0.1, 1.8)
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0.5, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+scale_min = 0.1
+scale_max = 0.2
+color = Color(0.2, 0.8, 1, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scan"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.3, 0.7, 1, 0.5)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_particle"]
+material = SubResource("StandardMaterial3D_scan")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.2
+
+[node name="InspectionPoint" type="Area3D"]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_1")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "INSPECTION POINT"
+font_size = 24
+outline_size = 4
+modulate = Color(0.1, 0.6, 1, 1)
+
+[node name="ScanParticles" type="GPUParticles3D" parent="."]
+amount = 20
+lifetime = 1.5
+process_material = SubResource("ParticleProcessMaterial_scan")
+draw_pass_1 = SubResource("CylinderMesh_particle")

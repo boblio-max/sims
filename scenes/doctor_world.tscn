@@ -1,235 +1,1327 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene format=3 uid="uid://ojd5gyn00ey4"]
 
-[ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://dh47bicys5wb3" path="res://player/player.tscn" id="1"]
+[ext_resource type="Script" uid="uid://chgrttrfruibg" path="res://scripts/worlds/doctor_world.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
-[ext_resource type="Script" path="res://scenes/doctor_world.gd" id="3"]
-[ext_resource type="Script" path="res://scenes/enhanced_world_ui.gd" id="4"]
-[ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://npc/npc.tscn" id="6"]
-[ext_resource type="PackedScene" path="res://ui/dialogue_ui.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/patient.tscn" id="3"]
 
-[sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
-sky_top_color = Color(0.15, 0.15, 0.2, 1)
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+sky_top_color = Color(0.05, 0.06, 0.1, 1)
+sky_horizon_color = Color(0.12, 0.13, 0.16, 1)
 
-[sub_resource type="Sky" id="SubResource_sky"]
-sky_material = SubResource("SubResource_sky_mat")
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
 
-[sub_resource type="Environment" id="SubResource_env"]
+[sub_resource type="Environment" id="env"]
 background_mode = 2
-sky = SubResource("SubResource_sky")
+sky = SubResource("sky")
 ambient_light_source = 2
-ambient_light_color = Color(0.8, 0.9, 0.85, 1)
-ambient_light_energy = 0.3
-bloom_enabled = true
-bloom_intensity = 0.2
+ambient_light_color = Color(0.6, 0.75, 0.68, 1)
+ambient_light_energy = 0.15
+tonemap_mode = 3
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
+glow_intensity = 0.5
+glow_bloom = 0.2
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.015
+volumetric_fog_albedo = Color(0.85, 0.9, 0.85, 1)
 
-[sub_resource type="StandardMaterial3D" id="SubResource_floor_mat"]
-albedo_color = Color(0.85, 0.9, 0.85, 1)
+[sub_resource type="StandardMaterial3D" id="m_floor"]
+albedo_color = Color(0.82, 0.84, 0.82, 1)
+metallic = 0.05
+metallic_specular = 0.6
+roughness = 0.25
 
-[sub_resource type="PlaneMesh" id="SubResource_floor"]
-size = Vector2(20, 20)
-material = SubResource("SubResource_floor_mat")
+[sub_resource type="PlaneMesh" id="msh_floor"]
+material = SubResource("m_floor")
+size = Vector2(30, 30)
 
-[sub_resource type="BoxShape3D" id="SubResource_floor_col"]
-size = Vector3(20, 0.1, 20)
+[sub_resource type="BoxShape3D" id="shp_floor"]
+size = Vector3(30, 0.1, 30)
 
-[sub_resource type="StandardMaterial3D" id="SubResource_wall_mat"]
-albedo_color = Color(0.9, 0.92, 0.9, 1)
+[sub_resource type="StandardMaterial3D" id="m_wall"]
+albedo_color = Color(0.88, 0.92, 0.88, 1)
+roughness = 0.7
 
-[sub_resource type="BoxMesh" id="SubResource_wall_mesh"]
-size = Vector3(20, 4, 0.2)
-material = SubResource("SubResource_wall_mat")
+[sub_resource type="BoxMesh" id="msh_wall"]
+material = SubResource("m_wall")
+size = Vector3(30, 5, 0.25)
 
-[sub_resource type="BoxMesh" id="SubResource_roof_mesh"]
-size = Vector3(20, 0.2, 20)
-material = SubResource("SubResource_wall_mat")
+[sub_resource type="BoxShape3D" id="shp_wall"]
+size = Vector3(30, 5, 0.25)
 
-[sub_resource type="StandardMaterial3D" id="SubResource_metal_mat"]
-albedo_color = Color(0.6, 0.65, 0.7, 1)
+[sub_resource type="StandardMaterial3D" id="m_ceil"]
+albedo_color = Color(0.93, 0.94, 0.93, 1)
+roughness = 0.8
 
-[sub_resource type="BoxMesh" id="SubResource_op_table"]
-size = Vector3(2.0, 0.8, 0.8)
-material = SubResource("SubResource_metal_mat")
+[sub_resource type="BoxMesh" id="msh_roof"]
+material = SubResource("m_ceil")
+size = Vector3(30, 0.25, 30)
 
-[sub_resource type="StandardMaterial3D" id="SubResource_light_mat"]
-albedo_color = Color(0.95, 0.95, 0.9, 1)
+[sub_resource type="BoxShape3D" id="shp_roof"]
+size = Vector3(30, 0.25, 30)
+
+[sub_resource type="StandardMaterial3D" id="m_baseboard"]
+albedo_color = Color(0.7, 0.72, 0.7, 1)
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="msh_baseboard"]
+material = SubResource("m_baseboard")
+size = Vector3(30, 0.15, 0.06)
+
+[sub_resource type="StandardMaterial3D" id="m_green_stripe"]
+albedo_color = Color(0.1, 0.6, 0.3, 1)
+roughness = 0.3
 emission_enabled = true
-emission = Color(0.9, 1.0, 1.0, 1)
+emission = Color(0.05, 0.3, 0.15, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="BoxMesh" id="msh_stripe"]
+material = SubResource("m_green_stripe")
+size = Vector3(0.1, 0.003, 28)
+
+[sub_resource type="StandardMaterial3D" id="m_blue_stripe"]
+albedo_color = Color(0.1, 0.3, 0.6, 1)
+roughness = 0.3
+emission_enabled = true
+emission = Color(0.05, 0.15, 0.3, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="BoxMesh" id="msh_stripe_b"]
+material = SubResource("m_blue_stripe")
+size = Vector3(0.1, 0.003, 28)
+
+[sub_resource type="StandardMaterial3D" id="m_panel"]
+albedo_color = Color(0.96, 0.96, 0.94, 1)
+emission_enabled = true
+emission = Color(0.95, 0.97, 0.92, 1)
 emission_energy_multiplier = 4.0
 
-[sub_resource type="BoxMesh" id="SubResource_light_mesh"]
-size = Vector3(0.6, 0.1, 0.6)
-material = SubResource("SubResource_light_mat")
+[sub_resource type="BoxMesh" id="msh_ceil_panel"]
+material = SubResource("m_panel")
+size = Vector3(1.8, 0.04, 0.6)
 
-[sub_resource type="BoxMesh" id="SubResource_cabinet"]
-size = Vector3(1.5, 2.4, 0.6)
-material = SubResource("SubResource_wall_mat")
+[sub_resource type="StandardMaterial3D" id="m_door_frame"]
+albedo_color = Color(0.6, 0.58, 0.55, 1)
+roughness = 0.5
 
-[sub_resource type="SphereMesh" id="SubResource_patient_mesh"]
-radius = 0.5
-rings = 16
-radial_segments = 16
+[sub_resource type="BoxMesh" id="msh_door_frame"]
+material = SubResource("m_door_frame")
+size = Vector3(1.2, 2.5, 0.15)
 
-[sub_resource type="BoxMesh" id="SubResource_equip_table"]
-size = Vector3(1.2, 0.7, 0.6)
-material = SubResource("SubResource_metal_mat")
+[sub_resource type="BoxShape3D" id="shp_door_frame"]
+size = Vector3(1.2, 2.5, 0.15)
 
-[node name="DoctorWorld" type="Node3D" unique_id=1485790777]
-script = ExtResource("3")
+[sub_resource type="StandardMaterial3D" id="m_chrome"]
+albedo_color = Color(0.8, 0.82, 0.85, 1)
+metallic = 0.95
+roughness = 0.1
 
-[node name="PauseMenu" parent="." instance=ExtResource("5")]
+[sub_resource type="BoxMesh" id="msh_op_base"]
+material = SubResource("m_chrome")
+size = Vector3(0.6, 0.65, 0.5)
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("SubResource_env")
+[sub_resource type="BoxShape3D" id="shp_op_base"]
+size = Vector3(0.6, 0.65, 0.5)
 
-[node name="WorldUI" type="CanvasLayer" parent="."]
-script = ExtResource("4")
+[sub_resource type="StandardMaterial3D" id="m_steel"]
+albedo_color = Color(0.7, 0.72, 0.75, 1)
+metallic = 0.85
+metallic_specular = 0.9
+roughness = 0.2
 
-[node name="ObjectiveLabel" type="Label" parent="WorldUI"]
-layout_mode = 3
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 600.0
-offset_bottom = 50.0
-text = ""
+[sub_resource type="BoxMesh" id="msh_op_top"]
+material = SubResource("m_steel")
+size = Vector3(2.2, 0.12, 0.85)
 
-[node name="StatusLabel" type="Label" parent="WorldUI"]
-layout_mode = 3
-offset_left = 20.0
-offset_top = 60.0
-offset_right = 600.0
-offset_bottom = 90.0
-text = ""
+[sub_resource type="BoxShape3D" id="shp_op_top"]
+size = Vector3(2.2, 0.12, 0.85)
 
-[node name="SunLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.86, 0, 0.5, 0, 1, 0, -0.5, 0, 0.86, 0, 12, 0)
-light_color = Color(1, 0.98, 0.95, 1)
-light_energy = 1.2
-shadow_enabled = true
-shadow_bias = 0.05
+[sub_resource type="StandardMaterial3D" id="m_mattress"]
+albedo_color = Color(0.9, 0.92, 0.95, 1)
+roughness = 0.85
 
-[node name="ReflectionProbe" type="ReflectionProbe3D" parent="."]
-extents = Vector3(25, 15, 25)
-intensity = 1.1
+[sub_resource type="BoxMesh" id="msh_op_pad"]
+material = SubResource("m_mattress")
+size = Vector3(2, 0.06, 0.75)
 
-[node name="WorldTitle" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
-text = "Doctor"
-font_size = 48
-modulate = Color(1, 0.9, 0.8, 1)
+[sub_resource type="CylinderMesh" id="msh_lamp_arm"]
+material = SubResource("m_chrome")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 1.0
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-light_color = Color(0.95, 1, 0.98, 1)
+[sub_resource type="BoxMesh" id="msh_lamp_head"]
+material = SubResource("m_panel")
+size = Vector3(0.55, 0.06, 0.55)
+
+[sub_resource type="BoxMesh" id="msh_monitor_stand"]
+material = SubResource("m_steel")
+size = Vector3(0.25, 1.1, 0.25)
+
+[sub_resource type="BoxShape3D" id="shp_mon_stand"]
+size = Vector3(0.25, 1.1, 0.25)
+
+[sub_resource type="CylinderMesh" id="msh_iv_pole"]
+material = SubResource("m_chrome")
+top_radius = 0.018
+bottom_radius = 0.022
+
+[sub_resource type="StandardMaterial3D" id="m_curtain"]
+transparency = 1
+albedo_color = Color(0.45, 0.65, 0.72, 0.85)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="msh_iv_bag"]
+material = SubResource("m_curtain")
+size = Vector3(0.1, 0.18, 0.05)
+
+[sub_resource type="BoxMesh" id="msh_cart"]
+material = SubResource("m_steel")
+size = Vector3(0.75, 0.75, 0.45)
+
+[sub_resource type="BoxShape3D" id="shp_cart"]
+size = Vector3(0.75, 0.75, 0.45)
+
+[sub_resource type="BoxMesh" id="msh_tray"]
+material = SubResource("m_chrome")
+size = Vector3(0.55, 0.03, 0.28)
+
+[sub_resource type="StandardMaterial3D" id="m_sink"]
+albedo_color = Color(0.9, 0.91, 0.92, 1)
+metallic = 0.3
+roughness = 0.2
+
+[sub_resource type="BoxMesh" id="msh_sink"]
+material = SubResource("m_sink")
+size = Vector3(0.6, 0.4, 0.45)
+
+[sub_resource type="CylinderMesh" id="msh_faucet"]
+material = SubResource("m_chrome")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.35
+
+[sub_resource type="StandardMaterial3D" id="m_bed"]
+albedo_color = Color(0.78, 0.8, 0.84, 1)
+metallic = 0.4
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="msh_bed"]
+material = SubResource("m_bed")
+size = Vector3(2, 0.45, 0.9)
+
+[sub_resource type="BoxShape3D" id="shp_bed"]
+size = Vector3(2, 0.45, 0.9)
+
+[sub_resource type="BoxMesh" id="msh_mattress"]
+material = SubResource("m_mattress")
+size = Vector3(1.85, 0.12, 0.82)
+
+[sub_resource type="StandardMaterial3D" id="m_pillow"]
+albedo_color = Color(0.95, 0.96, 0.97, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="msh_pillow"]
+material = SubResource("m_pillow")
+size = Vector3(0.35, 0.1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="m_cabinet"]
+albedo_color = Color(0.92, 0.93, 0.92, 1)
+metallic = 0.08
+roughness = 0.45
+
+[sub_resource type="BoxMesh" id="msh_bedside"]
+material = SubResource("m_cabinet")
+size = Vector3(0.45, 0.65, 0.38)
+
+[sub_resource type="BoxShape3D" id="shp_bedside"]
+size = Vector3(0.45, 0.65, 0.38)
+
+[sub_resource type="BoxMesh" id="msh_curtain_rail"]
+material = SubResource("m_chrome")
+size = Vector3(2.5, 0.025, 0.025)
+
+[sub_resource type="BoxMesh" id="msh_curtain"]
+material = SubResource("m_curtain")
+size = Vector3(2.4, 3.2, 0.015)
+
+[sub_resource type="BoxMesh" id="msh_shelf"]
+material = SubResource("m_cabinet")
+size = Vector3(1.5, 0.05, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="m_desk"]
+albedo_color = Color(0.65, 0.6, 0.55, 1)
+metallic = 0.05
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="msh_desk_f"]
+material = SubResource("m_desk")
+size = Vector3(4, 1, 0.55)
+
+[sub_resource type="BoxShape3D" id="shp_desk_f"]
+size = Vector3(4, 1, 0.55)
+
+[sub_resource type="BoxMesh" id="msh_desk_s"]
+material = SubResource("m_desk")
+size = Vector3(0.55, 1, 2.2)
+
+[sub_resource type="BoxShape3D" id="shp_desk_s"]
+size = Vector3(0.55, 1, 2.2)
+
+[sub_resource type="StandardMaterial3D" id="m_screen_blue"]
+albedo_color = Color(0.02, 0.02, 0.05, 1)
+roughness = 0.15
+emission_enabled = true
+emission = Color(0.15, 0.3, 0.8, 1)
+emission_energy_multiplier = 1.8
+
+[sub_resource type="BoxMesh" id="msh_pc_mon"]
+material = SubResource("m_screen_blue")
+size = Vector3(0.55, 0.38, 0.035)
+
+[sub_resource type="BoxMesh" id="msh_filing"]
+material = SubResource("m_cabinet")
+size = Vector3(0.55, 1.6, 0.45)
+
+[sub_resource type="BoxShape3D" id="shp_filing"]
+size = Vector3(0.55, 1.6, 0.45)
+
+[sub_resource type="StandardMaterial3D" id="m_scrub"]
+albedo_color = Color(0.22, 0.48, 0.6, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="msh_chair"]
+material = SubResource("m_scrub")
+size = Vector3(0.45, 0.55, 0.45)
+
+[sub_resource type="StandardMaterial3D" id="m_red_em"]
+albedo_color = Color(0.8, 0.08, 0.08, 1)
+emission_enabled = true
+emission = Color(0.9, 0.05, 0.05, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="BoxMesh" id="msh_cross_h"]
+material = SubResource("m_red_em")
+size = Vector3(0.75, 0.18, 0.04)
+
+[sub_resource type="BoxMesh" id="msh_cross_v"]
+material = SubResource("m_red_em")
+size = Vector3(0.18, 0.75, 0.04)
+
+[sub_resource type="BoxMesh" id="msh_lab_counter"]
+material = SubResource("m_cabinet")
+size = Vector3(4, 0.9, 0.75)
+
+[sub_resource type="BoxShape3D" id="shp_lab_counter"]
+size = Vector3(4, 0.9, 0.75)
+
+[sub_resource type="StandardMaterial3D" id="m_xray"]
+albedo_color = Color(0.08, 0.12, 0.2, 1)
+roughness = 0.1
+emission_enabled = true
+emission = Color(0.35, 0.55, 0.95, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="BoxMesh" id="msh_xray"]
+material = SubResource("m_xray")
+size = Vector3(1.4, 1.1, 0.06)
+
+[sub_resource type="CylinderMesh" id="msh_micro_b"]
+material = SubResource("m_chrome")
+top_radius = 0.11
+bottom_radius = 0.14
+height = 0.12
+
+[sub_resource type="CylinderMesh" id="msh_micro_t"]
+material = SubResource("m_chrome")
+top_radius = 0.035
+bottom_radius = 0.055
+height = 0.38
+
+[sub_resource type="BoxMesh" id="msh_med_cab"]
+material = SubResource("m_cabinet")
+size = Vector3(1.1, 1.4, 0.32)
+
+[sub_resource type="BoxMesh" id="msh_lab_tbl"]
+material = SubResource("m_desk")
+size = Vector3(1.4, 0.78, 0.65)
+
+[sub_resource type="BoxMesh" id="msh_tubes"]
+material = SubResource("m_scrub")
+size = Vector3(0.28, 0.12, 0.12)
+
+[sub_resource type="BoxMesh" id="msh_wait_ch"]
+material = SubResource("m_scrub")
+size = Vector3(0.55, 0.45, 0.55)
+
+[sub_resource type="BoxShape3D" id="shp_wait_ch"]
+size = Vector3(0.55, 0.45, 0.55)
+
+[sub_resource type="StandardMaterial3D" id="m_water"]
+albedo_color = Color(0.85, 0.87, 0.9, 1)
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="msh_cooler"]
+material = SubResource("m_water")
+size = Vector3(0.32, 1.15, 0.32)
+
+[sub_resource type="BoxShape3D" id="shp_cooler"]
+size = Vector3(0.32, 1.15, 0.32)
+
+[sub_resource type="BoxMesh" id="msh_mag_tbl"]
+material = SubResource("m_desk")
+size = Vector3(0.9, 0.38, 0.55)
+
+[sub_resource type="BoxShape3D" id="shp_mag_tbl"]
+size = Vector3(0.9, 0.38, 0.55)
+
+[sub_resource type="StandardMaterial3D" id="m_exit_green"]
+albedo_color = Color(0.05, 0.6, 0.15, 1)
+emission_enabled = true
+emission = Color(0.05, 0.8, 0.15, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="BoxMesh" id="msh_exit_sign"]
+material = SubResource("m_exit_green")
+size = Vector3(0.5, 0.18, 0.04)
+
+[sub_resource type="BoxShape3D" id="shp_exit_sign"]
+size = Vector3(0.5, 0.18, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="m_partition"]
+albedo_color = Color(0.85, 0.88, 0.85, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="msh_partition"]
+material = SubResource("m_partition")
+size = Vector3(7, 5, 0.2)
+
+[sub_resource type="BoxShape3D" id="shp_partition"]
+size = Vector3(7, 5, 0.2)
+
+[sub_resource type="BoxMesh" id="msh_gurney_legs"]
+material = SubResource("m_chrome")
+size = Vector3(1.8, 0.55, 0.5)
+
+[sub_resource type="BoxShape3D" id="shp_gurney_legs"]
+size = Vector3(1.8, 0.55, 0.5)
+
+[sub_resource type="BoxMesh" id="msh_gurney"]
+material = SubResource("m_steel")
+size = Vector3(2.2, 0.1, 0.75)
+
+[sub_resource type="BoxShape3D" id="shp_gurney"]
+size = Vector3(2.2, 0.1, 0.75)
+
+[sub_resource type="BoxMesh" id="msh_gurney_pad"]
+material = SubResource("m_mattress")
+size = Vector3(2, 0.06, 0.68)
+
+[sub_resource type="BoxShape3D" id="shp_gurney_pad"]
+size = Vector3(2, 0.06, 0.68)
+
+[sub_resource type="StandardMaterial3D" id="m_defib"]
+albedo_color = Color(0.85, 0.2, 0.15, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="msh_defib_body"]
+material = SubResource("m_defib")
+size = Vector3(0.4, 0.35, 0.3)
+
+[sub_resource type="BoxShape3D" id="shp_defib_body"]
+size = Vector3(0.4, 0.35, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="m_screen"]
+albedo_color = Color(0.02, 0.03, 0.04, 1)
+metallic = 0.3
+roughness = 0.15
+emission_enabled = true
+emission = Color(0.05, 0.55, 0.2, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="BoxMesh" id="msh_defib_screen"]
+material = SubResource("m_screen")
+size = Vector3(0.25, 0.15, 0.02)
+
+[sub_resource type="BoxShape3D" id="shp_defib_screen"]
+size = Vector3(0.25, 0.15, 0.02)
+
+[sub_resource type="CylinderMesh" id="msh_wc_wheel"]
+material = SubResource("m_door_frame")
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.03
+
+[sub_resource type="BoxShape3D" id="shp_wc_wheel"]
+size = Vector3(0.5, 0.03, 0.5)
+
+[sub_resource type="BoxMesh" id="msh_wheelchair_seat"]
+material = SubResource("m_scrub")
+size = Vector3(0.5, 0.05, 0.45)
+
+[sub_resource type="BoxShape3D" id="shp_wheelchair_seat"]
+size = Vector3(0.5, 0.05, 0.45)
+
+[sub_resource type="BoxMesh" id="msh_wheelchair_back"]
+material = SubResource("m_scrub")
+size = Vector3(0.5, 0.5, 0.04)
+
+[sub_resource type="BoxShape3D" id="shp_wheelchair_back"]
+size = Vector3(0.5, 0.5, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="m_vend"]
+albedo_color = Color(0.2, 0.22, 0.25, 1)
+metallic = 0.3
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="msh_vending"]
+material = SubResource("m_vend")
+size = Vector3(1, 2, 0.7)
+
+[sub_resource type="BoxShape3D" id="shp_vending"]
+size = Vector3(1, 2, 0.7)
+
+[sub_resource type="StandardMaterial3D" id="m_vend_screen"]
+albedo_color = Color(0.02, 0.02, 0.04, 1)
+emission_enabled = true
+emission = Color(0.2, 0.6, 0.9, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="BoxMesh" id="msh_vend_scr"]
+material = SubResource("m_vend_screen")
+size = Vector3(0.6, 0.8, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="m_sanitizer"]
+albedo_color = Color(0.85, 0.85, 0.88, 1)
+metallic = 0.2
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="msh_sanitizer"]
+material = SubResource("m_sanitizer")
+size = Vector3(0.12, 0.22, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="m_clock_face"]
+albedo_color = Color(0.95, 0.95, 0.93, 1)
+emission_enabled = true
+emission = Color(0.9, 0.9, 0.85, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="CylinderMesh" id="msh_clock"]
+material = SubResource("m_clock_face")
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.05
+
+[node name="DoctorWorld" type="Node3D" unique_id=566339316]
+script = ExtResource("1_script")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1143945328]
+environment = SubResource("env")
+
+[node name="OR_Spot" type="SpotLight3D" parent="." unique_id=1934686214]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 4.85, -9)
+light_color = Color(1, 1, 0.96, 1)
 light_energy = 2.0
 shadow_enabled = true
-omni_range = 25.0
+spot_range = 7.0
+spot_angle = 32.0
 
-[node name="Floor" type="StaticBody3D" parent="."]
+[node name="OR_Fill" type="OmniLight3D" parent="." unique_id=320986030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 4, -10)
+light_color = Color(0.9, 0.95, 0.92, 1)
+light_energy = 0.4
+omni_range = 8.0
 
-[node name="FloorMesh" type="MeshInstance3D" parent="Floor"]
-mesh = SubResource("SubResource_floor")
+[node name="Hall1" type="OmniLight3D" parent="." unique_id=694213060]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, 6)
+light_color = Color(0.95, 0.98, 0.96, 1)
+light_energy = 0.9
+shadow_enabled = true
+omni_range = 16.0
 
-[node name="FloorCol" type="CollisionShape3D" parent="Floor"]
+[node name="Hall2" type="OmniLight3D" parent="." unique_id=1736522687]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, -2)
+light_color = Color(0.95, 0.98, 0.96, 1)
+light_energy = 0.75
+omni_range = 14.0
+
+[node name="Ward" type="OmniLight3D" parent="." unique_id=819696975]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 4.5, -4)
+light_color = Color(1, 0.95, 0.88, 1)
+light_energy = 0.5
+omni_range = 10.0
+
+[node name="Lab" type="OmniLight3D" parent="." unique_id=1582080848]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 4.5, -6)
+light_color = Color(0.82, 0.88, 1, 1)
+light_energy = 0.65
+omni_range = 10.0
+
+[node name="Reception" type="OmniLight3D" parent="." unique_id=10716484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 4.5, 9)
+light_color = Color(0.95, 0.95, 0.9, 1)
+light_energy = 0.6
+omni_range = 10.0
+
+[node name="WaitLight" type="OmniLight3D" parent="." unique_id=1207876807]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4.5, 11)
+light_color = Color(1, 0.95, 0.9, 1)
+light_energy = 0.4
+omni_range = 8.0
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1786752102]
+
+[node name="FM" type="MeshInstance3D" parent="Floor" unique_id=470508422]
+mesh = SubResource("msh_floor")
+
+[node name="FC" type="CollisionShape3D" parent="Floor" unique_id=294081908]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-shape = SubResource("SubResource_floor_col")
+shape = SubResource("shp_floor")
 
-[node name="WallBack" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -10)
-mesh = SubResource("SubResource_wall_mesh")
+[node name="CSGBox3D" type="CSGBox3D" parent="Floor" unique_id=1456987883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.24487305, 0)
+use_collision = true
+size = Vector3(39.280273, 0.5102539, 43.11621)
 
-[node name="WallLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 2, 0)
-mesh = SubResource("SubResource_wall_mesh")
+[node name="WB" type="StaticBody3D" parent="." unique_id=372764721]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -15)
 
-[node name="WallRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 2, 0)
-mesh = SubResource("SubResource_wall_mesh")
+[node name="M" type="MeshInstance3D" parent="WB" unique_id=518781228]
+mesh = SubResource("msh_wall")
 
-[node name="WallFront" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 10)
-mesh = SubResource("SubResource_wall_mesh")
+[node name="C" type="CollisionShape3D" parent="WB" unique_id=2080391326]
+shape = SubResource("shp_wall")
 
-[node name="Roof" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
-mesh = SubResource("SubResource_roof_mesh")
+[node name="WL" type="StaticBody3D" parent="." unique_id=840399553]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -15, 2.5, 0)
 
-[node name="OperatingTable" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -3)
-mesh = SubResource("SubResource_op_table")
+[node name="M" type="MeshInstance3D" parent="WL" unique_id=1725127643]
+mesh = SubResource("msh_wall")
 
-[node name="SurgicalLight1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 3.5, -3)
-mesh = SubResource("SubResource_light_mesh")
+[node name="C" type="CollisionShape3D" parent="WL" unique_id=303073332]
+shape = SubResource("shp_wall")
 
-[node name="SurgicalLight2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 3.5, -3)
-mesh = SubResource("SubResource_light_mesh")
+[node name="WR" type="StaticBody3D" parent="." unique_id=773381918]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 15, 2.5, 0)
 
-[node name="CabinetLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.2, -9)
-mesh = SubResource("SubResource_cabinet")
+[node name="M" type="MeshInstance3D" parent="WR" unique_id=518062522]
+mesh = SubResource("msh_wall")
 
-[node name="CabinetRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.2, -9)
-mesh = SubResource("SubResource_cabinet")
+[node name="C" type="CollisionShape3D" parent="WR" unique_id=1322038501]
+shape = SubResource("shp_wall")
 
-[node name="EquipTable1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.35, -5)
-mesh = SubResource("SubResource_equip_table")
+[node name="WF" type="StaticBody3D" parent="." unique_id=1471349140]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 15)
 
-[node name="EquipTable2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.35, -5)
-mesh = SubResource("SubResource_equip_table")
+[node name="M" type="MeshInstance3D" parent="WF" unique_id=116131474]
+mesh = SubResource("msh_wall")
 
-[node name="Patient1" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.5, -3)
-monitoring = true
+[node name="C" type="CollisionShape3D" parent="WF" unique_id=1426594450]
+shape = SubResource("shp_wall")
 
-[node name="Patient1Col" type="CollisionShape3D" parent="Patient1"]
-shape = SphereShape3D(radius = 0.6)
+[node name="Roof" type="StaticBody3D" parent="." unique_id=2051226573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 
-[node name="Patient1Mesh" type="MeshInstance3D" parent="Patient1"]
-mesh = SubResource("SubResource_patient_mesh")
-material_override = SubResource("SubResource_light_mat")
+[node name="M" type="MeshInstance3D" parent="Roof" unique_id=430423723]
+mesh = SubResource("msh_roof")
 
-[node name="Patient2" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -3)
-monitoring = true
+[node name="C" type="CollisionShape3D" parent="Roof" unique_id=1842159945]
+shape = SubResource("shp_roof")
 
-[node name="Patient2Col" type="CollisionShape3D" parent="Patient2"]
-shape = SphereShape3D(radius = 0.6)
+[node name="BB_B" type="MeshInstance3D" parent="." unique_id=1043461136]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, -14.85)
+mesh = SubResource("msh_baseboard")
 
-[node name="Patient2Mesh" type="MeshInstance3D" parent="Patient2"]
-mesh = SubResource("SubResource_patient_mesh")
-material_override = SubResource("SubResource_light_mat")
+[node name="BB_F" type="MeshInstance3D" parent="." unique_id=996321389]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 14.85)
+mesh = SubResource("msh_baseboard")
 
-[node name="Patient3" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, -3)
-monitoring = true
+[node name="BB_L" type="MeshInstance3D" parent="." unique_id=1536067218]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14.85, 0.075, 0)
+mesh = SubResource("msh_baseboard")
 
-[node name="Patient3Col" type="CollisionShape3D" parent="Patient3"]
-shape = SphereShape3D(radius = 0.6)
+[node name="BB_R" type="MeshInstance3D" parent="." unique_id=185048684]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.85, 0.075, 0)
+mesh = SubResource("msh_baseboard")
 
-[node name="Patient3Mesh" type="MeshInstance3D" parent="Patient3"]
-mesh = SubResource("SubResource_patient_mesh")
-material_override = SubResource("SubResource_light_mat")
+[node name="StrG" type="MeshInstance3D" parent="." unique_id=1351577841]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.005, 0)
+mesh = SubResource("msh_stripe")
 
-[node name="Player" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 6.5)
+[node name="StrB" type="MeshInstance3D" parent="." unique_id=477730120]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.005, 0)
+mesh = SubResource("msh_stripe_b")
 
-[node name="ReturnPortal" parent="." instance=ExtResource("2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9)
+[node name="CP1" type="MeshInstance3D" parent="." unique_id=2119179642]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 8)
+mesh = SubResource("msh_ceil_panel")
+
+[node name="CP2" type="MeshInstance3D" parent="." unique_id=350645553]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 4)
+mesh = SubResource("msh_ceil_panel")
+
+[node name="CP3" type="MeshInstance3D" parent="." unique_id=466695632]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 0)
+mesh = SubResource("msh_ceil_panel")
+
+[node name="CP4" type="MeshInstance3D" parent="." unique_id=608080351]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, -4)
+mesh = SubResource("msh_ceil_panel")
+
+[node name="CP5" type="MeshInstance3D" parent="." unique_id=921126760]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 4.9, -4)
+mesh = SubResource("msh_ceil_panel")
+
+[node name="CP6" type="MeshInstance3D" parent="." unique_id=577776432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 4.9, -6)
+mesh = SubResource("msh_ceil_panel")
+
+[node name="DF1L" type="StaticBody3D" parent="." unique_id=531116202]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6, 1.25, -5.5)
+
+[node name="M" type="MeshInstance3D" parent="DF1L" unique_id=1579002665]
+mesh = SubResource("msh_door_frame")
+
+[node name="C" type="CollisionShape3D" parent="DF1L" unique_id=1896501266]
+shape = SubResource("shp_door_frame")
+
+[node name="DF1R" type="StaticBody3D" parent="." unique_id=1363154346]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 1.25, -5.5)
+
+[node name="M" type="MeshInstance3D" parent="DF1R" unique_id=1378734855]
+mesh = SubResource("msh_door_frame")
+
+[node name="C" type="CollisionShape3D" parent="DF1R" unique_id=380545923]
+shape = SubResource("shp_door_frame")
+
+[node name="DF2L" type="StaticBody3D" parent="." unique_id=858517225]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4, 1.25, -2)
+
+[node name="M" type="MeshInstance3D" parent="DF2L" unique_id=994650871]
+mesh = SubResource("msh_door_frame")
+
+[node name="C" type="CollisionShape3D" parent="DF2L" unique_id=2089133982]
+shape = SubResource("shp_door_frame")
+
+[node name="DF2R" type="StaticBody3D" parent="." unique_id=2124093519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 1.25, -2)
+
+[node name="M" type="MeshInstance3D" parent="DF2R" unique_id=565497464]
+mesh = SubResource("msh_door_frame")
+
+[node name="C" type="CollisionShape3D" parent="DF2R" unique_id=335289191]
+shape = SubResource("shp_door_frame")
+
+[node name="OPBase" type="StaticBody3D" parent="." unique_id=1558027947]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.325, -9)
+
+[node name="M" type="MeshInstance3D" parent="OPBase" unique_id=1477812059]
+mesh = SubResource("msh_op_base")
+
+[node name="C" type="CollisionShape3D" parent="OPBase" unique_id=493820478]
+shape = SubResource("shp_op_base")
+
+[node name="OPTop" type="StaticBody3D" parent="." unique_id=1091623378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.715, -9)
+
+[node name="M" type="MeshInstance3D" parent="OPTop" unique_id=921191605]
+mesh = SubResource("msh_op_top")
+
+[node name="C" type="CollisionShape3D" parent="OPTop" unique_id=1190006059]
+shape = SubResource("shp_op_top")
+
+[node name="OPPad" type="MeshInstance3D" parent="." unique_id=1147866977]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.805, -9)
+mesh = SubResource("msh_op_pad")
+
+[node name="LA1" type="MeshInstance3D" parent="." unique_id=840951588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 4.3, -9)
+mesh = SubResource("msh_lamp_arm")
+
+[node name="LA2" type="MeshInstance3D" parent="." unique_id=1509712394]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 4.3, -9)
+mesh = SubResource("msh_lamp_arm")
+
+[node name="LH1" type="MeshInstance3D" parent="." unique_id=1809973943]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 3.77, -9)
+mesh = SubResource("msh_lamp_head")
+
+[node name="LH2" type="MeshInstance3D" parent="." unique_id=1555657046]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 3.77, -9)
+mesh = SubResource("msh_lamp_head")
+
+[node name="HMS" type="StaticBody3D" parent="." unique_id=1959505040]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.55, -9)
+
+[node name="M" type="MeshInstance3D" parent="HMS" unique_id=1953919635]
+mesh = SubResource("msh_monitor_stand")
+
+[node name="C" type="CollisionShape3D" parent="HMS" unique_id=999660009]
+shape = SubResource("shp_mon_stand")
+
+[node name="HMS2" type="StaticBody3D" parent="." unique_id=1325242746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, 0.55, -10)
+
+[node name="M" type="MeshInstance3D" parent="HMS2" unique_id=1446041627]
+mesh = SubResource("msh_monitor_stand")
+
+[node name="C" type="CollisionShape3D" parent="HMS2" unique_id=1318024160]
+shape = SubResource("shp_mon_stand")
+
+[node name="IVP" type="MeshInstance3D" parent="." unique_id=1624306777]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1, -9)
+mesh = SubResource("msh_iv_pole")
+
+[node name="IVB" type="MeshInstance3D" parent="." unique_id=2101687443]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 2, -9)
+mesh = SubResource("msh_iv_bag")
+
+[node name="IVP2" type="MeshInstance3D" parent="." unique_id=2013780636]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -10.5)
+mesh = SubResource("msh_iv_pole")
+
+[node name="IVB2" type="MeshInstance3D" parent="." unique_id=335926562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -10.5)
+mesh = SubResource("msh_iv_bag")
+
+[node name="Cart1" type="StaticBody3D" parent="." unique_id=2067873709]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.375, -11)
+
+[node name="M" type="MeshInstance3D" parent="Cart1" unique_id=2058144532]
+mesh = SubResource("msh_cart")
+
+[node name="C" type="CollisionShape3D" parent="Cart1" unique_id=2058981053]
+shape = SubResource("shp_cart")
+
+[node name="Cart2" type="StaticBody3D" parent="." unique_id=590033200]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.375, -11.5)
+
+[node name="M" type="MeshInstance3D" parent="Cart2" unique_id=903567401]
+mesh = SubResource("msh_cart")
+
+[node name="C" type="CollisionShape3D" parent="Cart2" unique_id=1761461265]
+shape = SubResource("shp_cart")
+
+[node name="Tray1" type="MeshInstance3D" parent="." unique_id=1152174008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.79, -10.5)
+mesh = SubResource("msh_tray")
+
+[node name="Tray2" type="MeshInstance3D" parent="." unique_id=1906216756]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.79, -10.5)
+mesh = SubResource("msh_tray")
+
+[node name="Sink1" type="MeshInstance3D" parent="." unique_id=1989893245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.7, -14.5)
+mesh = SubResource("msh_sink")
+
+[node name="Faucet1" type="MeshInstance3D" parent="." unique_id=428672738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.08, -14.3)
+mesh = SubResource("msh_faucet")
+
+[node name="ORS" type="Label3D" parent="." unique_id=1207885465]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.3, -14.8)
+modulate = Color(0.9, 0.12, 0.12, 1)
+text = "OPERATING ROOM"
+font_size = 30
+
+[node name="B1" type="StaticBody3D" parent="." unique_id=152162225]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.225, -1)
+
+[node name="M" type="MeshInstance3D" parent="B1" unique_id=485125031]
+mesh = SubResource("msh_bed")
+
+[node name="C" type="CollisionShape3D" parent="B1" unique_id=1028527160]
+shape = SubResource("shp_bed")
+
+[node name="BM1" type="MeshInstance3D" parent="." unique_id=2121397456]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.51, -1)
+mesh = SubResource("msh_mattress")
+
+[node name="BP1" type="MeshInstance3D" parent="." unique_id=1785878359]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.65, 0.62, -1)
+mesh = SubResource("msh_pillow")
+
+[node name="BS1" type="StaticBody3D" parent="." unique_id=120975735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0.325, -1)
+
+[node name="M" type="MeshInstance3D" parent="BS1" unique_id=1155424858]
+mesh = SubResource("msh_bedside")
+
+[node name="C" type="CollisionShape3D" parent="BS1" unique_id=59598632]
+shape = SubResource("shp_bedside")
+
+[node name="B2" type="StaticBody3D" parent="." unique_id=1994615121]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.225, -4)
+
+[node name="M" type="MeshInstance3D" parent="B2" unique_id=587621944]
+mesh = SubResource("msh_bed")
+
+[node name="C" type="CollisionShape3D" parent="B2" unique_id=1334270929]
+shape = SubResource("shp_bed")
+
+[node name="BM2" type="MeshInstance3D" parent="." unique_id=768682386]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.51, -4)
+mesh = SubResource("msh_mattress")
+
+[node name="BP2" type="MeshInstance3D" parent="." unique_id=1044414155]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.65, 0.62, -4)
+mesh = SubResource("msh_pillow")
+
+[node name="BS2" type="StaticBody3D" parent="." unique_id=1603207309]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0.325, -4)
+
+[node name="M" type="MeshInstance3D" parent="BS2" unique_id=1792702244]
+mesh = SubResource("msh_bedside")
+
+[node name="C" type="CollisionShape3D" parent="BS2" unique_id=1914868450]
+shape = SubResource("shp_bedside")
+
+[node name="B3" type="StaticBody3D" parent="." unique_id=1485307565]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.225, -7)
+
+[node name="M" type="MeshInstance3D" parent="B3" unique_id=1857873255]
+mesh = SubResource("msh_bed")
+
+[node name="C" type="CollisionShape3D" parent="B3" unique_id=513784211]
+shape = SubResource("shp_bed")
+
+[node name="BM3" type="MeshInstance3D" parent="." unique_id=1968557101]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.51, -7)
+mesh = SubResource("msh_mattress")
+
+[node name="BP3" type="MeshInstance3D" parent="." unique_id=413521253]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.65, 0.62, -7)
+mesh = SubResource("msh_pillow")
+
+[node name="BS3" type="StaticBody3D" parent="." unique_id=926395372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0.325, -7)
+
+[node name="M" type="MeshInstance3D" parent="BS3" unique_id=518646412]
+mesh = SubResource("msh_bedside")
+
+[node name="C" type="CollisionShape3D" parent="BS3" unique_id=1114148529]
+shape = SubResource("shp_bedside")
+
+[node name="CR1" type="MeshInstance3D" parent="." unique_id=509420970]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 4.7, -2.5)
+mesh = SubResource("msh_curtain_rail")
+
+[node name="CT1" type="MeshInstance3D" parent="." unique_id=1041552043]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 3.1, -2.5)
+mesh = SubResource("msh_curtain")
+
+[node name="CR2" type="MeshInstance3D" parent="." unique_id=419981141]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 4.7, -5.5)
+mesh = SubResource("msh_curtain_rail")
+
+[node name="CT2" type="MeshInstance3D" parent="." unique_id=1737947130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 3.1, -5.5)
+mesh = SubResource("msh_curtain")
+
+[node name="WShelf1" type="MeshInstance3D" parent="." unique_id=1266193272]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14.7, 1.5, -2)
+mesh = SubResource("msh_shelf")
+
+[node name="WShelf2" type="MeshInstance3D" parent="." unique_id=1033779216]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14.7, 1.5, -6)
+mesh = SubResource("msh_shelf")
+
+[node name="WS" type="Label3D" parent="." unique_id=681267286]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14.75, 4.3, -4)
+modulate = Color(0.25, 0.5, 0.65, 1)
+text = "PATIENT WARD"
+font_size = 26
+
+[node name="RDF" type="StaticBody3D" parent="." unique_id=1998320367]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.5, 8)
+
+[node name="M" type="MeshInstance3D" parent="RDF" unique_id=1884517441]
+mesh = SubResource("msh_desk_f")
+
+[node name="C" type="CollisionShape3D" parent="RDF" unique_id=1885756009]
+shape = SubResource("shp_desk_f")
+
+[node name="RDS" type="StaticBody3D" parent="." unique_id=535686466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2, 0.5, 9.5)
+
+[node name="M" type="MeshInstance3D" parent="RDS" unique_id=1594946002]
+mesh = SubResource("msh_desk_s")
+
+[node name="C" type="CollisionShape3D" parent="RDS" unique_id=2058596793]
+shape = SubResource("shp_desk_s")
+
+[node name="RM1" type="MeshInstance3D" parent="." unique_id=1812396549]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.22, 8.25)
+mesh = SubResource("msh_pc_mon")
+
+[node name="RM2" type="MeshInstance3D" parent="." unique_id=1845805980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.22, 8.25)
+mesh = SubResource("msh_pc_mon")
+
+[node name="FC1" type="StaticBody3D" parent="." unique_id=885796269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0.8, 12.5)
+
+[node name="M" type="MeshInstance3D" parent="FC1" unique_id=477452096]
+mesh = SubResource("msh_filing")
+
+[node name="C" type="CollisionShape3D" parent="FC1" unique_id=1003006606]
+shape = SubResource("shp_filing")
+
+[node name="FC2" type="StaticBody3D" parent="." unique_id=483503997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0.8, 12.5)
+
+[node name="M" type="MeshInstance3D" parent="FC2" unique_id=1244303289]
+mesh = SubResource("msh_filing")
+
+[node name="C" type="CollisionShape3D" parent="FC2" unique_id=430128935]
+shape = SubResource("shp_filing")
+
+[node name="FC3" type="StaticBody3D" parent="." unique_id=1695568692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.8, 12.5)
+
+[node name="M" type="MeshInstance3D" parent="FC3" unique_id=1278228890]
+mesh = SubResource("msh_filing")
+
+[node name="C" type="CollisionShape3D" parent="FC3" unique_id=781094904]
+shape = SubResource("shp_filing")
+
+[node name="FC4" type="StaticBody3D" parent="." unique_id=2041574055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.8, 12.5)
+
+[node name="M" type="MeshInstance3D" parent="FC4" unique_id=720199146]
+mesh = SubResource("msh_filing")
+
+[node name="C" type="CollisionShape3D" parent="FC4" unique_id=1356894604]
+shape = SubResource("shp_filing")
+
+[node name="Ch1" type="MeshInstance3D" parent="." unique_id=191069546]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.275, 9)
+mesh = SubResource("msh_chair")
+
+[node name="Ch2" type="MeshInstance3D" parent="." unique_id=207352609]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.275, 9)
+mesh = SubResource("msh_chair")
+
+[node name="RCH" type="MeshInstance3D" parent="." unique_id=1296032664]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3.5, 14.8)
+mesh = SubResource("msh_cross_h")
+
+[node name="RCV" type="MeshInstance3D" parent="." unique_id=592093019]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3.5, 14.8)
+mesh = SubResource("msh_cross_v")
+
+[node name="LC" type="StaticBody3D" parent="." unique_id=1029881051]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.45, -8)
+
+[node name="M" type="MeshInstance3D" parent="LC" unique_id=1717355290]
+mesh = SubResource("msh_lab_counter")
+
+[node name="C" type="CollisionShape3D" parent="LC" unique_id=1745574554]
+shape = SubResource("shp_lab_counter")
+
+[node name="XR" type="MeshInstance3D" parent="." unique_id=654361400]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.8, 2.5, -6)
+mesh = SubResource("msh_xray")
+
+[node name="MiB" type="MeshInstance3D" parent="." unique_id=51542450]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0.96, -8)
+mesh = SubResource("msh_micro_b")
+
+[node name="MiT" type="MeshInstance3D" parent="." unique_id=1311415912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1.22, -8)
+mesh = SubResource("msh_micro_t")
+
+[node name="MC1" type="MeshInstance3D" parent="." unique_id=136663020]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.8, 2, -10)
+mesh = SubResource("msh_med_cab")
+
+[node name="MC2" type="MeshInstance3D" parent="." unique_id=420499521]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.8, 2, -3.5)
+mesh = SubResource("msh_med_cab")
+
+[node name="LT" type="MeshInstance3D" parent="." unique_id=2077616522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.39, -4)
+mesh = SubResource("msh_lab_tbl")
+
+[node name="TR" type="MeshInstance3D" parent="." unique_id=807101876]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.84, -4)
+mesh = SubResource("msh_tubes")
+
+[node name="Sink2" type="MeshInstance3D" parent="." unique_id=719459471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.7, -4)
+mesh = SubResource("msh_sink")
+
+[node name="Faucet2" type="MeshInstance3D" parent="." unique_id=1658663930]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1.08, -3.8)
+mesh = SubResource("msh_faucet")
+
+[node name="LS" type="Label3D" parent="." unique_id=201746467]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14.75, 4.3, -7)
+modulate = Color(0.35, 0.55, 0.9, 1)
+text = "X-RAY LAB"
+font_size = 26
+
+[node name="WCh1" type="StaticBody3D" parent="." unique_id=615348416]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.225, 11)
+
+[node name="M" type="MeshInstance3D" parent="WCh1" unique_id=1321810218]
+mesh = SubResource("msh_wait_ch")
+
+[node name="C" type="CollisionShape3D" parent="WCh1" unique_id=154603279]
+shape = SubResource("shp_wait_ch")
+
+[node name="WCh2" type="StaticBody3D" parent="." unique_id=1968139086]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.225, 11)
+
+[node name="M" type="MeshInstance3D" parent="WCh2" unique_id=1550073841]
+mesh = SubResource("msh_wait_ch")
+
+[node name="C" type="CollisionShape3D" parent="WCh2" unique_id=552345309]
+shape = SubResource("shp_wait_ch")
+
+[node name="WCh3" type="StaticBody3D" parent="." unique_id=986094925]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.225, 11)
+
+[node name="M" type="MeshInstance3D" parent="WCh3" unique_id=378101637]
+mesh = SubResource("msh_wait_ch")
+
+[node name="C" type="CollisionShape3D" parent="WCh3" unique_id=1906601788]
+shape = SubResource("shp_wait_ch")
+
+[node name="WCh4" type="StaticBody3D" parent="." unique_id=70627835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 0.225, 11)
+
+[node name="M" type="MeshInstance3D" parent="WCh4" unique_id=551332885]
+mesh = SubResource("msh_wait_ch")
+
+[node name="C" type="CollisionShape3D" parent="WCh4" unique_id=603744975]
+shape = SubResource("shp_wait_ch")
+
+[node name="WC5" type="MeshInstance3D" parent="." unique_id=1916396777]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.225, 12)
+mesh = SubResource("msh_wait_ch")
+
+[node name="WC6" type="MeshInstance3D" parent="." unique_id=116258206]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.225, 12)
+mesh = SubResource("msh_wait_ch")
+
+[node name="Cool" type="StaticBody3D" parent="." unique_id=2050252932]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.575, 10)
+
+[node name="M" type="MeshInstance3D" parent="Cool" unique_id=279089348]
+mesh = SubResource("msh_cooler")
+
+[node name="C" type="CollisionShape3D" parent="Cool" unique_id=32838424]
+shape = SubResource("shp_cooler")
+
+[node name="MTbl" type="StaticBody3D" parent="." unique_id=1448423762]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.19, 13)
+
+[node name="M" type="MeshInstance3D" parent="MTbl" unique_id=6950818]
+mesh = SubResource("msh_mag_tbl")
+
+[node name="C" type="CollisionShape3D" parent="MTbl" unique_id=2002042148]
+shape = SubResource("shp_mag_tbl")
+
+[node name="Dir" type="Label3D" parent="." unique_id=1910082023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, 2)
+modulate = Color(0.08, 0.35, 0.18, 1)
+text = "← Ward  |  O.R. ↑  |  Lab →"
+font_size = 18
+
+[node name="Exit1" type="StaticBody3D" parent="." unique_id=290881749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, 13)
+
+[node name="M" type="MeshInstance3D" parent="Exit1" unique_id=1852044696]
+mesh = SubResource("msh_exit_sign")
+
+[node name="C" type="CollisionShape3D" parent="Exit1" unique_id=260294828]
+shape = SubResource("shp_exit_sign")
+
+[node name="Exit2" type="Label3D" parent="." unique_id=1480901463]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, 12.95)
+text = "EXIT"
+font_size = 16
+
+[node name="PartOR" type="StaticBody3D" parent="." unique_id=1619797036]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4, 2.5, -6)
+
+[node name="M" type="MeshInstance3D" parent="PartOR" unique_id=1595692231]
+mesh = SubResource("msh_partition")
+
+[node name="C" type="CollisionShape3D" parent="PartOR" unique_id=1950439222]
+shape = SubResource("shp_partition")
+
+[node name="PartLab" type="StaticBody3D" parent="." unique_id=1747064939]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5, 2.5, -1.5)
+
+[node name="M" type="MeshInstance3D" parent="PartLab" unique_id=1358264680]
+mesh = SubResource("msh_partition")
+
+[node name="C" type="CollisionShape3D" parent="PartLab" unique_id=1161153725]
+shape = SubResource("shp_partition")
+
+[node name="GurneyLegs" type="StaticBody3D" parent="." unique_id=529144149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.275, 0)
+
+[node name="M" type="MeshInstance3D" parent="GurneyLegs" unique_id=202544470]
+mesh = SubResource("msh_gurney_legs")
+
+[node name="C" type="CollisionShape3D" parent="GurneyLegs" unique_id=612698929]
+shape = SubResource("shp_gurney_legs")
+
+[node name="GurneyTop" type="StaticBody3D" parent="." unique_id=217543592]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.6, 0)
+
+[node name="M" type="MeshInstance3D" parent="GurneyTop" unique_id=144043387]
+mesh = SubResource("msh_gurney")
+
+[node name="C" type="CollisionShape3D" parent="GurneyTop" unique_id=1554784807]
+shape = SubResource("shp_gurney")
+
+[node name="GurneyPad" type="StaticBody3D" parent="." unique_id=540643805]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.68, 0)
+
+[node name="M" type="MeshInstance3D" parent="GurneyPad" unique_id=1591872412]
+mesh = SubResource("msh_gurney_pad")
+
+[node name="C" type="CollisionShape3D" parent="GurneyPad" unique_id=639631751]
+shape = SubResource("shp_gurney_pad")
+
+[node name="DefibCart" type="StaticBody3D" parent="." unique_id=1273562424]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.375, -12)
+
+[node name="M" type="MeshInstance3D" parent="DefibCart" unique_id=28964583]
+mesh = SubResource("msh_cart")
+
+[node name="C" type="CollisionShape3D" parent="DefibCart" unique_id=80511787]
+shape = SubResource("shp_cart")
+
+[node name="DefibBody" type="StaticBody3D" parent="." unique_id=900394497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.925, -12)
+
+[node name="M" type="MeshInstance3D" parent="DefibBody" unique_id=1908465502]
+mesh = SubResource("msh_defib_body")
+
+[node name="C" type="CollisionShape3D" parent="DefibBody" unique_id=1504422488]
+shape = SubResource("shp_defib_body")
+
+[node name="DefibScreen" type="StaticBody3D" parent="." unique_id=1508446669]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 1, -11.84)
+
+[node name="M" type="MeshInstance3D" parent="DefibScreen" unique_id=729113443]
+mesh = SubResource("msh_defib_screen")
+
+[node name="C" type="CollisionShape3D" parent="DefibScreen" unique_id=946349663]
+shape = SubResource("shp_defib_screen")
+
+[node name="WCWheelL" type="StaticBody3D" parent="." unique_id=1636768246]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.25, 0.25, 8)
+
+[node name="M" type="MeshInstance3D" parent="WCWheelL" unique_id=110489920]
+mesh = SubResource("msh_wc_wheel")
+
+[node name="C" type="CollisionShape3D" parent="WCWheelL" unique_id=767308176]
+shape = SubResource("shp_wc_wheel")
+
+[node name="WCWheelR" type="StaticBody3D" parent="." unique_id=573245450]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.75, 0.25, 8)
+
+[node name="M" type="MeshInstance3D" parent="WCWheelR" unique_id=1761086733]
+mesh = SubResource("msh_wc_wheel")
+
+[node name="C" type="CollisionShape3D" parent="WCWheelR" unique_id=704285164]
+shape = SubResource("shp_wc_wheel")
+
+[node name="WCSeat" type="StaticBody3D" parent="." unique_id=1439744171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 8)
+
+[node name="M" type="MeshInstance3D" parent="WCSeat" unique_id=1937642996]
+mesh = SubResource("msh_wheelchair_seat")
+
+[node name="C" type="CollisionShape3D" parent="WCSeat" unique_id=720868112]
+shape = SubResource("shp_wheelchair_seat")
+
+[node name="WCBack" type="StaticBody3D" parent="." unique_id=1472459037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.78, 8.2)
+
+[node name="M" type="MeshInstance3D" parent="WCBack" unique_id=821700600]
+mesh = SubResource("msh_wheelchair_back")
+
+[node name="C" type="CollisionShape3D" parent="WCBack" unique_id=492958479]
+shape = SubResource("shp_wheelchair_back")
+
+[node name="Vending" type="StaticBody3D" parent="." unique_id=1217843805]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1, 12)
+
+[node name="M" type="MeshInstance3D" parent="Vending" unique_id=5178982]
+mesh = SubResource("msh_vending")
+
+[node name="C" type="CollisionShape3D" parent="Vending" unique_id=945733457]
+shape = SubResource("shp_vending")
+
+[node name="VendScreen" type="MeshInstance3D" parent="." unique_id=1908161603]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 1.3, 11.64)
+mesh = SubResource("msh_vend_scr")
+
+[node name="San1" type="MeshInstance3D" parent="." unique_id=768892262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.3, -5.42)
+mesh = SubResource("msh_sanitizer")
+
+[node name="San2" type="MeshInstance3D" parent="." unique_id=786502872]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.3, -1.92)
+mesh = SubResource("msh_sanitizer")
+
+[node name="San3" type="MeshInstance3D" parent="." unique_id=1744419541]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14.82, 1.3, 5)
+mesh = SubResource("msh_sanitizer")
+
+[node name="Clock" type="MeshInstance3D" parent="." unique_id=1719847110]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -14.82)
+mesh = SubResource("msh_clock")
+
+[node name="AmbientBeeps" type="AudioStreamPlayer3D" parent="." unique_id=700882756]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -9)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=236500776]
+
+[node name="Player" parent="." unique_id=618236122 instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 11)
+
+[node name="ReturnPortal" parent="." unique_id=2068626178 instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14)
 target_scene = "res://scenes/main_hub.tscn"
 
-[node name="ReturnLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 9)
+[node name="Patient1" parent="." unique_id=285972065 instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -5)
+patient_name = "Mr. Smith"
+symptom = "Patient has a high fever and persistent cough."
+option1 = "Antibiotics"
+option2 = "Rest & Fluids"
+correct_option = 2
+
+[node name="Patient2" parent="." unique_id=1830234808 instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -8)
+patient_name = "Mrs. Jones"
+symptom = "Patient has a sharp pain in the lower abdomen."
+option1 = "Appendectomy"
+option2 = "Aspirin"
+
+[node name="Patient3" parent="." unique_id=1643948715 instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+patient_name = "Kid Robbie"
+symptom = "Patient scraped his knee while playing."
+option1 = "Surgery"
+option2 = "Clean & Bandage"
+correct_option = 2
+
+[node name="ReturnLabel" type="Label3D" parent="." unique_id=1088065249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 14)
+modulate = Color(1, 1, 0.5, 1)
 text = "Return to Hub"
 font_size = 36
-modulate = Color(1, 1, 0.5, 1)
-[node name="DialogueUI" parent="." instance=ExtResource("7")]
-
-[node name="HeadNurse" parent="." instance=ExtResource("6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6)
-character_name = "Head Nurse"
-dialogue_lines = ["It's a busy day at the clinic.", "We need you to examine the patients and provide accurate diagnoses based on their symptoms."]

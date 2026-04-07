@@ -1,0 +1,17 @@
+res://player/player.tscn::df2d25d9a08a74575ead84ab1dc92a78::1774221316::res://.godot/exported/133200997/export-753d15e03e0182f9d550ac833b42bb41-player.scn
+res://portals/portal.tscn::5ad9a784d13bab539fba7a34ca337efe::1773966001::res://.godot/exported/133200997/export-f8df95704ab9c85819656cec7fec13e9-portal.scn
+res://scenes/civil_engineer_world.tscn::55ae4fd9cf43b786eac2d2e5fd308b1a::1774064477::res://.godot/exported/133200997/export-3f576b4baf6ffdc87b8528fc16eefa6e-civil_engineer_world.scn
+res://scenes/lawyer_world.tscn::1819daeffd331615900f2507897968be::1774064496::res://.godot/exported/133200997/export-56697472af07079bd2326bc5bdf01401-lawyer_world.scn
+res://scenes/main_hub.tscn::f4bcf6c9a938214e82a28f2e9f515259::1774064456::res://.godot/exported/133200997/export-5e581c5320c4c9270d818befa078e127-main_hub.scn
+res://scenes/politician_world.tscn::06964b712de3bb9af23fdf5e45f4622f::1774064505::res://.godot/exported/133200997/export-6f43c4703c7b6ac779b2e92b7674cc5c-politician_world.scn
+res://scenes/software_engineer_world.tscn::7c5203a8f744e29472dc17d29afa900b::1774138477::res://.godot/exported/133200997/export-bd00238acbabef73c01aebbe96bd1a38-software_engineer_world.scn
+res://scenes/ui/diagnosis_ui.tscn::6b842fe441cb44976ba01839c8d24885::1774137131::res://.godot/exported/133200997/export-281d263c6eeb447f270e5f54bfcedd19-diagnosis_ui.scn
+res://scenes/ui/hud.tscn::ffec0febbcc7e7fe1a7d81ec18e459da::1774064525::res://.godot/exported/133200997/export-f26fe175837e58804f1c48b99041ac16-hud.scn
+res://scenes/ui/title_screen.tscn::bd0aff0ecac46337693d5f06531d9922::1774063444::res://.godot/exported/133200997/export-5eabcd2865b627a14b0c7b9586988c63-title_screen.scn
+res://scenes/ui/victory_screen.tscn::25369abc9cf2dc549b1069c6cb7fe912::1774064785::res://.godot/exported/133200997/export-db536e82e7d4aa4cfaea1eb1dcfdce06-victory_screen.scn
+res://scenes/bug.tscn::00589b351ff1da19fb6ee48b384bac54::1774065144::res://.godot/exported/133200997/export-6fae8d89eacd5ac27394a7b897ffcafc-bug.scn
+res://scenes/evidence.tscn::8d3c1742a89d9d6f97a355f34bc78330::1774065156::res://.godot/exported/133200997/export-60d05e69c4ed1f826ec04e36a3a9b22e-evidence.scn
+res://scenes/inspection_point.tscn::9f06fd5c8d417e79fd8d3758466cefc3::1774065165::res://.godot/exported/133200997/export-13296a5784f4a295de6a1b8b631183a9-inspection_point.scn
+res://scenes/interactable.tscn::a54f1701af321fdc6832cef4c7e1a51b::1774063252::res://.godot/exported/133200997/export-9ca662879ca3d3378c759f7739130006-interactable.scn
+res://scenes/patient.tscn::b6487e1febfb7b0c814ac4dc07232dca::1774065175::res://.godot/exported/133200997/export-00564df83ce019c4538bb5e78265c50c-patient.scn
+res://scenes/voter.tscn::39532f9f93e1a66b436fef4d7b920636::1774065185::res://.godot/exported/133200997/export-9a65bcdc64f6cc6806e511ab5d0bf448-voter.scn
