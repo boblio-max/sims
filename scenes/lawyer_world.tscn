@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bfc7jupht8rxg"]
+[gd_scene format=3 uid="uid://bfc7jupht8rxg"]
 
-[ext_resource type="Script" path="res://scripts/worlds/lawyer_world.gd" id="1_script"]
-
-[ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://dh47bicys5wb3" path="res://player/player.tscn" id="1"]
+[ext_resource type="Script" uid="uid://cqlx6d1ufjjyx" path="res://scripts/worlds/lawyer_world.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/evidence.tscn" id="3"]
+[ext_resource type="Script" uid="uid://bfq8rjylohvt6" path="res://scenes/evidence1.gd" id="5_ae52j"]
+[ext_resource type="Script" uid="uid://cvlb34gt3hxu7" path="res://scenes/evidence2.gd" id="6_tam8o"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SubResource_sky_mat"]
 sky_top_color = Color(0.15, 0.12, 0.1, 1)
@@ -103,7 +104,6 @@ environment = SubResource("SubResource_env")
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=914004060]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -4)
 light_color = Color(1, 0.95, 0.85, 1)
-light_energy = 1.0
 shadow_enabled = true
 omni_range = 30.0
 
@@ -275,17 +275,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 target_scene = "res://scenes/main_hub.tscn"
 
-[node name="Evidence1" parent="." instance=ExtResource("3")]
+[node name="Evidence1" parent="." unique_id=265958195 instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, -2)
 evidence_name = "Legal Brief"
 
-[node name="Evidence2" parent="." instance=ExtResource("3")]
+[node name="Evidence2" parent="." unique_id=669337866 instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.2, -6)
-evidence_name = "Critical Document"
+script = ExtResource("5_ae52j")
+challenge_index = 1
 
-[node name="Evidence3" parent="." instance=ExtResource("3")]
+[node name="Evidence3" parent="." unique_id=541386979 instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -4)
-evidence_name = "The Gavel"
+script = ExtResource("6_tam8o")
+challenge_index = 2
 
 [node name="ReturnLabel" type="Label3D" parent="." unique_id=1431251894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 10)

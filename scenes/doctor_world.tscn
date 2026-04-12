@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://chgrttrfruibg" path="res://scripts/worlds/doctor_world.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/patient.tscn" id="3"]
+[ext_resource type="Script" uid="uid://dn0y4rxxebrei" path="res://scenes/patient1.gd" id="5_f0207"]
+[ext_resource type="Script" uid="uid://bcdo6lm86lxnv" path="res://scenes/patient2.gd" id="6_w1f1i"]
 
 [sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
 sky_top_color = Color(0.05, 0.06, 0.1, 1)
@@ -1307,18 +1309,13 @@ correct_option = 2
 
 [node name="Patient2" parent="." unique_id=1830234808 instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -8)
-patient_name = "Mrs. Jones"
-symptom = "Patient has a sharp pain in the lower abdomen."
-option1 = "Appendectomy"
-option2 = "Aspirin"
+script = ExtResource("5_f0207")
+challenge_index = 1
 
 [node name="Patient3" parent="." unique_id=1643948715 instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
-patient_name = "Kid Robbie"
-symptom = "Patient scraped his knee while playing."
-option1 = "Surgery"
-option2 = "Clean & Bandage"
-correct_option = 2
+script = ExtResource("6_w1f1i")
+challenge_index = 2
 
 [node name="ReturnLabel" type="Label3D" parent="." unique_id=1088065249]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 14)

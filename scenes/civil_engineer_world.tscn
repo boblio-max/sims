@@ -1,10 +1,11 @@
-[gd_scene load_steps=76 format=3]
+[gd_scene format=3 uid="uid://c7vdott8s1g"]
 
-[ext_resource type="Script" path="res://scripts/worlds/civil_engineer_world.gd" id="1_script"]
-
-[ext_resource type="PackedScene" path="res://player/player.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://dh47bicys5wb3" path="res://player/player.tscn" id="1"]
+[ext_resource type="Script" uid="uid://banq6eih36phg" path="res://scripts/worlds/civil_engineer_world.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://portals/portal.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/inspection_point.tscn" id="3"]
+[ext_resource type="Script" uid="uid://8n1o0rgd12ev" path="res://scenes/inspection_point1.gd" id="5_ynsav"]
+[ext_resource type="Script" uid="uid://c0rk2iv8edak6" path="res://scenes/inspection_point2.gd" id="6_88gnh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
 sky_top_color = Color(0.35, 0.52, 0.78, 1)
@@ -26,16 +27,9 @@ ssao_enabled = true
 ssil_enabled = true
 sdfgi_enabled = true
 glow_enabled = true
-glow_intensity = 0.4
-glow_strength = 1.0
-glow_bloom = 0.1
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.04
-volumetric_fog_albedo = Color(0.8, 0.7, 0.5, 1)
 glow_intensity = 0.25
 glow_strength = 0.6
 glow_bloom = 0.1
-glow_blend_mode = 1
 fog_enabled = true
 fog_light_color = Color(0.7, 0.65, 0.55, 1)
 fog_sun_scatter = 0.3
@@ -44,44 +38,76 @@ volumetric_fog_enabled = true
 volumetric_fog_density = 0.015
 volumetric_fog_albedo = Color(0.75, 0.7, 0.6, 1)
 
-; === PBR MATERIALS ===
 [sub_resource type="StandardMaterial3D" id="m_dirt"]
 albedo_color = Color(0.48, 0.38, 0.28, 1)
 roughness = 0.95
 
+[sub_resource type="PlaneMesh" id="msh_floor"]
+material = SubResource("m_dirt")
+size = Vector2(50, 50)
+
+[sub_resource type="BoxShape3D" id="shp_floor"]
+size = Vector3(50, 0.1, 50)
+
 [sub_resource type="StandardMaterial3D" id="m_concrete"]
 albedo_color = Color(0.62, 0.6, 0.57, 1)
-roughness = 0.8
 metallic = 0.02
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="msh_wall"]
+material = SubResource("m_concrete")
+size = Vector3(50, 12, 0.5)
+
+[sub_resource type="BoxShape3D" id="shp_wall"]
+size = Vector3(50, 12, 0.5)
+
+[sub_resource type="BoxMesh" id="msh_roof"]
+material = SubResource("m_concrete")
+size = Vector3(50, 0.5, 50)
+
+[sub_resource type="BoxShape3D" id="shp_roof"]
+size = Vector3(50, 0.5, 50)
+
+[sub_resource type="CylinderMesh" id="msh_pillar"]
+material = SubResource("m_concrete")
+top_radius = 0.55
+bottom_radius = 0.7
+height = 8.0
+
+[sub_resource type="CylinderShape3D" id="shp_pillar"]
+height = 8.0
+radius = 0.55
+
+[sub_resource type="BoxMesh" id="msh_deck"]
+material = SubResource("m_concrete")
+size = Vector3(18, 0.55, 5.5)
+
+[sub_resource type="BoxShape3D" id="shp_deck"]
+size = Vector3(18, 0.55, 5.5)
 
 [sub_resource type="StandardMaterial3D" id="m_steel"]
 albedo_color = Color(0.48, 0.5, 0.55, 1)
 metallic = 0.8
-roughness = 0.25
 metallic_specular = 0.8
+roughness = 0.25
 
-[sub_resource type="StandardMaterial3D" id="m_scaffold"]
-albedo_color = Color(0.58, 0.52, 0.28, 1)
-metallic = 0.3
-roughness = 0.6
+[sub_resource type="BoxMesh" id="msh_rail"]
+material = SubResource("m_steel")
+size = Vector3(18, 0.85, 0.08)
 
-[sub_resource type="StandardMaterial3D" id="m_orange"]
-albedo_color = Color(0.92, 0.42, 0.08, 1)
-emission_enabled = true
-emission = Color(0.5, 0.2, 0.02, 1)
-emission_energy_multiplier = 0.3
-roughness = 0.65
-
-[sub_resource type="StandardMaterial3D" id="m_yellow"]
-albedo_color = Color(0.95, 0.85, 0.08, 1)
-emission_enabled = true
-emission = Color(0.5, 0.45, 0.02, 1)
-emission_energy_multiplier = 0.3
-roughness = 0.6
+[sub_resource type="BoxShape3D" id="shp_rail"]
+size = Vector3(18, 0.85, 0.08)
 
 [sub_resource type="StandardMaterial3D" id="m_asphalt"]
 albedo_color = Color(0.25, 0.25, 0.28, 1)
 roughness = 0.9
+
+[sub_resource type="BoxMesh" id="msh_road"]
+material = SubResource("m_asphalt")
+size = Vector3(16.5, 0.04, 5)
+
+[sub_resource type="BoxShape3D" id="shp_road"]
+size = Vector3(16.5, 0.04, 5)
 
 [sub_resource type="StandardMaterial3D" id="m_road_line"]
 albedo_color = Color(0.95, 0.88, 0.25, 1)
@@ -89,50 +115,80 @@ emission_enabled = true
 emission = Color(0.4, 0.35, 0.05, 1)
 emission_energy_multiplier = 0.2
 
-[sub_resource type="StandardMaterial3D" id="m_lumber"]
-albedo_color = Color(0.62, 0.48, 0.28, 1)
-roughness = 0.88
+[sub_resource type="BoxMesh" id="msh_rline"]
+material = SubResource("m_road_line")
+size = Vector3(2, 0.045, 0.1)
 
-[sub_resource type="StandardMaterial3D" id="m_gravel"]
-albedo_color = Color(0.5, 0.47, 0.42, 1)
-roughness = 0.95
+[sub_resource type="BoxMesh" id="msh_beam_v"]
+material = SubResource("m_steel")
+size = Vector3(0.28, 6.5, 0.28)
 
-[sub_resource type="StandardMaterial3D" id="m_pipe"]
-albedo_color = Color(0.55, 0.53, 0.5, 1)
-roughness = 0.7
-metallic = 0.1
+[sub_resource type="BoxShape3D" id="shp_beam_v"]
+size = Vector3(0.28, 6.5, 0.28)
 
-[sub_resource type="StandardMaterial3D" id="m_cabin"]
-albedo_color = Color(0.82, 0.78, 0.72, 1)
-roughness = 0.75
+[sub_resource type="BoxMesh" id="msh_beam_h"]
+material = SubResource("m_steel")
+size = Vector3(6.5, 0.22, 0.22)
 
-[sub_resource type="StandardMaterial3D" id="m_cabin_r"]
-albedo_color = Color(0.38, 0.4, 0.42, 1)
-metallic = 0.2
-roughness = 0.5
+[sub_resource type="BoxShape3D" id="shp_beam_h"]
+size = Vector3(6.5, 0.22, 0.22)
+
+[sub_resource type="BoxMesh" id="msh_slab"]
+material = SubResource("m_concrete")
+size = Vector3(7, 0.28, 7)
+
+[sub_resource type="BoxShape3D" id="shp_slab"]
+size = Vector3(7, 0.28, 7)
 
 [sub_resource type="StandardMaterial3D" id="m_rebar"]
 albedo_color = Color(0.42, 0.32, 0.25, 1)
 metallic = 0.5
 roughness = 0.65
 
+[sub_resource type="CylinderMesh" id="msh_rebar"]
+material = SubResource("m_rebar")
+top_radius = 0.018
+bottom_radius = 0.018
+height = 1.5
+
 [sub_resource type="StandardMaterial3D" id="m_cat_yellow"]
 albedo_color = Color(0.88, 0.72, 0.12, 1)
-roughness = 0.6
 metallic = 0.15
+roughness = 0.6
 
-[sub_resource type="StandardMaterial3D" id="m_mixer"]
-albedo_color = Color(0.72, 0.72, 0.75, 1)
-metallic = 0.4
-roughness = 0.4
+[sub_resource type="BoxMesh" id="msh_cr_base"]
+material = SubResource("m_cat_yellow")
+size = Vector3(2.2, 1, 2.2)
 
-[sub_resource type="StandardMaterial3D" id="m_blueprint"]
-albedo_color = Color(0.12, 0.22, 0.5, 1)
-roughness = 0.85
+[sub_resource type="BoxShape3D" id="shp_cr_base"]
+size = Vector3(2.2, 1, 2.2)
 
-[sub_resource type="StandardMaterial3D" id="m_fence"]
-albedo_color = Color(0.68, 0.32, 0.08, 1)
-roughness = 0.7
+[sub_resource type="BoxMesh" id="msh_cr_twr"]
+material = SubResource("m_steel")
+size = Vector3(0.5, 13, 0.5)
+
+[sub_resource type="BoxShape3D" id="shp_cr_twr"]
+size = Vector3(0.5, 13, 0.5)
+
+[sub_resource type="BoxMesh" id="msh_cr_arm"]
+material = SubResource("m_steel")
+size = Vector3(14, 0.38, 0.38)
+
+[sub_resource type="BoxShape3D" id="shp_cr_arm"]
+size = Vector3(14, 0.38, 0.38)
+
+[sub_resource type="BoxMesh" id="msh_cr_ctr"]
+material = SubResource("m_concrete")
+size = Vector3(2.2, 0.85, 0.85)
+
+[sub_resource type="BoxShape3D" id="shp_cr_ctr"]
+size = Vector3(2.2, 0.85, 0.85)
+
+[sub_resource type="CylinderMesh" id="msh_cable"]
+material = SubResource("m_steel")
+top_radius = 0.015
+bottom_radius = 0.015
+height = 5.5
 
 [sub_resource type="StandardMaterial3D" id="m_flood"]
 albedo_color = Color(0.95, 0.92, 0.85, 1)
@@ -140,348 +196,331 @@ emission_enabled = true
 emission = Color(1, 0.95, 0.8, 1)
 emission_energy_multiplier = 3.0
 
+[sub_resource type="BoxMesh" id="msh_flood"]
+material = SubResource("m_flood")
+size = Vector3(0.5, 0.35, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="m_scaffold"]
+albedo_color = Color(0.58, 0.52, 0.28, 1)
+metallic = 0.3
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="msh_scfv"]
+material = SubResource("m_scaffold")
+size = Vector3(0.12, 8.5, 0.12)
+
+[sub_resource type="BoxShape3D" id="shp_scfv"]
+size = Vector3(0.12, 8.5, 0.12)
+
+[sub_resource type="BoxMesh" id="msh_scfh"]
+material = SubResource("m_scaffold")
+size = Vector3(4.2, 0.08, 0.08)
+
+[sub_resource type="BoxShape3D" id="shp_scfh"]
+size = Vector3(4.2, 0.08, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="m_lumber"]
+albedo_color = Color(0.62, 0.48, 0.28, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="msh_plank"]
+material = SubResource("m_lumber")
+size = Vector3(4.2, 0.06, 0.9)
+
+[sub_resource type="BoxShape3D" id="shp_plank"]
+size = Vector3(4.2, 0.06, 0.9)
+
+[sub_resource type="BoxMesh" id="msh_lumber"]
+material = SubResource("m_lumber")
+size = Vector3(3.2, 0.85, 1.6)
+
+[sub_resource type="BoxShape3D" id="shp_lumber"]
+size = Vector3(3.2, 0.85, 1.6)
+
+[sub_resource type="StandardMaterial3D" id="m_gravel"]
+albedo_color = Color(0.5, 0.47, 0.42, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="msh_gravel"]
+material = SubResource("m_gravel")
+size = Vector3(3.2, 1.1, 2.8)
+
+[sub_resource type="BoxShape3D" id="shp_gravel"]
+size = Vector3(3.2, 1.1, 2.8)
+
+[sub_resource type="StandardMaterial3D" id="m_pipe"]
+albedo_color = Color(0.55, 0.53, 0.5, 1)
+metallic = 0.1
+roughness = 0.7
+
+[sub_resource type="CylinderMesh" id="msh_pipe"]
+material = SubResource("m_pipe")
+top_radius = 0.48
+bottom_radius = 0.48
+height = 3.2
+
+[sub_resource type="CylinderShape3D" id="shp_pipe"]
+height = 3.2
+radius = 0.48
+
+[sub_resource type="BoxMesh" id="msh_pallet"]
+material = SubResource("m_lumber")
+size = Vector3(1.2, 0.12, 1)
+
+[sub_resource type="BoxShape3D" id="shp_pallet"]
+size = Vector3(1.2, 0.12, 1)
+
+[sub_resource type="StandardMaterial3D" id="m_cabin"]
+albedo_color = Color(0.82, 0.78, 0.72, 1)
+roughness = 0.75
+
+[sub_resource type="BoxMesh" id="msh_cabin"]
+material = SubResource("m_cabin")
+size = Vector3(5.5, 2.8, 3.2)
+
+[sub_resource type="BoxShape3D" id="shp_cabin"]
+size = Vector3(5.5, 2.8, 3.2)
+
+[sub_resource type="StandardMaterial3D" id="m_cabin_r"]
+albedo_color = Color(0.38, 0.4, 0.42, 1)
+metallic = 0.2
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="msh_cab_r"]
+material = SubResource("m_cabin_r")
+size = Vector3(5.8, 0.12, 3.5)
+
+[sub_resource type="BoxShape3D" id="shp_cab_r"]
+size = Vector3(5.8, 0.12, 3.5)
+
+[sub_resource type="BoxMesh" id="msh_desk"]
+material = SubResource("m_lumber")
+size = Vector3(1.5, 0.72, 0.65)
+
+[sub_resource type="BoxShape3D" id="shp_desk"]
+size = Vector3(1.5, 0.72, 0.65)
+
+[sub_resource type="BoxMesh" id="msh_bp_tbl"]
+material = SubResource("m_lumber")
+size = Vector3(2, 0.82, 1)
+
+[sub_resource type="BoxShape3D" id="shp_bp_tbl"]
+size = Vector3(2, 0.82, 1)
+
+[sub_resource type="StandardMaterial3D" id="m_blueprint"]
+albedo_color = Color(0.12, 0.22, 0.5, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="msh_bp"]
+material = SubResource("m_blueprint")
+size = Vector3(1.5, 0.015, 0.8)
+
+[sub_resource type="BoxMesh" id="msh_dozer"]
+material = SubResource("m_cat_yellow")
+size = Vector3(3.2, 1.5, 2.2)
+
+[sub_resource type="BoxShape3D" id="shp_dozer"]
+size = Vector3(3.2, 1.5, 2.2)
+
+[sub_resource type="BoxMesh" id="msh_blade"]
+material = SubResource("m_steel")
+size = Vector3(3.8, 1.25, 0.18)
+
+[sub_resource type="BoxShape3D" id="shp_blade"]
+size = Vector3(3.8, 1.25, 0.18)
+
 [sub_resource type="StandardMaterial3D" id="m_tire"]
 albedo_color = Color(0.12, 0.12, 0.12, 1)
 roughness = 0.9
 
-; === MESHES ===
-[sub_resource type="PlaneMesh" id="msh_floor"]
-size = Vector2(50, 50)
-material = SubResource("m_dirt")
-[sub_resource type="BoxShape3D" id="shp_floor"]
-size = Vector3(50, 0.1, 50)
-[sub_resource type="BoxMesh" id="msh_wall"]
-size = Vector3(50, 12, 0.5)
-material = SubResource("m_concrete")
-[sub_resource type="BoxMesh" id="msh_roof"]
-size = Vector3(50, 0.5, 50)
-material = SubResource("m_concrete")
-
-[sub_resource type="CylinderMesh" id="msh_pillar"]
-top_radius = 0.55
-bottom_radius = 0.7
-height = 8.0
-material = SubResource("m_concrete")
-[sub_resource type="BoxMesh" id="msh_deck"]
-size = Vector3(18, 0.55, 5.5)
-material = SubResource("m_concrete")
-[sub_resource type="BoxMesh" id="msh_rail"]
-size = Vector3(18, 0.85, 0.08)
-material = SubResource("m_steel")
-[sub_resource type="BoxMesh" id="msh_road"]
-size = Vector3(16.5, 0.04, 5)
-material = SubResource("m_asphalt")
-[sub_resource type="BoxMesh" id="msh_rline"]
-size = Vector3(2.0, 0.045, 0.1)
-material = SubResource("m_road_line")
-
-[sub_resource type="BoxMesh" id="msh_beam_v"]
-size = Vector3(0.28, 6.5, 0.28)
-material = SubResource("m_steel")
-[sub_resource type="BoxMesh" id="msh_beam_h"]
-size = Vector3(6.5, 0.22, 0.22)
-material = SubResource("m_steel")
-[sub_resource type="BoxMesh" id="msh_slab"]
-size = Vector3(7, 0.28, 7)
-material = SubResource("m_concrete")
-[sub_resource type="CylinderMesh" id="msh_rebar"]
-top_radius = 0.018
-bottom_radius = 0.018
-height = 1.5
-material = SubResource("m_rebar")
-
-[sub_resource type="BoxMesh" id="msh_scfv"]
-size = Vector3(0.12, 8.5, 0.12)
-material = SubResource("m_scaffold")
-[sub_resource type="BoxMesh" id="msh_scfh"]
-size = Vector3(4.2, 0.08, 0.08)
-material = SubResource("m_scaffold")
-[sub_resource type="BoxMesh" id="msh_plank"]
-size = Vector3(4.2, 0.06, 0.9)
-material = SubResource("m_lumber")
-
-[sub_resource type="BoxMesh" id="msh_cr_base"]
-size = Vector3(2.2, 1.0, 2.2)
-material = SubResource("m_cat_yellow")
-[sub_resource type="BoxMesh" id="msh_cr_twr"]
-size = Vector3(0.5, 13.0, 0.5)
-material = SubResource("m_steel")
-[sub_resource type="BoxMesh" id="msh_cr_arm"]
-size = Vector3(14.0, 0.38, 0.38)
-material = SubResource("m_steel")
-[sub_resource type="BoxMesh" id="msh_cr_ctr"]
-size = Vector3(2.2, 0.85, 0.85)
-material = SubResource("m_concrete")
-[sub_resource type="CylinderMesh" id="msh_cable"]
-top_radius = 0.015
-bottom_radius = 0.015
-height = 5.5
-material = SubResource("m_steel")
-
-[sub_resource type="BoxMesh" id="msh_lumber"]
-size = Vector3(3.2, 0.85, 1.6)
-material = SubResource("m_lumber")
-[sub_resource type="BoxMesh" id="msh_gravel"]
-size = Vector3(3.2, 1.1, 2.8)
-material = SubResource("m_gravel")
-[sub_resource type="CylinderMesh" id="msh_pipe"]
-top_radius = 0.48
-bottom_radius = 0.48
-height = 3.2
-material = SubResource("m_pipe")
-[sub_resource type="BoxMesh" id="msh_pallet"]
-size = Vector3(1.2, 0.12, 1.0)
-material = SubResource("m_lumber")
-
-[sub_resource type="BoxMesh" id="msh_cabin"]
-size = Vector3(5.5, 2.8, 3.2)
-material = SubResource("m_cabin")
-[sub_resource type="BoxMesh" id="msh_cab_r"]
-size = Vector3(5.8, 0.12, 3.5)
-material = SubResource("m_cabin_r")
-[sub_resource type="BoxMesh" id="msh_desk"]
-size = Vector3(1.5, 0.72, 0.65)
-material = SubResource("m_lumber")
-[sub_resource type="BoxMesh" id="msh_bp_tbl"]
-size = Vector3(2.0, 0.82, 1.0)
-material = SubResource("m_lumber")
-[sub_resource type="BoxMesh" id="msh_bp"]
-size = Vector3(1.5, 0.015, 0.8)
-material = SubResource("m_blueprint")
-
-[sub_resource type="BoxMesh" id="msh_dozer"]
-size = Vector3(3.2, 1.5, 2.2)
-material = SubResource("m_cat_yellow")
-[sub_resource type="BoxMesh" id="msh_blade"]
-size = Vector3(3.8, 1.25, 0.18)
-material = SubResource("m_steel")
 [sub_resource type="BoxMesh" id="msh_track"]
-size = Vector3(3.2, 0.5, 0.38)
 material = SubResource("m_tire")
+size = Vector3(3.2, 0.5, 0.38)
+
+[sub_resource type="BoxShape3D" id="shp_track"]
+size = Vector3(3.2, 0.5, 0.38)
+
+[sub_resource type="BoxMesh" id="msh_mfr"]
+material = SubResource("m_cat_yellow")
+size = Vector3(3.8, 0.85, 1.8)
+
+[sub_resource type="BoxShape3D" id="shp_mfr"]
+size = Vector3(3.8, 0.85, 1.8)
+
+[sub_resource type="StandardMaterial3D" id="m_mixer"]
+albedo_color = Color(0.72, 0.72, 0.75, 1)
+metallic = 0.4
+roughness = 0.4
+
 [sub_resource type="CylinderMesh" id="msh_drum"]
+material = SubResource("m_mixer")
 top_radius = 0.75
 bottom_radius = 1.0
 height = 2.8
-material = SubResource("m_mixer")
-[sub_resource type="BoxMesh" id="msh_mfr"]
-size = Vector3(3.8, 0.85, 1.8)
-material = SubResource("m_cat_yellow")
+
+[sub_resource type="CylinderShape3D" id="shp_drum"]
+height = 2.8
+radius = 1.0
+
 [sub_resource type="BoxMesh" id="msh_wbarrow"]
-size = Vector3(0.75, 0.38, 0.48)
 material = SubResource("m_steel")
+size = Vector3(0.75, 0.38, 0.48)
+
+[sub_resource type="BoxShape3D" id="shp_wbarrow"]
+size = Vector3(0.75, 0.38, 0.48)
+
+[sub_resource type="StandardMaterial3D" id="m_orange"]
+albedo_color = Color(0.92, 0.42, 0.08, 1)
+roughness = 0.65
+emission_enabled = true
+emission = Color(0.5, 0.2, 0.02, 1)
+emission_energy_multiplier = 0.3
 
 [sub_resource type="CylinderMesh" id="msh_cone"]
+material = SubResource("m_orange")
 top_radius = 0.025
 bottom_radius = 0.14
 height = 0.48
-material = SubResource("m_orange")
-[sub_resource type="BoxMesh" id="msh_barrier"]
-size = Vector3(2.8, 0.85, 0.08)
-material = SubResource("m_yellow")
-[sub_resource type="BoxMesh" id="msh_fpost"]
-size = Vector3(0.08, 1.2, 0.08)
-material = SubResource("m_fence")
-[sub_resource type="BoxMesh" id="msh_fbar"]
-size = Vector3(3.2, 0.06, 0.05)
-material = SubResource("m_fence")
-[sub_resource type="BoxMesh" id="msh_flood"]
-size = Vector3(0.5, 0.35, 0.3)
-material = SubResource("m_flood")
 
-; === COLLISION SHAPES ===
-[sub_resource type="BoxShape3D" id="shp_wall"]
-size = Vector3(50, 12, 0.5)
-[sub_resource type="BoxShape3D" id="shp_roof"]
-size = Vector3(50, 0.5, 50)
-[sub_resource type="CylinderShape3D" id="shp_pillar"]
-radius = 0.55
-height = 8.0
-[sub_resource type="BoxShape3D" id="shp_deck"]
-size = Vector3(18, 0.55, 5.5)
-[sub_resource type="BoxShape3D" id="shp_rail"]
-size = Vector3(18, 0.85, 0.08)
-[sub_resource type="BoxShape3D" id="shp_road"]
-size = Vector3(16.5, 0.04, 5)
-[sub_resource type="BoxShape3D" id="shp_beam_v"]
-size = Vector3(0.28, 6.5, 0.28)
-[sub_resource type="BoxShape3D" id="shp_beam_h"]
-size = Vector3(6.5, 0.22, 0.22)
-[sub_resource type="BoxShape3D" id="shp_slab"]
-size = Vector3(7, 0.28, 7)
-[sub_resource type="BoxShape3D" id="shp_scfv"]
-size = Vector3(0.12, 8.5, 0.12)
-[sub_resource type="BoxShape3D" id="shp_scfh"]
-size = Vector3(4.2, 0.08, 0.08)
-[sub_resource type="BoxShape3D" id="shp_plank"]
-size = Vector3(4.2, 0.06, 0.9)
-[sub_resource type="BoxShape3D" id="shp_cr_base"]
-size = Vector3(2.2, 1.0, 2.2)
-[sub_resource type="BoxShape3D" id="shp_cr_twr"]
-size = Vector3(0.5, 13.0, 0.5)
-[sub_resource type="BoxShape3D" id="shp_cr_arm"]
-size = Vector3(14.0, 0.38, 0.38)
-[sub_resource type="BoxShape3D" id="shp_cr_ctr"]
-size = Vector3(2.2, 0.85, 0.85)
-[sub_resource type="BoxShape3D" id="shp_lumber"]
-size = Vector3(3.2, 0.85, 1.6)
-[sub_resource type="BoxShape3D" id="shp_gravel"]
-size = Vector3(3.2, 1.1, 2.8)
-[sub_resource type="CylinderShape3D" id="shp_pipe"]
-radius = 0.48
-height = 3.2
-[sub_resource type="BoxShape3D" id="shp_pallet"]
-size = Vector3(1.2, 0.12, 1.0)
-[sub_resource type="BoxShape3D" id="shp_cabin"]
-size = Vector3(5.5, 2.8, 3.2)
-[sub_resource type="BoxShape3D" id="shp_cab_r"]
-size = Vector3(5.8, 0.12, 3.5)
-[sub_resource type="BoxShape3D" id="shp_desk"]
-size = Vector3(1.5, 0.72, 0.65)
-[sub_resource type="BoxShape3D" id="shp_bp_tbl"]
-size = Vector3(2.0, 0.82, 1.0)
-[sub_resource type="BoxShape3D" id="shp_dozer"]
-size = Vector3(3.2, 1.5, 2.2)
-[sub_resource type="BoxShape3D" id="shp_blade"]
-size = Vector3(3.8, 1.25, 0.18)
-[sub_resource type="BoxShape3D" id="shp_track"]
-size = Vector3(3.2, 0.5, 0.38)
-[sub_resource type="CylinderShape3D" id="shp_drum"]
-radius = 1.0
-height = 2.8
-[sub_resource type="BoxShape3D" id="shp_mfr"]
-size = Vector3(3.8, 0.85, 1.8)
-[sub_resource type="BoxShape3D" id="shp_wbarrow"]
-size = Vector3(0.75, 0.38, 0.48)
 [sub_resource type="CylinderShape3D" id="shp_cone"]
-radius = 0.14
 height = 0.48
+radius = 0.14
+
+[sub_resource type="StandardMaterial3D" id="m_yellow"]
+albedo_color = Color(0.95, 0.85, 0.08, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.5, 0.45, 0.02, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="BoxMesh" id="msh_barrier"]
+material = SubResource("m_yellow")
+size = Vector3(2.8, 0.85, 0.08)
+
 [sub_resource type="BoxShape3D" id="shp_barrier"]
 size = Vector3(2.8, 0.85, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="m_fence"]
+albedo_color = Color(0.68, 0.32, 0.08, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="msh_fpost"]
+material = SubResource("m_fence")
+size = Vector3(0.08, 1.2, 0.08)
+
 [sub_resource type="BoxShape3D" id="shp_fpost"]
 size = Vector3(0.08, 1.2, 0.08)
+
+[sub_resource type="BoxMesh" id="msh_fbar"]
+material = SubResource("m_fence")
+size = Vector3(3.2, 0.06, 0.05)
+
 [sub_resource type="BoxShape3D" id="shp_fbar"]
 size = Vector3(3.2, 0.06, 0.05)
-[sub_resource type="BoxShape3D" id="shp_porta"]
-size = Vector3(1.2, 2.4, 1.2)
-[sub_resource type="BoxShape3D" id="shp_gen"]
-size = Vector3(1.5, 1.0, 0.8)
-[sub_resource type="BoxShape3D" id="shp_workbench"]
-size = Vector3(2.5, 0.8, 0.8)
-[sub_resource type="BoxShape3D" id="shp_dump_cab"]
-size = Vector3(2.0, 1.8, 2.2)
-[sub_resource type="BoxShape3D" id="shp_dump_bed"]
-size = Vector3(3.5, 1.2, 2.2)
-[sub_resource type="CylinderShape3D" id="shp_wtank"]
-radius = 1.0
-height = 2.0
-[sub_resource type="BoxShape3D" id="shp_chain_post"]
-size = Vector3(0.08, 2.0, 0.08)
-[sub_resource type="BoxShape3D" id="shp_chain_panel"]
-size = Vector3(3.5, 1.8, 0.02)
 
-; --- NEW PROP MATERIALS ---
 [sub_resource type="StandardMaterial3D" id="m_porta"]
 albedo_color = Color(0.15, 0.35, 0.65, 1)
 roughness = 0.7
+
+[sub_resource type="BoxMesh" id="msh_porta"]
+material = SubResource("m_porta")
+size = Vector3(1.2, 2.4, 1.2)
+
+[sub_resource type="BoxMesh" id="msh_porta_r"]
+material = SubResource("m_cabin_r")
+size = Vector3(1.3, 0.08, 1.3)
 
 [sub_resource type="StandardMaterial3D" id="m_gen"]
 albedo_color = Color(0.3, 0.32, 0.35, 1)
 metallic = 0.4
 roughness = 0.5
 
-[sub_resource type="StandardMaterial3D" id="m_muddle"]
-albedo_color = Color(0.28, 0.22, 0.15, 1)
-roughness = 0.15
-metallic = 0.1
-
-[sub_resource type="StandardMaterial3D" id="m_chainlink"]
-albedo_color = Color(0.55, 0.55, 0.58, 1)
-metallic = 0.5
-roughness = 0.4
-transparency = 1
-albedo_color.a = 0.6
-
-[sub_resource type="StandardMaterial3D" id="m_dump"]
-albedo_color = Color(0.82, 0.65, 0.1, 1)
-roughness = 0.6
-metallic = 0.15
-
-; --- NEW PROP MESHES ---
-[sub_resource type="BoxMesh" id="msh_porta"]
-size = Vector3(1.2, 2.4, 1.2)
-material = SubResource("m_porta")
-
-[sub_resource type="BoxMesh" id="msh_porta_r"]
-size = Vector3(1.3, 0.08, 1.3)
-material = SubResource("m_cabin_r")
-
 [sub_resource type="BoxMesh" id="msh_gen"]
-size = Vector3(1.5, 1.0, 0.8)
 material = SubResource("m_gen")
+size = Vector3(1.5, 1, 0.8)
 
 [sub_resource type="BoxMesh" id="msh_gen_exhaust"]
-size = Vector3(0.12, 0.5, 0.12)
 material = SubResource("m_steel")
+size = Vector3(0.12, 0.5, 0.12)
 
 [sub_resource type="CylinderMesh" id="msh_surv_tripod"]
+material = SubResource("m_cat_yellow")
 top_radius = 0.01
 bottom_radius = 0.015
 height = 1.3
-material = SubResource("m_cat_yellow")
 
 [sub_resource type="BoxMesh" id="msh_surv_inst"]
-size = Vector3(0.2, 0.12, 0.15)
 material = SubResource("m_steel")
+size = Vector3(0.2, 0.12, 0.15)
 
 [sub_resource type="BoxMesh" id="msh_workbench"]
-size = Vector3(2.5, 0.8, 0.8)
 material = SubResource("m_lumber")
+size = Vector3(2.5, 0.8, 0.8)
 
 [sub_resource type="BoxMesh" id="msh_tool_board"]
-size = Vector3(2.5, 1.5, 0.06)
 material = SubResource("m_lumber")
+size = Vector3(2.5, 1.5, 0.06)
+
+[sub_resource type="StandardMaterial3D" id="m_dump"]
+albedo_color = Color(0.82, 0.65, 0.1, 1)
+metallic = 0.15
+roughness = 0.6
 
 [sub_resource type="BoxMesh" id="msh_dump_cab"]
-size = Vector3(2.0, 1.8, 2.2)
 material = SubResource("m_dump")
+size = Vector3(2, 1.8, 2.2)
 
 [sub_resource type="BoxMesh" id="msh_dump_bed"]
-size = Vector3(3.5, 1.2, 2.2)
 material = SubResource("m_steel")
+size = Vector3(3.5, 1.2, 2.2)
 
 [sub_resource type="CylinderMesh" id="msh_wtank"]
+material = SubResource("m_concrete")
 top_radius = 1.0
 bottom_radius = 1.0
-height = 2.0
-material = SubResource("m_concrete")
+
+[sub_resource type="StandardMaterial3D" id="m_muddle"]
+albedo_color = Color(0.28, 0.22, 0.15, 1)
+metallic = 0.1
+roughness = 0.15
 
 [sub_resource type="BoxMesh" id="msh_mud"]
-size = Vector3(2.5, 0.005, 1.8)
 material = SubResource("m_muddle")
+size = Vector3(2.5, 0.005, 1.8)
 
 [sub_resource type="BoxMesh" id="msh_chain_post"]
-size = Vector3(0.08, 2.0, 0.08)
 material = SubResource("m_steel")
+size = Vector3(0.08, 2, 0.08)
+
+[sub_resource type="BoxShape3D" id="shp_chain_post"]
+size = Vector3(0.08, 2, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="m_chainlink"]
+transparency = 1
+albedo_color = Color(0.55, 0.55, 0.58, 1)
+metallic = 0.5
+roughness = 0.4
 
 [sub_resource type="BoxMesh" id="msh_chain_panel"]
-size = Vector3(3.5, 1.8, 0.02)
 material = SubResource("m_chainlink")
+size = Vector3(3.5, 1.8, 0.02)
 
+[sub_resource type="BoxShape3D" id="shp_chain_panel"]
+size = Vector3(3.5, 1.8, 0.02)
 
-; === SCENE TREE ===
-[node name="CivilEngineerWorld" type="Node3D"]
+[node name="CivilEngineerWorld" type="Node3D" unique_id=1838100899]
 script = ExtResource("1_script")
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1442730797]
 environment = SubResource("env")
 
-; === 6-LIGHT CINEMATIC SETUP ===
-[node name="Sun" type="DirectionalLight3D" parent="."]
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1779113459]
 transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 20, 0)
 light_color = Color(1, 0.9, 0.75, 1)
 light_energy = 0.9
 shadow_enabled = true
 
-[node name="Flood1" type="SpotLight3D" parent="."]
+[node name="Flood1" type="SpotLight3D" parent="." unique_id=2143220809]
 transform = Transform3D(1, 0, 0, 0, -0.866, 0.5, 0, -0.5, -0.866, -18, 10, -18)
 light_color = Color(1, 0.95, 0.82, 1)
 light_energy = 1.5
@@ -489,721 +528,888 @@ shadow_enabled = true
 spot_range = 30.0
 spot_angle = 50.0
 
-[node name="Flood2" type="SpotLight3D" parent="."]
+[node name="Flood2" type="SpotLight3D" parent="." unique_id=1730996987]
 transform = Transform3D(1, 0, 0, 0, -0.866, 0.5, 0, -0.5, -0.866, 18, 10, 8)
 light_color = Color(1, 0.92, 0.8, 1)
 light_energy = 1.25
 spot_range = 28.0
 spot_angle = 50.0
 
-[node name="CraneTip" type="OmniLight3D" parent="."]
+[node name="CraneTip" type="OmniLight3D" parent="." unique_id=1794230333]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 13.5, -10)
 light_color = Color(1, 0.3, 0.1, 1)
 light_energy = 0.4
 omni_range = 3.0
 
-[node name="CabinL" type="OmniLight3D" parent="."]
+[node name="CabinL" type="OmniLight3D" parent="." unique_id=1162064325]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 2.5, 10)
 light_color = Color(1, 0.9, 0.7, 1)
 light_energy = 0.6
 omni_range = 6.0
 
-[node name="BridgeL" type="OmniLight3D" parent="."]
+[node name="BridgeL" type="OmniLight3D" parent="." unique_id=2082138674]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -15)
 light_color = Color(0.9, 0.85, 0.75, 1)
 light_energy = 0.5
 omni_range = 12.0
 
-; === STRUCTURE ===
-[node name="Floor" type="StaticBody3D" parent="."]
-[node name="FM" type="MeshInstance3D" parent="Floor"]
+[node name="Floor" type="StaticBody3D" parent="." unique_id=2051046223]
+
+[node name="FM" type="MeshInstance3D" parent="Floor" unique_id=1662132687]
 mesh = SubResource("msh_floor")
-[node name="FC" type="CollisionShape3D" parent="Floor"]
+
+[node name="FC" type="CollisionShape3D" parent="Floor" unique_id=936130656]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 shape = SubResource("shp_floor")
 
-[node name="WB" type="StaticBody3D" parent="."]
+[node name="WB" type="StaticBody3D" parent="." unique_id=324540514]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -25)
-[node name="M" type="MeshInstance3D" parent="WB"]
+
+[node name="M" type="MeshInstance3D" parent="WB" unique_id=653866830]
 mesh = SubResource("msh_wall")
-[node name="C" type="CollisionShape3D" parent="WB"]
+
+[node name="C" type="CollisionShape3D" parent="WB" unique_id=2090795482]
 shape = SubResource("shp_wall")
 
-[node name="WL" type="StaticBody3D" parent="."]
+[node name="WL" type="StaticBody3D" parent="." unique_id=63793476]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -25, 6, 0)
-[node name="M" type="MeshInstance3D" parent="WL"]
+
+[node name="M" type="MeshInstance3D" parent="WL" unique_id=260225092]
 mesh = SubResource("msh_wall")
-[node name="C" type="CollisionShape3D" parent="WL"]
+
+[node name="C" type="CollisionShape3D" parent="WL" unique_id=1416388201]
 shape = SubResource("shp_wall")
 
-[node name="WR" type="StaticBody3D" parent="."]
+[node name="WR" type="StaticBody3D" parent="." unique_id=1640315950]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 25, 6, 0)
-[node name="M" type="MeshInstance3D" parent="WR"]
+
+[node name="M" type="MeshInstance3D" parent="WR" unique_id=448764362]
 mesh = SubResource("msh_wall")
-[node name="C" type="CollisionShape3D" parent="WR"]
+
+[node name="C" type="CollisionShape3D" parent="WR" unique_id=1801190959]
 shape = SubResource("shp_wall")
 
-[node name="WF" type="StaticBody3D" parent="."]
+[node name="WF" type="StaticBody3D" parent="." unique_id=794826487]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 25)
-[node name="M" type="MeshInstance3D" parent="WF"]
+
+[node name="M" type="MeshInstance3D" parent="WF" unique_id=815285669]
 mesh = SubResource("msh_wall")
-[node name="C" type="CollisionShape3D" parent="WF"]
+
+[node name="C" type="CollisionShape3D" parent="WF" unique_id=1985013140]
 shape = SubResource("shp_wall")
 
-[node name="Roof" type="StaticBody3D" parent="."]
+[node name="Roof" type="StaticBody3D" parent="." unique_id=1095954308]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
-[node name="M" type="MeshInstance3D" parent="Roof"]
+
+[node name="M" type="MeshInstance3D" parent="Roof" unique_id=951765098]
 mesh = SubResource("msh_roof")
-[node name="C" type="CollisionShape3D" parent="Roof"]
+
+[node name="C" type="CollisionShape3D" parent="Roof" unique_id=386981581]
 shape = SubResource("shp_roof")
 
-; === BRIDGE ===
-[node name="BP1" type="StaticBody3D" parent="."]
+[node name="BP1" type="StaticBody3D" parent="." unique_id=2134844851]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 4, -18)
-[node name="M" type="MeshInstance3D" parent="BP1"]
+
+[node name="M" type="MeshInstance3D" parent="BP1" unique_id=963559078]
 mesh = SubResource("msh_pillar")
-[node name="C" type="CollisionShape3D" parent="BP1"]
+
+[node name="C" type="CollisionShape3D" parent="BP1" unique_id=941817198]
 shape = SubResource("shp_pillar")
 
-[node name="BP2" type="StaticBody3D" parent="."]
+[node name="BP2" type="StaticBody3D" parent="." unique_id=149217858]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 4, -18)
-[node name="M" type="MeshInstance3D" parent="BP2"]
+
+[node name="M" type="MeshInstance3D" parent="BP2" unique_id=1105960159]
 mesh = SubResource("msh_pillar")
-[node name="C" type="CollisionShape3D" parent="BP2"]
+
+[node name="C" type="CollisionShape3D" parent="BP2" unique_id=1484373980]
 shape = SubResource("shp_pillar")
 
-[node name="BP3" type="StaticBody3D" parent="."]
+[node name="BP3" type="StaticBody3D" parent="." unique_id=288663388]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 4, -12)
-[node name="M" type="MeshInstance3D" parent="BP3"]
+
+[node name="M" type="MeshInstance3D" parent="BP3" unique_id=887866630]
 mesh = SubResource("msh_pillar")
-[node name="C" type="CollisionShape3D" parent="BP3"]
+
+[node name="C" type="CollisionShape3D" parent="BP3" unique_id=1465556054]
 shape = SubResource("shp_pillar")
 
-[node name="BP4" type="StaticBody3D" parent="."]
+[node name="BP4" type="StaticBody3D" parent="." unique_id=358380469]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 4, -12)
-[node name="M" type="MeshInstance3D" parent="BP4"]
+
+[node name="M" type="MeshInstance3D" parent="BP4" unique_id=1026232042]
 mesh = SubResource("msh_pillar")
-[node name="C" type="CollisionShape3D" parent="BP4"]
+
+[node name="C" type="CollisionShape3D" parent="BP4" unique_id=959415582]
 shape = SubResource("shp_pillar")
 
-[node name="BDeck" type="StaticBody3D" parent="."]
+[node name="BDeck" type="StaticBody3D" parent="." unique_id=1762047407]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, -15)
-[node name="M" type="MeshInstance3D" parent="BDeck"]
+
+[node name="M" type="MeshInstance3D" parent="BDeck" unique_id=1476849854]
 mesh = SubResource("msh_deck")
-[node name="C" type="CollisionShape3D" parent="BDeck"]
+
+[node name="C" type="CollisionShape3D" parent="BDeck" unique_id=245338690]
 shape = SubResource("shp_deck")
 
-[node name="BRL" type="StaticBody3D" parent="."]
+[node name="BRL" type="StaticBody3D" parent="." unique_id=796464739]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -17.7)
-[node name="M" type="MeshInstance3D" parent="BRL"]
+
+[node name="M" type="MeshInstance3D" parent="BRL" unique_id=214464007]
 mesh = SubResource("msh_rail")
-[node name="C" type="CollisionShape3D" parent="BRL"]
+
+[node name="C" type="CollisionShape3D" parent="BRL" unique_id=6257989]
 shape = SubResource("shp_rail")
 
-[node name="BRR" type="StaticBody3D" parent="."]
+[node name="BRR" type="StaticBody3D" parent="." unique_id=316943033]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -12.3)
-[node name="M" type="MeshInstance3D" parent="BRR"]
+
+[node name="M" type="MeshInstance3D" parent="BRR" unique_id=761022490]
 mesh = SubResource("msh_rail")
-[node name="C" type="CollisionShape3D" parent="BRR"]
+
+[node name="C" type="CollisionShape3D" parent="BRR" unique_id=1598994045]
 shape = SubResource("shp_rail")
 
-[node name="BRoad" type="StaticBody3D" parent="."]
+[node name="BRoad" type="StaticBody3D" parent="." unique_id=1121578184]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.11, -15)
-[node name="M" type="MeshInstance3D" parent="BRoad"]
+
+[node name="M" type="MeshInstance3D" parent="BRoad" unique_id=1283304981]
 mesh = SubResource("msh_road")
-[node name="C" type="CollisionShape3D" parent="BRoad"]
+
+[node name="C" type="CollisionShape3D" parent="BRoad" unique_id=1975007508]
 shape = SubResource("shp_road")
-[node name="RL1" type="MeshInstance3D" parent="."]
+
+[node name="RL1" type="MeshInstance3D" parent="." unique_id=1799604801]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 8.14, -15)
 mesh = SubResource("msh_rline")
-[node name="RL2" type="MeshInstance3D" parent="."]
+
+[node name="RL2" type="MeshInstance3D" parent="." unique_id=37398153]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 8.14, -15)
 mesh = SubResource("msh_rline")
-[node name="RL3" type="MeshInstance3D" parent="."]
+
+[node name="RL3" type="MeshInstance3D" parent="." unique_id=1199045828]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 8.14, -15)
 mesh = SubResource("msh_rline")
-[node name="BLbl" type="Label3D" parent="."]
+
+[node name="BLbl" type="Label3D" parent="." unique_id=487746776]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.2, -15)
+modulate = Color(0.95, 0.82, 0.08, 1)
 text = "BRIDGE SPAN A"
 font_size = 26
-modulate = Color(0.95, 0.82, 0.08, 1)
 
-; === BUILDING FRAME ===
-[node name="BV1" type="StaticBody3D" parent="."]
+[node name="BV1" type="StaticBody3D" parent="." unique_id=2092610667]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 3.25, -5)
-[node name="M" type="MeshInstance3D" parent="BV1"]
+
+[node name="M" type="MeshInstance3D" parent="BV1" unique_id=387674875]
 mesh = SubResource("msh_beam_v")
-[node name="C" type="CollisionShape3D" parent="BV1"]
+
+[node name="C" type="CollisionShape3D" parent="BV1" unique_id=1190134700]
 shape = SubResource("shp_beam_v")
 
-[node name="BV2" type="StaticBody3D" parent="."]
+[node name="BV2" type="StaticBody3D" parent="." unique_id=613133086]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 3.25, -5)
-[node name="M" type="MeshInstance3D" parent="BV2"]
+
+[node name="M" type="MeshInstance3D" parent="BV2" unique_id=1298333798]
 mesh = SubResource("msh_beam_v")
-[node name="C" type="CollisionShape3D" parent="BV2"]
+
+[node name="C" type="CollisionShape3D" parent="BV2" unique_id=644086061]
 shape = SubResource("shp_beam_v")
 
-[node name="BV3" type="StaticBody3D" parent="."]
+[node name="BV3" type="StaticBody3D" parent="." unique_id=422435570]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 3.25, 1)
-[node name="M" type="MeshInstance3D" parent="BV3"]
+
+[node name="M" type="MeshInstance3D" parent="BV3" unique_id=434357672]
 mesh = SubResource("msh_beam_v")
-[node name="C" type="CollisionShape3D" parent="BV3"]
+
+[node name="C" type="CollisionShape3D" parent="BV3" unique_id=2124684920]
 shape = SubResource("shp_beam_v")
 
-[node name="BV4" type="StaticBody3D" parent="."]
+[node name="BV4" type="StaticBody3D" parent="." unique_id=288416906]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 3.25, 1)
-[node name="M" type="MeshInstance3D" parent="BV4"]
+
+[node name="M" type="MeshInstance3D" parent="BV4" unique_id=2127435201]
 mesh = SubResource("msh_beam_v")
-[node name="C" type="CollisionShape3D" parent="BV4"]
+
+[node name="C" type="CollisionShape3D" parent="BV4" unique_id=304898196]
 shape = SubResource("shp_beam_v")
 
-[node name="BH1" type="StaticBody3D" parent="."]
+[node name="BH1" type="StaticBody3D" parent="." unique_id=515533766]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 6.5, -5)
-[node name="M" type="MeshInstance3D" parent="BH1"]
+
+[node name="M" type="MeshInstance3D" parent="BH1" unique_id=758100556]
 mesh = SubResource("msh_beam_h")
-[node name="C" type="CollisionShape3D" parent="BH1"]
+
+[node name="C" type="CollisionShape3D" parent="BH1" unique_id=1318594230]
 shape = SubResource("shp_beam_h")
 
-[node name="BH2" type="StaticBody3D" parent="."]
+[node name="BH2" type="StaticBody3D" parent="." unique_id=1495310824]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 6.5, 1)
-[node name="M" type="MeshInstance3D" parent="BH2"]
+
+[node name="M" type="MeshInstance3D" parent="BH2" unique_id=2102130338]
 mesh = SubResource("msh_beam_h")
-[node name="C" type="CollisionShape3D" parent="BH2"]
+
+[node name="C" type="CollisionShape3D" parent="BH2" unique_id=563636451]
 shape = SubResource("shp_beam_h")
 
-[node name="BH3" type="StaticBody3D" parent="."]
+[node name="BH3" type="StaticBody3D" parent="." unique_id=386154764]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -20, 6.5, -2)
-[node name="M" type="MeshInstance3D" parent="BH3"]
+
+[node name="M" type="MeshInstance3D" parent="BH3" unique_id=1127316216]
 mesh = SubResource("msh_beam_h")
-[node name="C" type="CollisionShape3D" parent="BH3"]
+
+[node name="C" type="CollisionShape3D" parent="BH3" unique_id=1828880716]
 shape = SubResource("shp_beam_h")
 
-[node name="BH4" type="StaticBody3D" parent="."]
+[node name="BH4" type="StaticBody3D" parent="." unique_id=1669264942]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -14, 6.5, -2)
-[node name="M" type="MeshInstance3D" parent="BH4"]
+
+[node name="M" type="MeshInstance3D" parent="BH4" unique_id=1104718554]
 mesh = SubResource("msh_beam_h")
-[node name="C" type="CollisionShape3D" parent="BH4"]
+
+[node name="C" type="CollisionShape3D" parent="BH4" unique_id=871492777]
 shape = SubResource("shp_beam_h")
 
-[node name="Slab" type="StaticBody3D" parent="."]
+[node name="Slab" type="StaticBody3D" parent="." unique_id=1977823261]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 3.14, -2)
-[node name="M" type="MeshInstance3D" parent="Slab"]
+
+[node name="M" type="MeshInstance3D" parent="Slab" unique_id=1198414398]
 mesh = SubResource("msh_slab")
-[node name="C" type="CollisionShape3D" parent="Slab"]
+
+[node name="C" type="CollisionShape3D" parent="Slab" unique_id=621963770]
 shape = SubResource("shp_slab")
-[node name="RB1" type="MeshInstance3D" parent="."]
+
+[node name="RB1" type="MeshInstance3D" parent="." unique_id=1951794190]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 4.03, -4)
 mesh = SubResource("msh_rebar")
-[node name="RB2" type="MeshInstance3D" parent="."]
+
+[node name="RB2" type="MeshInstance3D" parent="." unique_id=15773592]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 4.03, -3)
 mesh = SubResource("msh_rebar")
-[node name="RB3" type="MeshInstance3D" parent="."]
+
+[node name="RB3" type="MeshInstance3D" parent="." unique_id=1703899204]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 4.03, -1)
 mesh = SubResource("msh_rebar")
-[node name="RB4" type="MeshInstance3D" parent="."]
+
+[node name="RB4" type="MeshInstance3D" parent="." unique_id=1270933548]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 4.03, 0)
 mesh = SubResource("msh_rebar")
-[node name="RB5" type="MeshInstance3D" parent="."]
+
+[node name="RB5" type="MeshInstance3D" parent="." unique_id=1958748809]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 4.03, -2)
 mesh = SubResource("msh_rebar")
 
-; === CRANE ===
-[node name="CrB" type="StaticBody3D" parent="."]
+[node name="CrB" type="StaticBody3D" parent="." unique_id=1724923694]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.5, -10)
-[node name="M" type="MeshInstance3D" parent="CrB"]
+
+[node name="M" type="MeshInstance3D" parent="CrB" unique_id=1293557097]
 mesh = SubResource("msh_cr_base")
-[node name="C" type="CollisionShape3D" parent="CrB"]
+
+[node name="C" type="CollisionShape3D" parent="CrB" unique_id=569205658]
 shape = SubResource("shp_cr_base")
 
-[node name="CrT" type="StaticBody3D" parent="."]
+[node name="CrT" type="StaticBody3D" parent="." unique_id=1135272486]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 7.5, -10)
-[node name="M" type="MeshInstance3D" parent="CrT"]
+
+[node name="M" type="MeshInstance3D" parent="CrT" unique_id=836416277]
 mesh = SubResource("msh_cr_twr")
-[node name="C" type="CollisionShape3D" parent="CrT"]
+
+[node name="C" type="CollisionShape3D" parent="CrT" unique_id=624770248]
 shape = SubResource("shp_cr_twr")
 
-[node name="CrA" type="StaticBody3D" parent="."]
+[node name="CrA" type="StaticBody3D" parent="." unique_id=677217833]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 12.2, -10)
-[node name="M" type="MeshInstance3D" parent="CrA"]
+
+[node name="M" type="MeshInstance3D" parent="CrA" unique_id=1675833978]
 mesh = SubResource("msh_cr_arm")
-[node name="C" type="CollisionShape3D" parent="CrA"]
+
+[node name="C" type="CollisionShape3D" parent="CrA" unique_id=1670900047]
 shape = SubResource("shp_cr_arm")
 
-[node name="CrC" type="StaticBody3D" parent="."]
+[node name="CrC" type="StaticBody3D" parent="." unique_id=5208223]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 12.2, -10)
-[node name="M" type="MeshInstance3D" parent="CrC"]
+
+[node name="M" type="MeshInstance3D" parent="CrC" unique_id=1742086314]
 mesh = SubResource("msh_cr_ctr")
-[node name="C" type="CollisionShape3D" parent="CrC"]
+
+[node name="C" type="CollisionShape3D" parent="CrC" unique_id=1108940481]
 shape = SubResource("shp_cr_ctr")
-[node name="CrCb" type="MeshInstance3D" parent="."]
+
+[node name="CrCb" type="MeshInstance3D" parent="." unique_id=1645665860]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 9.4, -10)
 mesh = SubResource("msh_cable")
 
-; Flood light props on scaffolding
-[node name="FL1" type="MeshInstance3D" parent="."]
+[node name="FL1" type="MeshInstance3D" parent="." unique_id=1203014872]
 transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, -18, 8.5, -18)
 mesh = SubResource("msh_flood")
-[node name="FL2" type="MeshInstance3D" parent="."]
+
+[node name="FL2" type="MeshInstance3D" parent="." unique_id=909249645]
 transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, 18, 8.5, 8)
 mesh = SubResource("msh_flood")
 
-; === SCAFFOLDING ===
-[node name="SV1" type="StaticBody3D" parent="."]
+[node name="SV1" type="StaticBody3D" parent="." unique_id=1050109469]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 4.25, -5)
-[node name="M" type="MeshInstance3D" parent="SV1"]
+
+[node name="M" type="MeshInstance3D" parent="SV1" unique_id=1099646416]
 mesh = SubResource("msh_scfv")
-[node name="C" type="CollisionShape3D" parent="SV1"]
+
+[node name="C" type="CollisionShape3D" parent="SV1" unique_id=200835770]
 shape = SubResource("shp_scfv")
 
-[node name="SV2" type="StaticBody3D" parent="."]
+[node name="SV2" type="StaticBody3D" parent="." unique_id=1074712998]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 4.25, -5)
-[node name="M" type="MeshInstance3D" parent="SV2"]
+
+[node name="M" type="MeshInstance3D" parent="SV2" unique_id=1767417102]
 mesh = SubResource("msh_scfv")
-[node name="C" type="CollisionShape3D" parent="SV2"]
+
+[node name="C" type="CollisionShape3D" parent="SV2" unique_id=838988568]
 shape = SubResource("shp_scfv")
 
-[node name="SV3" type="StaticBody3D" parent="."]
+[node name="SV3" type="StaticBody3D" parent="." unique_id=714705949]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 4.25, -1)
-[node name="M" type="MeshInstance3D" parent="SV3"]
+
+[node name="M" type="MeshInstance3D" parent="SV3" unique_id=965530699]
 mesh = SubResource("msh_scfv")
-[node name="C" type="CollisionShape3D" parent="SV3"]
+
+[node name="C" type="CollisionShape3D" parent="SV3" unique_id=1893685244]
 shape = SubResource("shp_scfv")
 
-[node name="SV4" type="StaticBody3D" parent="."]
+[node name="SV4" type="StaticBody3D" parent="." unique_id=605258476]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 4.25, -1)
-[node name="M" type="MeshInstance3D" parent="SV4"]
+
+[node name="M" type="MeshInstance3D" parent="SV4" unique_id=439786397]
 mesh = SubResource("msh_scfv")
-[node name="C" type="CollisionShape3D" parent="SV4"]
+
+[node name="C" type="CollisionShape3D" parent="SV4" unique_id=766639304]
 shape = SubResource("shp_scfv")
 
-[node name="SH1" type="StaticBody3D" parent="."]
+[node name="SH1" type="StaticBody3D" parent="." unique_id=1416293876]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2, -5)
-[node name="M" type="MeshInstance3D" parent="SH1"]
+
+[node name="M" type="MeshInstance3D" parent="SH1" unique_id=1535371136]
 mesh = SubResource("msh_scfh")
-[node name="C" type="CollisionShape3D" parent="SH1"]
+
+[node name="C" type="CollisionShape3D" parent="SH1" unique_id=725712045]
 shape = SubResource("shp_scfh")
 
-[node name="SH2" type="StaticBody3D" parent="."]
+[node name="SH2" type="StaticBody3D" parent="." unique_id=1214975909]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 4, -5)
-[node name="M" type="MeshInstance3D" parent="SH2"]
+
+[node name="M" type="MeshInstance3D" parent="SH2" unique_id=28168742]
 mesh = SubResource("msh_scfh")
-[node name="C" type="CollisionShape3D" parent="SH2"]
+
+[node name="C" type="CollisionShape3D" parent="SH2" unique_id=842977520]
 shape = SubResource("shp_scfh")
 
-[node name="SH3" type="StaticBody3D" parent="."]
+[node name="SH3" type="StaticBody3D" parent="." unique_id=696129575]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 6, -5)
-[node name="M" type="MeshInstance3D" parent="SH3"]
+
+[node name="M" type="MeshInstance3D" parent="SH3" unique_id=896855299]
 mesh = SubResource("msh_scfh")
-[node name="C" type="CollisionShape3D" parent="SH3"]
+
+[node name="C" type="CollisionShape3D" parent="SH3" unique_id=1227621303]
 shape = SubResource("shp_scfh")
 
-[node name="SP1" type="StaticBody3D" parent="."]
+[node name="SP1" type="StaticBody3D" parent="." unique_id=898530569]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2.04, -3)
-[node name="M" type="MeshInstance3D" parent="SP1"]
+
+[node name="M" type="MeshInstance3D" parent="SP1" unique_id=854309062]
 mesh = SubResource("msh_plank")
-[node name="C" type="CollisionShape3D" parent="SP1"]
+
+[node name="C" type="CollisionShape3D" parent="SP1" unique_id=685466174]
 shape = SubResource("shp_plank")
 
-[node name="SP2" type="StaticBody3D" parent="."]
+[node name="SP2" type="StaticBody3D" parent="." unique_id=160293730]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 4.04, -3)
-[node name="M" type="MeshInstance3D" parent="SP2"]
+
+[node name="M" type="MeshInstance3D" parent="SP2" unique_id=886980095]
 mesh = SubResource("msh_plank")
-[node name="C" type="CollisionShape3D" parent="SP2"]
+
+[node name="C" type="CollisionShape3D" parent="SP2" unique_id=936710824]
 shape = SubResource("shp_plank")
 
-[node name="SP3" type="StaticBody3D" parent="."]
+[node name="SP3" type="StaticBody3D" parent="." unique_id=1434594918]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 6.04, -3)
-[node name="M" type="MeshInstance3D" parent="SP3"]
+
+[node name="M" type="MeshInstance3D" parent="SP3" unique_id=1304291170]
 mesh = SubResource("msh_plank")
-[node name="C" type="CollisionShape3D" parent="SP3"]
+
+[node name="C" type="CollisionShape3D" parent="SP3" unique_id=2121704377]
 shape = SubResource("shp_plank")
 
-; === MATERIALS YARD ===
-[node name="L1" type="StaticBody3D" parent="."]
+[node name="L1" type="StaticBody3D" parent="." unique_id=970885999]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.425, 8)
-[node name="M" type="MeshInstance3D" parent="L1"]
+
+[node name="M" type="MeshInstance3D" parent="L1" unique_id=1034996644]
 mesh = SubResource("msh_lumber")
-[node name="C" type="CollisionShape3D" parent="L1"]
+
+[node name="C" type="CollisionShape3D" parent="L1" unique_id=1857818469]
 shape = SubResource("shp_lumber")
 
-[node name="L2" type="StaticBody3D" parent="."]
+[node name="L2" type="StaticBody3D" parent="." unique_id=1356042009]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1.275, 8)
-[node name="M" type="MeshInstance3D" parent="L2"]
+
+[node name="M" type="MeshInstance3D" parent="L2" unique_id=380379175]
 mesh = SubResource("msh_lumber")
-[node name="C" type="CollisionShape3D" parent="L2"]
+
+[node name="C" type="CollisionShape3D" parent="L2" unique_id=866358079]
 shape = SubResource("shp_lumber")
 
-[node name="L3" type="StaticBody3D" parent="."]
+[node name="L3" type="StaticBody3D" parent="." unique_id=1592448723]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0.425, 8)
-[node name="M" type="MeshInstance3D" parent="L3"]
+
+[node name="M" type="MeshInstance3D" parent="L3" unique_id=1626463473]
 mesh = SubResource("msh_lumber")
-[node name="C" type="CollisionShape3D" parent="L3"]
+
+[node name="C" type="CollisionShape3D" parent="L3" unique_id=24687315]
 shape = SubResource("shp_lumber")
 
-[node name="GH" type="StaticBody3D" parent="."]
+[node name="GH" type="StaticBody3D" parent="." unique_id=1801763761]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0.55, 13)
-[node name="M" type="MeshInstance3D" parent="GH"]
+
+[node name="M" type="MeshInstance3D" parent="GH" unique_id=27194408]
 mesh = SubResource("msh_gravel")
-[node name="C" type="CollisionShape3D" parent="GH"]
+
+[node name="C" type="CollisionShape3D" parent="GH" unique_id=1765043688]
 shape = SubResource("shp_gravel")
 
-[node name="PP1" type="StaticBody3D" parent="."]
+[node name="PP1" type="StaticBody3D" parent="." unique_id=686311490]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 8, 0.48, 12)
-[node name="M" type="MeshInstance3D" parent="PP1"]
+
+[node name="M" type="MeshInstance3D" parent="PP1" unique_id=1250759692]
 mesh = SubResource("msh_pipe")
-[node name="C" type="CollisionShape3D" parent="PP1"]
+
+[node name="C" type="CollisionShape3D" parent="PP1" unique_id=1185403812]
 shape = SubResource("shp_pipe")
 
-[node name="PP2" type="StaticBody3D" parent="."]
+[node name="PP2" type="StaticBody3D" parent="." unique_id=12290588]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 8, 0.48, 14.5)
-[node name="M" type="MeshInstance3D" parent="PP2"]
+
+[node name="M" type="MeshInstance3D" parent="PP2" unique_id=485944002]
 mesh = SubResource("msh_pipe")
-[node name="C" type="CollisionShape3D" parent="PP2"]
+
+[node name="C" type="CollisionShape3D" parent="PP2" unique_id=133321194]
 shape = SubResource("shp_pipe")
 
-[node name="PP3" type="StaticBody3D" parent="."]
+[node name="PP3" type="StaticBody3D" parent="." unique_id=1936667597]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 8, 1.4, 13.2)
-[node name="M" type="MeshInstance3D" parent="PP3"]
+
+[node name="M" type="MeshInstance3D" parent="PP3" unique_id=777176021]
 mesh = SubResource("msh_pipe")
-[node name="C" type="CollisionShape3D" parent="PP3"]
+
+[node name="C" type="CollisionShape3D" parent="PP3" unique_id=1005153357]
 shape = SubResource("shp_pipe")
 
-[node name="PL1" type="StaticBody3D" parent="."]
+[node name="PL1" type="StaticBody3D" parent="." unique_id=769580279]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0.06, 12)
-[node name="M" type="MeshInstance3D" parent="PL1"]
+
+[node name="M" type="MeshInstance3D" parent="PL1" unique_id=1095768146]
 mesh = SubResource("msh_pallet")
-[node name="C" type="CollisionShape3D" parent="PL1"]
+
+[node name="C" type="CollisionShape3D" parent="PL1" unique_id=204102487]
 shape = SubResource("shp_pallet")
 
-[node name="PL2" type="StaticBody3D" parent="."]
+[node name="PL2" type="StaticBody3D" parent="." unique_id=1412656495]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0.06, 14)
-[node name="M" type="MeshInstance3D" parent="PL2"]
+
+[node name="M" type="MeshInstance3D" parent="PL2" unique_id=1997636252]
 mesh = SubResource("msh_pallet")
-[node name="C" type="CollisionShape3D" parent="PL2"]
+
+[node name="C" type="CollisionShape3D" parent="PL2" unique_id=585831477]
 shape = SubResource("shp_pallet")
 
-[node name="PL3" type="StaticBody3D" parent="."]
+[node name="PL3" type="StaticBody3D" parent="." unique_id=847472639]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0.06, 16)
-[node name="M" type="MeshInstance3D" parent="PL3"]
+
+[node name="M" type="MeshInstance3D" parent="PL3" unique_id=1102029139]
 mesh = SubResource("msh_pallet")
-[node name="C" type="CollisionShape3D" parent="PL3"]
+
+[node name="C" type="CollisionShape3D" parent="PL3" unique_id=138516930]
 shape = SubResource("shp_pallet")
 
-; === SITE OFFICE ===
-[node name="Cab" type="StaticBody3D" parent="."]
+[node name="Cab" type="StaticBody3D" parent="." unique_id=739627037]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 1.4, 10)
-[node name="M" type="MeshInstance3D" parent="Cab"]
+
+[node name="M" type="MeshInstance3D" parent="Cab" unique_id=437287761]
 mesh = SubResource("msh_cabin")
-[node name="C" type="CollisionShape3D" parent="Cab"]
+
+[node name="C" type="CollisionShape3D" parent="Cab" unique_id=550653993]
 shape = SubResource("shp_cabin")
 
-[node name="CabR" type="StaticBody3D" parent="."]
+[node name="CabR" type="StaticBody3D" parent="." unique_id=1431385160]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 2.86, 10)
-[node name="M" type="MeshInstance3D" parent="CabR"]
+
+[node name="M" type="MeshInstance3D" parent="CabR" unique_id=657361320]
 mesh = SubResource("msh_cab_r")
-[node name="C" type="CollisionShape3D" parent="CabR"]
+
+[node name="C" type="CollisionShape3D" parent="CabR" unique_id=1488863336]
 shape = SubResource("shp_cab_r")
 
-[node name="ODsk" type="StaticBody3D" parent="."]
+[node name="ODsk" type="StaticBody3D" parent="." unique_id=48195480]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 0.36, 10)
-[node name="M" type="MeshInstance3D" parent="ODsk"]
+
+[node name="M" type="MeshInstance3D" parent="ODsk" unique_id=1504997489]
 mesh = SubResource("msh_desk")
-[node name="C" type="CollisionShape3D" parent="ODsk"]
+
+[node name="C" type="CollisionShape3D" parent="ODsk" unique_id=89009827]
 shape = SubResource("shp_desk")
 
-[node name="BPTbl" type="StaticBody3D" parent="."]
+[node name="BPTbl" type="StaticBody3D" parent="." unique_id=1431687419]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0.41, 10)
-[node name="M" type="MeshInstance3D" parent="BPTbl"]
+
+[node name="M" type="MeshInstance3D" parent="BPTbl" unique_id=891064372]
 mesh = SubResource("msh_bp_tbl")
-[node name="C" type="CollisionShape3D" parent="BPTbl"]
+
+[node name="C" type="CollisionShape3D" parent="BPTbl" unique_id=487502073]
 shape = SubResource("shp_bp_tbl")
-[node name="BPr" type="MeshInstance3D" parent="."]
+
+[node name="BPr" type="MeshInstance3D" parent="." unique_id=649181458]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0.83, 10)
 mesh = SubResource("msh_bp")
-[node name="OSgn" type="Label3D" parent="."]
+
+[node name="OSgn" type="Label3D" parent="." unique_id=337261619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 3.2, 8.35)
+modulate = Color(0.95, 0.85, 0.1, 1)
 text = "SITE OFFICE"
 font_size = 22
-modulate = Color(0.95, 0.85, 0.1, 1)
 
-; === HEAVY EQUIPMENT ===
-[node name="DzB" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.0, 3)
-[node name="M" type="MeshInstance3D" parent="DzB"]
+[node name="DzB" type="StaticBody3D" parent="." unique_id=1853903116]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, 3)
+
+[node name="M" type="MeshInstance3D" parent="DzB" unique_id=688840495]
 mesh = SubResource("msh_dozer")
-[node name="C" type="CollisionShape3D" parent="DzB"]
+
+[node name="C" type="CollisionShape3D" parent="DzB" unique_id=1779207874]
 shape = SubResource("shp_dozer")
 
-[node name="DzBl" type="StaticBody3D" parent="."]
+[node name="DzBl" type="StaticBody3D" parent="." unique_id=1232479207]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.625, 1.85)
-[node name="M" type="MeshInstance3D" parent="DzBl"]
+
+[node name="M" type="MeshInstance3D" parent="DzBl" unique_id=194491440]
 mesh = SubResource("msh_blade")
-[node name="C" type="CollisionShape3D" parent="DzBl"]
+
+[node name="C" type="CollisionShape3D" parent="DzBl" unique_id=860647359]
 shape = SubResource("shp_blade")
 
-[node name="DzTL" type="StaticBody3D" parent="."]
+[node name="DzTL" type="StaticBody3D" parent="." unique_id=905596632]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.25, 2.1)
-[node name="M" type="MeshInstance3D" parent="DzTL"]
+
+[node name="M" type="MeshInstance3D" parent="DzTL" unique_id=712405995]
 mesh = SubResource("msh_track")
-[node name="C" type="CollisionShape3D" parent="DzTL"]
+
+[node name="C" type="CollisionShape3D" parent="DzTL" unique_id=119694783]
 shape = SubResource("shp_track")
 
-[node name="DzTR" type="StaticBody3D" parent="."]
+[node name="DzTR" type="StaticBody3D" parent="." unique_id=549729109]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.25, 3.9)
-[node name="M" type="MeshInstance3D" parent="DzTR"]
+
+[node name="M" type="MeshInstance3D" parent="DzTR" unique_id=866493699]
 mesh = SubResource("msh_track")
-[node name="C" type="CollisionShape3D" parent="DzTR"]
+
+[node name="C" type="CollisionShape3D" parent="DzTR" unique_id=476877052]
 shape = SubResource("shp_track")
 
-[node name="MxFr" type="StaticBody3D" parent="."]
+[node name="MxFr" type="StaticBody3D" parent="." unique_id=1718766451]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.425, 3)
-[node name="M" type="MeshInstance3D" parent="MxFr"]
+
+[node name="M" type="MeshInstance3D" parent="MxFr" unique_id=1639176925]
 mesh = SubResource("msh_mfr")
-[node name="C" type="CollisionShape3D" parent="MxFr"]
+
+[node name="C" type="CollisionShape3D" parent="MxFr" unique_id=1456354129]
 shape = SubResource("shp_mfr")
 
-[node name="MxDr" type="StaticBody3D" parent="."]
+[node name="MxDr" type="StaticBody3D" parent="." unique_id=1876929896]
 transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, 5, 2.1, 3)
-[node name="M" type="MeshInstance3D" parent="MxDr"]
+
+[node name="M" type="MeshInstance3D" parent="MxDr" unique_id=1160438801]
 mesh = SubResource("msh_drum")
-[node name="C" type="CollisionShape3D" parent="MxDr"]
+
+[node name="C" type="CollisionShape3D" parent="MxDr" unique_id=882941561]
 shape = SubResource("shp_drum")
 
-[node name="WB1" type="StaticBody3D" parent="."]
+[node name="WB1" type="StaticBody3D" parent="." unique_id=473627754]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 6)
-[node name="M" type="MeshInstance3D" parent="WB1"]
+
+[node name="M" type="MeshInstance3D" parent="WB1" unique_id=449685934]
 mesh = SubResource("msh_wbarrow")
-[node name="C" type="CollisionShape3D" parent="WB1"]
+
+[node name="C" type="CollisionShape3D" parent="WB1" unique_id=596330915]
 shape = SubResource("shp_wbarrow")
 
-[node name="WB2" type="StaticBody3D" parent="."]
+[node name="WB2" type="StaticBody3D" parent="." unique_id=1198663914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.19, 6)
-[node name="M" type="MeshInstance3D" parent="WB2"]
+
+[node name="M" type="MeshInstance3D" parent="WB2" unique_id=1720412972]
 mesh = SubResource("msh_wbarrow")
-[node name="C" type="CollisionShape3D" parent="WB2"]
+
+[node name="C" type="CollisionShape3D" parent="WB2" unique_id=435923804]
 shape = SubResource("shp_wbarrow")
 
-; === SAFETY ===
-[node name="C1" type="StaticBody3D" parent="."]
+[node name="C1" type="StaticBody3D" parent="." unique_id=1806782330]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.24, 6)
-[node name="M" type="MeshInstance3D" parent="C1"]
+
+[node name="M" type="MeshInstance3D" parent="C1" unique_id=1666769276]
 mesh = SubResource("msh_cone")
-[node name="C" type="CollisionShape3D" parent="C1"]
+
+[node name="C" type="CollisionShape3D" parent="C1" unique_id=1110827077]
 shape = SubResource("shp_cone")
 
-[node name="C2" type="StaticBody3D" parent="."]
+[node name="C2" type="StaticBody3D" parent="." unique_id=1498781124]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.24, 6)
-[node name="M" type="MeshInstance3D" parent="C2"]
+
+[node name="M" type="MeshInstance3D" parent="C2" unique_id=231798232]
 mesh = SubResource("msh_cone")
-[node name="C" type="CollisionShape3D" parent="C2"]
+
+[node name="C" type="CollisionShape3D" parent="C2" unique_id=2095136935]
 shape = SubResource("shp_cone")
 
-[node name="C3" type="StaticBody3D" parent="."]
+[node name="C3" type="StaticBody3D" parent="." unique_id=1369871665]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.24, -8)
-[node name="M" type="MeshInstance3D" parent="C3"]
+
+[node name="M" type="MeshInstance3D" parent="C3" unique_id=65057404]
 mesh = SubResource("msh_cone")
-[node name="C" type="CollisionShape3D" parent="C3"]
+
+[node name="C" type="CollisionShape3D" parent="C3" unique_id=1775284863]
 shape = SubResource("shp_cone")
 
-[node name="C4" type="StaticBody3D" parent="."]
+[node name="C4" type="StaticBody3D" parent="." unique_id=1273449511]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.24, -8)
-[node name="M" type="MeshInstance3D" parent="C4"]
+
+[node name="M" type="MeshInstance3D" parent="C4" unique_id=1070337863]
 mesh = SubResource("msh_cone")
-[node name="C" type="CollisionShape3D" parent="C4"]
+
+[node name="C" type="CollisionShape3D" parent="C4" unique_id=1546630608]
 shape = SubResource("shp_cone")
 
-[node name="C5" type="StaticBody3D" parent="."]
+[node name="C5" type="StaticBody3D" parent="." unique_id=269272352]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.24, 3)
-[node name="M" type="MeshInstance3D" parent="C5"]
+
+[node name="M" type="MeshInstance3D" parent="C5" unique_id=889436426]
 mesh = SubResource("msh_cone")
-[node name="C" type="CollisionShape3D" parent="C5"]
+
+[node name="C" type="CollisionShape3D" parent="C5" unique_id=521020161]
 shape = SubResource("shp_cone")
 
-[node name="C6" type="StaticBody3D" parent="."]
+[node name="C6" type="StaticBody3D" parent="." unique_id=1257649274]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.24, 0)
-[node name="M" type="MeshInstance3D" parent="C6"]
+
+[node name="M" type="MeshInstance3D" parent="C6" unique_id=1494319535]
 mesh = SubResource("msh_cone")
-[node name="C" type="CollisionShape3D" parent="C6"]
+
+[node name="C" type="CollisionShape3D" parent="C6" unique_id=1024133282]
 shape = SubResource("shp_cone")
 
-[node name="Br1" type="StaticBody3D" parent="."]
+[node name="Br1" type="StaticBody3D" parent="." unique_id=632690215]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.425, 0)
-[node name="M" type="MeshInstance3D" parent="Br1"]
+
+[node name="M" type="MeshInstance3D" parent="Br1" unique_id=1194337323]
 mesh = SubResource("msh_barrier")
-[node name="C" type="CollisionShape3D" parent="Br1"]
+
+[node name="C" type="CollisionShape3D" parent="Br1" unique_id=235665738]
 shape = SubResource("shp_barrier")
 
-[node name="Br2" type="StaticBody3D" parent="."]
+[node name="Br2" type="StaticBody3D" parent="." unique_id=276538800]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, -8)
-[node name="M" type="MeshInstance3D" parent="Br2"]
+
+[node name="M" type="MeshInstance3D" parent="Br2" unique_id=2055263003]
 mesh = SubResource("msh_barrier")
-[node name="C" type="CollisionShape3D" parent="Br2"]
+
+[node name="C" type="CollisionShape3D" parent="Br2" unique_id=1141056215]
 shape = SubResource("shp_barrier")
-[node name="FP1" type="StaticBody3D" parent="."]
+
+[node name="FP1" type="StaticBody3D" parent="." unique_id=604879425]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.6, 5)
-[node name="M" type="MeshInstance3D" parent="FP1"]
+
+[node name="M" type="MeshInstance3D" parent="FP1" unique_id=999417914]
 mesh = SubResource("msh_fpost")
-[node name="C" type="CollisionShape3D" parent="FP1"]
+
+[node name="C" type="CollisionShape3D" parent="FP1" unique_id=1967369155]
 shape = SubResource("shp_fpost")
 
-[node name="FP2" type="StaticBody3D" parent="."]
+[node name="FP2" type="StaticBody3D" parent="." unique_id=1463922398]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.6, 5)
-[node name="M" type="MeshInstance3D" parent="FP2"]
+
+[node name="M" type="MeshInstance3D" parent="FP2" unique_id=103939703]
 mesh = SubResource("msh_fpost")
-[node name="C" type="CollisionShape3D" parent="FP2"]
+
+[node name="C" type="CollisionShape3D" parent="FP2" unique_id=2042955180]
 shape = SubResource("shp_fpost")
 
-[node name="FB1" type="StaticBody3D" parent="."]
+[node name="FB1" type="StaticBody3D" parent="." unique_id=1071988245]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0.8, 5)
-[node name="M" type="MeshInstance3D" parent="FB1"]
+
+[node name="M" type="MeshInstance3D" parent="FB1" unique_id=1472130672]
 mesh = SubResource("msh_fbar")
-[node name="C" type="CollisionShape3D" parent="FB1"]
+
+[node name="C" type="CollisionShape3D" parent="FB1" unique_id=2044767812]
 shape = SubResource("shp_fbar")
 
-[node name="FB2" type="StaticBody3D" parent="."]
+[node name="FB2" type="StaticBody3D" parent="." unique_id=84777831]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0.4, 5)
-[node name="M" type="MeshInstance3D" parent="FB2"]
+
+[node name="M" type="MeshInstance3D" parent="FB2" unique_id=654818451]
 mesh = SubResource("msh_fbar")
-[node name="C" type="CollisionShape3D" parent="FB2"]
+
+[node name="C" type="CollisionShape3D" parent="FB2" unique_id=1933947025]
 shape = SubResource("shp_fbar")
-[node name="DS" type="Label3D" parent="."]
+
+[node name="DS" type="Label3D" parent="." unique_id=556791849]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 1.5, 5)
+modulate = Color(0.95, 0.82, 0.08, 1)
 text = "DANGER - HARD HAT AREA"
 font_size = 18
-modulate = Color(0.95, 0.82, 0.08, 1)
-[node name="CS" type="Label3D" parent="."]
+
+[node name="CS" type="Label3D" parent="." unique_id=2078425281]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -8)
+modulate = Color(0.9, 0.42, 0.08, 1)
 text = "CAUTION - CONSTRUCTION ZONE"
 font_size = 16
-modulate = Color(0.9, 0.42, 0.08, 1)
 
-; === PORTA-POTTY ===
-[node name="Porta" type="MeshInstance3D" parent="."]
+[node name="Porta" type="MeshInstance3D" parent="." unique_id=1365381734]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 1.2, 18)
 mesh = SubResource("msh_porta")
-[node name="PortaR" type="MeshInstance3D" parent="."]
+
+[node name="PortaR" type="MeshInstance3D" parent="." unique_id=1992628994]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.44, 18)
 mesh = SubResource("msh_porta_r")
 
-; === GENERATOR ===
-[node name="Gen" type="MeshInstance3D" parent="."]
+[node name="Gen" type="MeshInstance3D" parent="." unique_id=270470374]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.5, 15)
 mesh = SubResource("msh_gen")
-[node name="GenEx" type="MeshInstance3D" parent="."]
+
+[node name="GenEx" type="MeshInstance3D" parent="." unique_id=1688033283]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5, 1.25, 15)
 mesh = SubResource("msh_gen_exhaust")
 
-; === SURVEYOR TRIPOD ===
-[node name="SurvT" type="MeshInstance3D" parent="."]
+[node name="SurvT" type="MeshInstance3D" parent="." unique_id=196737390]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.65, -15)
 mesh = SubResource("msh_surv_tripod")
-[node name="SurvI" type="MeshInstance3D" parent="."]
+
+[node name="SurvI" type="MeshInstance3D" parent="." unique_id=440486546]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.36, -15)
 mesh = SubResource("msh_surv_inst")
 
-; === TOOL RACK / WORKBENCH ===
-[node name="Bench" type="MeshInstance3D" parent="."]
+[node name="Bench" type="MeshInstance3D" parent="." unique_id=2042129491]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0.4, 3)
 mesh = SubResource("msh_workbench")
-[node name="ToolBrd" type="MeshInstance3D" parent="."]
+
+[node name="ToolBrd" type="MeshInstance3D" parent="." unique_id=754689696]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1.55, 3.35)
 mesh = SubResource("msh_tool_board")
 
-; === DUMP TRUCK ===
-[node name="DumpCab" type="MeshInstance3D" parent="."]
+[node name="DumpCab" type="MeshInstance3D" parent="." unique_id=851963878]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.9, -18)
 mesh = SubResource("msh_dump_cab")
-[node name="DumpBed" type="MeshInstance3D" parent="."]
+
+[node name="DumpBed" type="MeshInstance3D" parent="." unique_id=149110016]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.6, -18)
 mesh = SubResource("msh_dump_bed")
-[node name="DumpTrL" type="MeshInstance3D" parent="."]
+
+[node name="DumpTrL" type="MeshInstance3D" parent="." unique_id=1302465218]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0.25, -17)
 mesh = SubResource("msh_track")
-[node name="DumpTrR" type="MeshInstance3D" parent="."]
+
+[node name="DumpTrR" type="MeshInstance3D" parent="." unique_id=364365246]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0.25, -19)
 mesh = SubResource("msh_track")
 
-; === WATER TANK ===
-[node name="WTank" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.0, -18)
+[node name="WTank" type="MeshInstance3D" parent="." unique_id=419393122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1, -18)
 mesh = SubResource("msh_wtank")
 
-; === MUD PUDDLES ===
-[node name="Mud1" type="MeshInstance3D" parent="."]
+[node name="Mud1" type="MeshInstance3D" parent="." unique_id=1523452691]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.005, 8)
 mesh = SubResource("msh_mud")
-[node name="Mud2" type="MeshInstance3D" parent="."]
+
+[node name="Mud2" type="MeshInstance3D" parent="." unique_id=1488453504]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.005, -3)
 mesh = SubResource("msh_mud")
-[node name="Mud3" type="MeshInstance3D" parent="."]
+
+[node name="Mud3" type="MeshInstance3D" parent="." unique_id=696225958]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.005, -12)
 mesh = SubResource("msh_mud")
 
-; === CHAIN-LINK FENCE ===
-[node name="ChP1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.0, 20)
-[node name="M" type="MeshInstance3D" parent="ChP1"]
+[node name="ChP1" type="StaticBody3D" parent="." unique_id=1438302765]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1, 20)
+
+[node name="M" type="MeshInstance3D" parent="ChP1" unique_id=279931819]
 mesh = SubResource("msh_chain_post")
-[node name="C" type="CollisionShape3D" parent="ChP1"]
+
+[node name="C" type="CollisionShape3D" parent="ChP1" unique_id=714169964]
 shape = SubResource("shp_chain_post")
-[node name="ChP2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.0, 20)
-[node name="M" type="MeshInstance3D" parent="ChP2"]
+
+[node name="ChP2" type="StaticBody3D" parent="." unique_id=1649234202]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 20)
+
+[node name="M" type="MeshInstance3D" parent="ChP2" unique_id=351419294]
 mesh = SubResource("msh_chain_post")
-[node name="C" type="CollisionShape3D" parent="ChP2"]
+
+[node name="C" type="CollisionShape3D" parent="ChP2" unique_id=1254311147]
 shape = SubResource("shp_chain_post")
-[node name="ChF1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.0, 20)
-[node name="M" type="MeshInstance3D" parent="ChF1"]
+
+[node name="ChF1" type="StaticBody3D" parent="." unique_id=7552402]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, 20)
+
+[node name="M" type="MeshInstance3D" parent="ChF1" unique_id=1343572003]
 mesh = SubResource("msh_chain_panel")
-[node name="C" type="CollisionShape3D" parent="ChF1"]
-shape = SubResource("shp_chain_panel")
-[node name="ChP3" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.0, 20)
-[node name="M" type="MeshInstance3D" parent="ChP3"]
-mesh = SubResource("msh_chain_post")
-[node name="C" type="CollisionShape3D" parent="ChP3"]
-shape = SubResource("shp_chain_post")
-[node name="ChP4" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.0, 20)
-[node name="M" type="MeshInstance3D" parent="ChP4"]
-mesh = SubResource("msh_chain_post")
-[node name="C" type="CollisionShape3D" parent="ChP4"]
-shape = SubResource("shp_chain_post")
-[node name="ChF2" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.0, 20)
-[node name="M" type="MeshInstance3D" parent="ChF2"]
-mesh = SubResource("msh_chain_panel")
-[node name="C" type="CollisionShape3D" parent="ChF2"]
+
+[node name="C" type="CollisionShape3D" parent="ChF1" unique_id=2082409634]
 shape = SubResource("shp_chain_panel")
 
-; === AMBIENT AUDIO ===
-[node name="AmbientClank" type="AudioStreamPlayer3D" parent="."]
+[node name="ChP3" type="StaticBody3D" parent="." unique_id=2091328874]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, 20)
+
+[node name="M" type="MeshInstance3D" parent="ChP3" unique_id=1521281458]
+mesh = SubResource("msh_chain_post")
+
+[node name="C" type="CollisionShape3D" parent="ChP3" unique_id=924362510]
+shape = SubResource("shp_chain_post")
+
+[node name="ChP4" type="StaticBody3D" parent="." unique_id=1886694448]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, 20)
+
+[node name="M" type="MeshInstance3D" parent="ChP4" unique_id=2100395742]
+mesh = SubResource("msh_chain_post")
+
+[node name="C" type="CollisionShape3D" parent="ChP4" unique_id=1550074677]
+shape = SubResource("shp_chain_post")
+
+[node name="ChF2" type="StaticBody3D" parent="." unique_id=1510993125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, 20)
+
+[node name="M" type="MeshInstance3D" parent="ChF2" unique_id=105374880]
+mesh = SubResource("msh_chain_panel")
+
+[node name="C" type="CollisionShape3D" parent="ChF2" unique_id=116814647]
+shape = SubResource("shp_chain_panel")
+
+[node name="AmbientClank" type="AudioStreamPlayer3D" parent="." unique_id=1507937715]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
-; === ANIMATION PLAYER ===
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1867274114]
 
-; === PLAYER & PORTAL ===
-[node name="Player" parent="." instance=ExtResource("1")]
+[node name="Player" parent="." unique_id=355338032 instance=ExtResource("1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 18)
-[node name="ReturnPortal" parent="." instance=ExtResource("2")]
+
+[node name="ReturnPortal" parent="." unique_id=1984701413 instance=ExtResource("2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
 target_scene = "res://scenes/main_hub.tscn"
 
-[node name="Point1" parent="." instance=ExtResource("3")]
+[node name="Point1" parent="." unique_id=1471405571 instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 point_name = "Bridge Foundation"
 
-[node name="Point2" parent="." instance=ExtResource("3")]
+[node name="Point2" parent="." unique_id=1567647770 instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, -5)
-point_name = "Steel Support"
+script = ExtResource("5_ynsav")
+challenge_index = 1
 
-[node name="Point3" parent="." instance=ExtResource("3")]
+[node name="Point3" parent="." unique_id=2036290954 instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.5, -5)
-point_name = "Road Surface"
-[node name="ReturnLabel" type="Label3D" parent="."]
+script = ExtResource("6_88gnh")
+challenge_index = 2
+
+[node name="ReturnLabel" type="Label3D" parent="." unique_id=793945039]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 20)
+modulate = Color(1, 1, 0.5, 1)
 text = "Return to Hub"
 font_size = 36
-modulate = Color(1, 1, 0.5, 1)
