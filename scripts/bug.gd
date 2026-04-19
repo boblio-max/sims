@@ -7,12 +7,6 @@ var player_nearby: bool = false
 var is_fixed: bool = false
 var interacting: bool = false
 
-# Wandering logic
-var spawn_pos: Vector3
-var move_target: Vector3
-var speed: float = 2.0
-var wander_radius: float = 6.0
-var move_state: String = "IDLE"
 
 # Pool of code debugging challenges
 var challenges = [
@@ -88,8 +82,7 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	$Label3D.text = bug_name
-	spawn_pos = global_position
-	move_target = spawn_pos
+	
 	
 	var npc_scene = load("res://npc/npc_base.tscn")
 	if npc_scene:
@@ -103,35 +96,11 @@ func _ready() -> void:
 		if has_node("MeshInstance3D"):
 			get_node("MeshInstance3D").hide()
 			
-	_start_idle()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_fixed or interacting:
 		return
-		
-	if move_state == "WANDER":
-		var dir = (move_target - global_position)
-		dir.y = 0
-		if dir.length() > 0.1:
-			dir = dir.normalized()
-			global_position.x += dir.x * speed * delta
-			global_position.z += dir.z * speed * delta
-			var target_basis = Basis.looking_at(dir, Vector3.UP)
-			transform.basis = transform.basis.slerp(target_basis, delta * 5.0)
-		else:
-			_start_idle()
 
-func _start_idle() -> void:
-	move_state = "IDLE"
-	get_tree().create_timer(randf_range(1.0, 3.0)).timeout.connect(_start_wander)
-
-func _start_wander() -> void:
-	if not is_inside_tree() or is_fixed or interacting:
-		return
-	move_state = "WANDER"
-	var angle = randf() * PI * 2
-	var dist = randf() * wander_radius
-	move_target = spawn_pos + Vector3(cos(angle), 0, sin(angle)) * dist
 
 func _input(event: InputEvent) -> void:
 	if not is_fixed and not interacting and player_nearby and event.is_action_pressed("interact"):

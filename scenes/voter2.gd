@@ -12,13 +12,6 @@ var has_supported: bool = false
 var interacting: bool = false
 var current_step: int = 0
 
-# Wandering logic
-var spawn_pos: Vector3
-var move_target: Vector3
-var speed: float = 1.0
-var wander_radius: float = 3.0
-var move_state: String = "IDLE"
-
 # 2-step voter challenges — identify issue → propose solution
 var voter_scenarios = [
 	{
@@ -83,6 +76,7 @@ var voter_scenarios = [
 					{"text": "A) Hospital staffing — they need more doctors", "correct": false},
 					{"text": "B) Healthcare access — uninsured residents delay treatment because of cost barriers", "correct": true},
 					{"text": "C) Emergency room efficiency — they need faster triage", "correct": false},
+					{"text": "D) Public health policy — focus on preventive care", "correct": true}
 				],
 				"fun_fact": "Delayed healthcare due to cost leads to 5x higher treatment costs when patients finally seek care. Preventive care programs have been shown to reduce ER visits by 20-30% and save communities millions."
 			},
@@ -105,8 +99,6 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	$Label3D.text = voter_name
-	spawn_pos = global_position
-	move_target = spawn_pos
 	
 	var npc_scene = load("res://npc/npc_base.tscn")
 	if npc_scene:
@@ -117,37 +109,10 @@ func _ready() -> void:
 		add_child(npc)
 		if has_node("MeshInstance3D"):
 			get_node("MeshInstance3D").hide()
-			
-	_start_idle()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if has_supported or interacting:
 		return
-		
-	if move_state == "WANDER":
-		var dir = (move_target - global_position)
-		dir.y = 0
-		if dir.length() > 0.1:
-			dir = dir.normalized()
-			global_position.x += dir.x * speed * delta
-			global_position.z += dir.z * speed * delta
-			# Rotate
-			var target_basis = Basis.looking_at(dir, Vector3.UP)
-			transform.basis = transform.basis.slerp(target_basis, delta * 5.0)
-		else:
-			_start_idle()
-
-func _start_idle() -> void:
-	move_state = "IDLE"
-	get_tree().create_timer(randf_range(2.0, 5.0)).timeout.connect(_start_wander)
-
-func _start_wander() -> void:
-	if not is_inside_tree() or has_supported or interacting:
-		return
-	move_state = "WANDER"
-	var angle = randf() * PI * 2
-	var dist = randf() * wander_radius
-	move_target = spawn_pos + Vector3(cos(angle), 0, sin(angle)) * dist
 
 func _input(event: InputEvent) -> void:
 	if not has_supported and not interacting and player_nearby and event.is_action_pressed("interact"):

@@ -1,22 +1,22 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://b8lkwvj8u4ri3"]
 
-[ext_resource type="Script" path="res://scenes/ui/title_screen.gd" id="1"]
+[ext_resource type="Script" uid="uid://cdj4g8nyogoam" path="res://scenes/ui/title_screen.gd" id="1"]
 
-[node name="TitleScreen" type="CanvasLayer"]
+[node name="TitleScreen" type="CanvasLayer" unique_id=433377420]
 process_mode = 3
 layer = 2
 script = ExtResource("1")
 
-[node name="Control" type="Control" parent="."]
-mouse_filter = 1
+[node name="Control" type="Control" parent="." unique_id=214926833]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
-[node name="BackgroundBlur" type="ColorRect" parent="Control"]
+[node name="BackgroundBlur" type="ColorRect" parent="Control" unique_id=251849708]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,7 +25,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.45)
 
-[node name="TitleBox" type="VBoxContainer" parent="Control"]
+[node name="TitleBox" type="VBoxContainer" parent="Control" unique_id=1879444029]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -40,40 +40,40 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="GameTitle" type="Label" parent="Control/TitleBox"]
+[node name="GameTitle" type="Label" parent="Control/TitleBox" unique_id=1268434714]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
 theme_override_font_sizes/font_size = 64
-text = "CAREER EXPLORER"
+text = "STEP INTO MY SHOES"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="Control/TitleBox"]
+[node name="Subtitle" type="Label" parent="Control/TitleBox" unique_id=983377490]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Explore your future today!"
 horizontal_alignment = 1
 
-[node name="Buttons" type="VBoxContainer" parent="Control/TitleBox"]
+[node name="Buttons" type="VBoxContainer" parent="Control/TitleBox" unique_id=123658044]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="PlayButton" type="Button" parent="Control/TitleBox/Buttons"]
+[node name="PlayButton" type="Button" parent="Control/TitleBox/Buttons" unique_id=730307116]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Start Exploration"
 
-[node name="HowToButton" type="Button" parent="Control/TitleBox/Buttons"]
+[node name="HowToButton" type="Button" parent="Control/TitleBox/Buttons" unique_id=1384950100]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "How to Play"
 
-[node name="QuitButton" type="Button" parent="Control/TitleBox/Buttons"]
+[node name="QuitButton" type="Button" parent="Control/TitleBox/Buttons" unique_id=1783973348]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2

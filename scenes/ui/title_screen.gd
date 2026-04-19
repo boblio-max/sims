@@ -103,7 +103,7 @@ func _on_how_to_pressed() -> void:
 	
 	var close_btn = Button.new()
 	close_btn.text = "Got it!"
-	close_btn.custom_minimum_size = Vector2(0, 45)
+	close_btn.custom_minimum_size = Vector2(0, 10)
 	close_btn.add_theme_font_size_override("font_size", 20)
 	close_btn.pressed.connect(func():
 		overlay.queue_free()

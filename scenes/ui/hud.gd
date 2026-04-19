@@ -162,4 +162,4 @@ func _on_objective_updated(current: int, total: int, description: String) -> voi
 
 func _on_all_objectives_done() -> void:
 	show_notification("Objective Complete!", Color(1, 0.8, 0.2))
-	create_tween().set_delay(2.0).tween_property(objective_panel, "position:x", get_viewport().size.x + 300, 0.8).finished.connect(func(): objective_panel.visible = false)
+	create_tween().tween_property(objective_panel, "position:x", get_viewport().size.x + 300, 0.8).set_delay(2.0).finished.connect(func(): objective_panel.visible = false)
