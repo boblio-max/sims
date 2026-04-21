@@ -9,11 +9,6 @@ var options: Array = []  # Array of {text: String, correct: bool}
 var fun_fact: String = ""
 var already_answered: bool = false
 
-# Timer logic
-var time_limit: float = 15.0
-var time_left: float = 15.0
-var timer_label: Label
-var timer_active: bool = false
 
 func _ready() -> void:
 	get_tree().paused = true
@@ -78,13 +73,6 @@ func _build_ui() -> void:
 	var title_hbox = HBoxContainer.new()
 	title_hbox.add_child(title_label)
 	
-	# Timer
-	timer_label = Label.new()
-	timer_label.text = "15.0s"
-	timer_label.add_theme_font_size_override("font_size", 20)
-	timer_label.add_theme_color_override("font_color", Color(1, 0.4, 0.4))
-	title_hbox.add_child(timer_label)
-	
 	title_bar.add_child(title_hbox)
 	
 	# === CONTENT AREA ===
@@ -147,34 +135,7 @@ func _build_ui() -> void:
 	tw.tween_callback(_show_options)
 	
 func _process(delta: float) -> void:
-	if timer_active and not already_answered:
-		# Use unscaled delta because tree is paused
-		time_left -= delta
-		if time_left < 0:
-			time_left = 0
-			_on_timeout()
-		timer_label.text = "%.1fs" % time_left
-        
-func _on_timeout() -> void:
-	if already_answered: return
-	already_answered = true
-	timer_active = false
-	timer_label.text = "TIME'S UP!"
-	timer_label.add_theme_color_override("font_color", Color.RED)
-	
-	if JuiceManager:
-		JuiceManager.shake_camera(0.15, 0.4)
-		JuiceManager.flash_screen(Color(1, 0, 0, 0.15), 0.2)
-		
-	# Find all option buttons to disable
-	var options_vbox = _find_node_recursive(self, "OptionsVBox")
-	if options_vbox:
-		for i in range(options_vbox.get_child_count()):
-			var btn = options_vbox.get_child(i) as Button
-			if btn: btn.disabled = true
-			
-	await get_tree().create_timer(1.5).timeout
-	_close(false)
+	pass
 
 
 func _show_options() -> void:
@@ -218,8 +179,7 @@ func _show_options() -> void:
 		t.tween_property(btn, "scale", Vector2(1, 1), 0.25).set_trans(Tween.TRANS_ELASTIC).set_delay(delay)
 		t.tween_property(btn, "modulate:a", 1.0, 0.15).set_delay(delay)
 
-	# Start timer after options are shown
-	timer_active = true
+	# Start options display
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func _on_option_selected(index: int) -> void:

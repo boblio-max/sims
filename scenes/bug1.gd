@@ -77,10 +77,7 @@ var challenges = [
 	},
 ]
 
-func _ready() -> void:
-	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
-	$Label3D.text = bug_name
+func _ready() -> void: 	
 	
 	var npc_scene = load("res://npc/npc_base.tscn")
 	if npc_scene:

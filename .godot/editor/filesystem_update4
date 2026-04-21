@@ -1,11 +1,1 @@
-res://scenes/ui/title_screen.tscn
-res://scenes/ui/title_screen.gd
-res://npc/npc_base.gd
-res://scripts/voter.gd
-res://scripts/bug.gd
 res://scenes/bug1.gd
-res://scenes/bug2.gd
-res://scenes/bug3.gd
-res://scenes/voter1.gd
-res://scenes/voter2.gd
-res://scenes/ui/hud.gd
