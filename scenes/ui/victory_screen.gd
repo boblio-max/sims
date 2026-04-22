@@ -7,9 +7,8 @@ func _ready() -> void:
 	restart_button.pressed.connect(_on_restart_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
 	
-	# Celebratory audio
-	if AudioManager:
-		AudioManager.play_sfx("victory_fanfare")
+	# Celebratory audio (handled by HUD)
+
 	
 	# Pause the game and show mouse
 	get_tree().paused = true

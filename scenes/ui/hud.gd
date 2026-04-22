@@ -6,6 +6,8 @@ extends CanvasLayer
 @onready var objective_panel: PanelContainer = %ObjectivePanel
 @onready var objective_desc: Label = %ObjectiveDesc
 @onready var objective_progress: Label = %ObjectiveProgress
+@export var pickup_audio : AudioStream
+var audio : AudioStreamPlayer
 
 var discovery_tween: Tween
 var career_labels: Dictionary = {}
@@ -29,6 +31,12 @@ func _ready() -> void:
 	
 	# Create career tracker
 	_create_career_tracker()
+	
+	audio = AudioStreamPlayer.new()
+	add_child(audio)
+	audio.stream = load("res://668436__david819__win.mp3")
+	add_child(audio)
+	await get_tree().process_frame
 	
 	# Initial slide-in for ProgressPanel
 	var progress_panel = $Control/ProgressPanel
@@ -118,11 +126,12 @@ func _on_career_completed(career_name: String) -> void:
 	update_hud()
 	_mark_career_completed_ui(career_name)
 	show_notification(career_name + " Mastered!", Color(0.1, 1, 0.5))
+	print("audio: ", audio, " | stream: ", audio.stream if audio else "null")
+	audio.play()
 	if JuiceManager:
 		JuiceManager.shake_camera(0.1, 0.5)
 		JuiceManager.flash_screen(Color(0, 1, 0.5, 0.1), 0.2)
-	if AudioManager:
-		AudioManager.play_sfx("victory")
+
 
 func show_notification(message: String, color: Color = Color.WHITE) -> void:
 	notification.text = ""

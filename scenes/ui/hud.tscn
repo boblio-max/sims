@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/ui/hud.gd" id="1"]
 [ext_resource type="Shader" path="res://assets/shaders/glass_blur.gdshader" id="2"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/win.mp3" id="3"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_glass"]
 shader = ExtResource("2")

@@ -19,6 +19,9 @@ func play_sfx(sound_name: String) -> void:
 	var path = "res://assets/audio/sfx/" + sound_name + ".wav"
 	if not ResourceLoader.exists(path):
 		path = "res://assets/audio/sfx/" + sound_name + ".ogg"
+	if not ResourceLoader.exists(path):
+		path = "res://assets/audio/sfx/" + sound_name + ".mp3"
+		
 	if ResourceLoader.exists(path):
 		var player = _get_available_sfx_player()
 		player.stream = load(path)

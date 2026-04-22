@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/voter.tscn" id="3"]
 [ext_resource type="Script" uid="uid://boeumdyrqjojs" path="res://scenes/voter1.gd" id="5_jge32"]
 [ext_resource type="Script" uid="uid://rwr265tnufyg" path="res://scenes/voter2.gd" id="6_cdw4q"]
+[ext_resource type="AudioStream" uid="uid://bhysao2kh35rt" path="res://668436__david819__win.mp3" id="7_4o3bw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
 sky_top_color = Color(0.25, 0.38, 0.7, 1)
@@ -1082,3 +1083,6 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 3
 modulate = Color(1, 1, 0.5, 1)
 text = "Return to Hub"
 font_size = 36
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=320497438]
+stream = ExtResource("7_4o3bw")
