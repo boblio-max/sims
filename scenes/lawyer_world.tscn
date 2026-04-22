@@ -276,7 +276,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 target_scene = "res://scenes/main_hub.tscn"
 
 [node name="Evidence1" parent="." unique_id=265958195 instance=ExtResource("3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, -0.97595024)
 evidence_name = "Legal Brief"
 
 [node name="Evidence2" parent="." unique_id=669337866 instance=ExtResource("3")]

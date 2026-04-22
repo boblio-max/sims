@@ -1062,7 +1062,7 @@ target_scene = "res://scenes/main_hub.tscn"
 
 [node name="Voter1" parent="." unique_id=1614694826 instance=ExtResource("3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 5)
-voter_name = "Farmer Bob"
+voter_name = "Maria Gonzales"
 concern = "We need better irrigation for our crops."
 option1 = "Build Water Tank"
 option2 = "Lower Taxes"
@@ -1078,7 +1078,7 @@ script = ExtResource("6_cdw4q")
 challenge_index = 2
 
 [node name="ReturnLabel" type="Label3D" parent="." unique_id=1541961702]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, 18)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 3.8, 18)
 modulate = Color(1, 1, 0.5, 1)
 text = "Return to Hub"
 font_size = 36
