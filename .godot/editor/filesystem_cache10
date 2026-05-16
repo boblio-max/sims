@@ -1,5 +1,5 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1776874975
+::res://::1776879674
 668436__david819__win.mp3::AudioStreamMP3::2928381338628024349::1776874922::1776874990::1::::<><><>0<>0<>fbd3897554ff90354e037e62cb92bd71<>res://.godot/imported/668436__david819__win.mp3-66d3cb43bef36510fba0740be518a9a5.mp3str::
 export_presets.cfg::TextFile::-1::1773966001::0::1::::<><><>0<>0<><>::
 ::res://ARC/::1775596076
@@ -19,7 +19,7 @@ player_controller.gd::GDScript::4805379571516164436::1774136982::0::1::::<>Chara
 ::res://portals/::1775595629
 portal.tscn::PackedScene::-1::1773966001::0::1::::<><><>0<>0<><>::res://portals/portal_teleport.gd
 portal_teleport.gd::GDScript::8549947045644933513::1774137099::0::1::::<>Node3D<><>0<>0<><>::
-::res://scenes/::1776874517
+::res://scenes/::1776875091
 bug1.gd::GDScript::1467654930387516780::1776728882::0::1::::<>Area3D<><>0<>0<><>::
 bug2.gd::GDScript::7851622237616036716::1776564885::0::1::::<>Area3D<><>0<>0<><>::
 bug3.gd::GDScript::3908278764683581023::1776564900::0::1::::<>Area3D<><>0<>0<><>::
@@ -38,16 +38,16 @@ main_hub.tscn::PackedScene::6947001487875797343::1775589534::0::1::::<><><>0<>0<
 patient1.gd::GDScript::8124836387552728892::1776010719::0::1::::<>Area3D<><>0<>0<><>::
 patient2.gd::GDScript::2533897499576886803::1776010820::0::1::::<>Area3D<><>0<>0<><>::
 patient.tscn::PackedScene::-1::1774065175::0::1::::<><><>0<>0<><>::res://scripts/patient.gd<>res://assets/shaders/glow_pulse.gdshader
-politician_world.tscn::PackedScene::2435597412840102188::1776874516::0::1::::<><><>0<>0<><>::uid://dh47bicys5wb3::::res://player/player.tscn<>uid://dnm3o3alatwmi::::res://scripts/worlds/politician_world.gd<>res://portals/portal.tscn<>res://scenes/voter.tscn<>uid://boeumdyrqjojs::::res://scenes/voter1.gd<>uid://rwr265tnufyg::::res://scenes/voter2.gd<>res://668436__david819__win.mp3
+politician_world.tscn::PackedScene::2435597412840102188::1776875091::0::1::::<><><>0<>0<><>::uid://dh47bicys5wb3::::res://player/player.tscn<>uid://dnm3o3alatwmi::::res://scripts/worlds/politician_world.gd<>res://portals/portal.tscn<>res://scenes/voter.tscn<>uid://boeumdyrqjojs::::res://scenes/voter1.gd<>uid://rwr265tnufyg::::res://scenes/voter2.gd<>uid://bhysao2kh35rt::::res://668436__david819__win.mp3
 software_engineer_world.tscn::PackedScene::3047193156117618698::1776010992::0::1::::<><><>0<>0<><>::uid://dh47bicys5wb3::::res://player/player.tscn<>uid://2s8laffy8y7s::::res://scripts/worlds/software_engineer_world.gd<>res://portals/portal.tscn<>res://scenes/bug.tscn<>uid://u57cd8yhiu2w::::res://scenes/bug1.gd<>uid://dj4ncohgo2q1a::::res://scenes/bug2.gd<>uid://bvxg1r74bqlad::::res://scenes/bug3.gd
 voter1.gd::GDScript::3378557970463491812::1776564935::0::1::::<>Area3D<><>0<>0<><>::
 voter2.gd::GDScript::1239708733197752730::1776564951::0::1::::<>Area3D<><>0<>0<><>::
 voter.tscn::PackedScene::-1::1774065185::0::1::::<><><>0<>0<><>::res://scripts/voter.gd<>res://assets/shaders/glow_pulse.gdshader
-::res://scenes/ui/::1776874517
+::res://scenes/ui/::1776875009
 challenge_ui.gd::GDScript::6410407127442583867::1776733100::0::1::::<>CanvasLayer<><>0<>0<><>::
 diagnosis_ui.gd::GDScript::925221888107909251::1774137038::0::1::::<>CanvasLayer<><>0<>0<><>::
 diagnosis_ui.tscn::PackedScene::-1::1774137131::0::1::::<><><>0<>0<><>::res://scenes/ui/diagnosis_ui.gd<>res://assets/shaders/glass_blur.gdshader
-hud.gd::GDScript::6403087147821188434::1776874517::0::1::::<>CanvasLayer<><>0<>0<><>::
+hud.gd::GDScript::6403087147821188434::1776875009::0::1::::<>CanvasLayer<><>0<>0<><>::
 hud.tscn::PackedScene::-1::1776873694::0::1::::<><><>0<>0<><>::res://scenes/ui/hud.gd<>res://assets/shaders/glass_blur.gdshader
 title_screen.gd::GDScript::5003760560102917140::1776563763::0::1::::<>CanvasLayer<><>0<>0<><>::
 title_screen.tscn::PackedScene::4726008254857247864::1776565293::0::1::::<><><>0<>0<><>::uid://cdj4g8nyogoam::::res://scenes/ui/title_screen.gd
